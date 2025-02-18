@@ -1,6 +1,7 @@
 from flask import Flask
 from routes import routes
 import yaml
+import logging, logging.config
 
 
 #initializes our app and tells it where to look for html pages.
@@ -12,6 +13,8 @@ app.register_blueprint(routes)
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
+
+logging.config.dictConfig(config["logging"])
 
 #this if statement just checks that you are running main.py, rather than an import
 if __name__ == '__main__':
