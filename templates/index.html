@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style>
-        body {
-            background-color: #0D0D0D;
-        }
-
-        h1 {
-            color: #FFFFFF;
-            text-align: center;
-        }
-
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+<body class="brendans-body">
 <h1>Hello World!</h1>
+<h2>Behold.. The power of template tags / variables!</h2>
+<h1>{{ random_number }}</h1>
 </body>
-</html>
+{% endblock %}
