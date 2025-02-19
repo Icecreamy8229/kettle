@@ -2,186 +2,28 @@
 /* Created 2/16 */
 /* Last edited 2/18 */
 /* General Styling */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #000000;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
+
 
 /* Temporary Navbar Styling */
-.temporaryNav {
-    background-color: #4C1D70; 
-    color: white;
-    text-align: center;
-    padding: 30px; 
-    font-size: 24px; 
-    margin-bottom: 0;
-}
-
-.temporaryNav h1 {
-    margin: 0;
-    font-size: 28px;
-}
 
 /* Header and Banner */
-header {
-    background-image: url('tempbanner.png');
-    background-size: cover;
-    background-position: center;
-    padding: 150px 20px; 
-    text-align: center;
-    color: white;
-    width: 100%;
-}
 
-header h1 {
-    margin-bottom: 10px;
-    font-size: 48px;
-}
+
+
 
 /* Small description text under the banner */
-.banner-description {
-    text-align: center;
-    color: white;
-    font-size: 16px;
-    margin-top: 40px;
-	margin-bottom: 80px;
-}
 
 /* Container for game list */
-.container {
-    max-width: 1200px;
-    margin: 0 auto; 
-    background-color: #343538; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #504d54;
-    padding-top: 30px; 
-	padding-bottom: 50px; 
-}
 
 /* Game Table Styling */
-.gameList table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0; 
-    margin-bottom: 0; 
-}
 
-.gameList th, .gameList td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    color: white; 
-}
 
-.gameList th {
-    background-color: transparent; 
-}
 
-.gameItem td {
-    vertical-align: middle;
-}
 
-.gameInfo {
-    display: inline-block;
-    width: 100%;
-}
 
-.gameImage {
-    width: 100px;
-    height: auto;
-    margin-right: 20px;
-}
 
-.gameItem h3 {
-    font-size: 18px;
-    margin: 0;
-    display: inline-block;
-    color: white; 
-}
 
-.price {
-    font-size: 16px;
-    color: white; 
-    text-align: center;
-}
 
-.buyButton {
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-align: center;
-   
-}
 
-.buyButton:hover {
-    background-color: #ddd; 
-}
 
-.container {
-    border-radius: 0; 
-}
 
-.buyButton {
-    border-radius: 0; 
-}
-
-/* Footer Styles */
-.footer {
-    background-color: #4C1D70;
-    color: white;
-    padding: 20px 0;
-    margin-top: 40px;
-    text-align: center;
-}
-
-.footerContainer {
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.footerLinks {
-    display: flex;
-    flex-direction: row; 
-    gap: 15px; 
-}
-
-.footerLinks ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-.footerLinks li {
-    margin-right: 20px;
-}
-
-.footerLinks a {
-    text-decoration: none;
-    color: white;
-    font-size: 16px;
-}
-
-.footerLinks a:hover {
-    text-decoration: underline;
-}
-
-.footerLinks li::after {
-    content: " |";
-    margin-left: 10px;
-}
-
-.footerLinks li:last-child::after {
-    content: ""; 
-}
