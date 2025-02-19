@@ -1,18 +1,66 @@
 <!-- Rough draft created on 2/16 -->
 <!-- Edited on 2/18 -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Display</title>
-    <link rel="stylesheet" href="gamepageCss.css">
-</head>
+
 <!-- Temporary nav bar -->
+{% extends 'base.html' %}
+{% include 'navbar.html' %}
+{% block content %}
+<style>
+
+    {#
+    I moved any of sav's code
+    that was prefixed with game
+    here.  Code unique to only one page
+    can go in a single pages style tag.
+    If it is needed elsewhere, rename the class,
+    and move it to the styles.css sheet.
+    #}
+
+.gameList table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+.gameList th, .gameList td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    color: white;
+}
+
+
+.gameList th {
+    background-color: transparent;
+}
+
+
+.gameItem td {
+    vertical-align: middle;
+}
+
+.gameInfo {
+    display: inline-block;
+    width: 100%;
+}
+
+.gameImage {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.gameItem h3 {
+    font-size: 18px;
+    margin: 0;
+    display: inline-block;
+    color: white;
+}
+</style>
 <body>
-    <nav class="temporaryNav">
-        <h1>Temporary nav</h1>
-    </nav>
+
     
     <!-- Banner -->
     <header>
@@ -35,7 +83,7 @@
                     <tbody>
                         <tr class="gameItem">
                             <td class="gameInfo">
-                                <img src="game1.png" alt="Game 1" class="gameImage">
+                                <img src="../static/images/games/game1.png" alt="Game 1" class="gameImage">
                                 <h3>McPawnolds Fast food Simulator</h3>
                             </td>
                             <td class="price">$2.99</td>
@@ -44,7 +92,7 @@
 
                         <tr class="gameItem">
                             <td class="gameInfo">
-                                <img src="game2.png" alt="Game 2" class="gameImage">
+                                <img src="../static/images/games/game2.png" alt="Game 2" class="gameImage">
                                 <h3>Bald Man's Gate 3</h3>
                             </td>
                             <td class="price">$34.99</td>
@@ -53,7 +101,7 @@
 
                         <tr class="gameItem">
                             <td class="gameInfo">
-                                <img src="game3.png" alt="Game 3" class="gameImage">
+                                <img src="../static/images/games/game3.png" alt="Game 3" class="gameImage">
                                 <h3>Shower With Your Dad Simulator 2077</h3>
                             </td>
                             <td class="price">$14.99</td>
@@ -62,7 +110,7 @@
 
                         <tr class="gameItem">
                             <td class="gameInfo">
-                                <img src="game4.png" alt="Game 4" class="gameImage">
+                                <img src="../static/images/games/game4.png" alt="Game 4" class="gameImage">
                                 <h3>Overwatch</h3>
                             </td>
                             <td class="price">$60.00</td>
@@ -71,7 +119,7 @@
 
                         <tr class="gameItem">
                             <td class="gameInfo">
-                                <img src="game5.png" alt="Game 5" class="gameImage">
+                                <img src="../static/images/games/game5.png" alt="Game 5" class="gameImage">
                                 <h3>Balatro</h3>
                             </td>
                             <td class="price">$4.99</td>
@@ -99,4 +147,4 @@
         </div>
     </footer>
 </body>
-</html>
+{% endblock %}
