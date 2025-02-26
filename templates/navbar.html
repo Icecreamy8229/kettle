@@ -31,14 +31,14 @@
 
   /* Hover effect for links */
   .navbar .links a:hover {
-    background-color: #6a2c8b; /* Darker purple on hover */
+    background-color: #371055; /* Darker purple on hover */
     border-radius: 4px; /* Optional: Add border radius for a more rounded effect */
   }
 
   /* Button styles for login/signup */
   .navbar .login-signup {
-    background-color: #fff;
-    color: #4C1D70;
+    background-color: #4C1D70;
+    color: #371055;
     border: none;
     border-radius: 5px;
     padding: 8px 16px;
@@ -58,15 +58,17 @@
   <!-- Logo -->
   <div class="logo">
     <!-- Temporary kettle logo -->
-    <img src="../static/images/kettlelogo.png" alt="Logo">
+    <a href="/">
+      <img src="static\images\kettlelogo.png" alt="Index page"> 
+    </a>
   </div>
 
   <!-- Links for nav bar -->
   <div class="links">
-    <a href="#">Store</a>
+    <a href="/game">Store</a>
     <a href="#">Keys</a>
     <a href="#">Support</a>
-    <button class="login-signup">Login / Sign Up</button>
+    <a href="/user" class="login-signup">Login / Sign Up</a>
   </div>
 </nav>
 
