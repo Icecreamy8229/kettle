@@ -1,15 +1,75 @@
 {% extends "base.html" %}
 {% block content %}
 {% include "navbar.html" %}
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    </head>
+
     <style>
-    body {
-        text-align: center;
-        color: white;
-    }
+        body {
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            color: white;
+        }
+
+        .landingBANNER {
+            background-image: url("");
+            opacity: 0.8;
+            background-color: #030303;
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        a.INDEXBUTTON {
+            background-color: #D4AF37;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .bannerBox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+
+        .bannerBox img {
+            width: 150px;
+            height: 150px;
+        }
+
+
     </style>
-<body class="brendans-body">
-<h1>Hello World!</h1>
-<h2>Behold.. The power of template tags / variables!</h2>
-<h1>{{ random_number }}</h1>
+
+    <body class="brendans-body">
+        <div class="landingBANNER">
+            <div class="bannerBox">
+                <img src="static\images\kettlelogonobckrnd.png" alt="Kettle Logo">
+                <h1>KETTLE</h1>
+                <h3>Streamlining purchasing games & keys,</h3>
+                <h3><em>IN THE SAME PLACE!</em></h3>
+                <a href="" class="INDEXBUTTON">Games</a>
+            </div>
+        </div>
+    <div class="">
+
+
+
+
+    </div>
+
 </body>
 {% endblock %}

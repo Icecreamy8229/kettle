@@ -1,7 +1,7 @@
 /* General body styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #000000;
+    background-color: #121212;
     color: #333;
     margin: 0;
     padding: 0;
@@ -41,59 +41,6 @@ header h1 {
     padding-top: 30px;
 	padding-bottom: 50px;
 }
-
-/* Navbar styles */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #4C1D70;
-  padding: 10px 20px;
-}
-
-/* Leftmost logo section */
-.navbar .logo img {
-  height: 40px; /* Adjust logo size */
-}
-
-/* Right section with links and buttons */
-.navbar .links {
-  display: flex;
-  align-items: center;
-}
-
-/* Navbar links */
-.navbar .links a {
-  color: white;
-  text-decoration: none;
-  margin-left: 20px;
-  font-size: 16px;
-  padding: 8px 12px;
-  transition: background-color 0.3s ease; /* Smooth transition for background change */
-}
-
-/* Hover effect for links */
-.navbar .links a:hover {
-  background-color: #6a2c8b; /* Darker purple on hover */
-  border-radius: 4px; /* Optional: Add border radius for a more rounded effect */
-}
-
-/* Button styles for login/signup */
-.navbar .login-signup {
-  background-color: #fff;
-  color: #4C1D70;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 16px;
-  cursor: pointer;
-  margin-left: 20px;
-}
-
-/* Hover effect for login/signup button */
-.navbar .login-signup:hover {
-  background-color: #f1f1f1;
-}
-
 
 .price {
     font-size: 16px;
