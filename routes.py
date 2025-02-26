@@ -7,8 +7,7 @@ routes = Blueprint('routes', __name__) #this module points to itself for routes.
 @routes.route('/') #This is the general syntax for creating a route in flask.
 def index_route():
     logging.debug('Index route called')
-    random_number = random.randint(0, 9)  #we can remove, just showing an example of template tags.
-    return render_template('index.html', random_number=str(random_number))
+    return render_template('index.html')
 
 
 @routes.route('/game') #this will be modified later, but adding so we can hit the game page url for now.
