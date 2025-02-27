@@ -8,11 +8,11 @@ CREATE DATABASE kettle;
 USE kettle;
 
 CREATE TABLE users (
-  user_id bigint NOT NULL PRIMARY KEY,
+  user_id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
   user_alias varchar(128),
-  user_email varchar(320) NOT NULL,
-  user_login varchar(128) NOT NULL,
-  user_password char(60) NOT NULL,
+  user_email varchar(320) NOT NULL UNIQUE,
+  user_login varchar(128) NOT NULL UNIQUE,
+  user_password char(60) NOT NULL UNIQUE,
   user_balance integer NOT NULL DEFAULT 10000
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE libraries (
 
 
 CREATE TABLE profile_pictures (
-  user_id bigint NOT NULL PRIMARY KEY,
+  user_id bigint NOT NULL PRIMARY KEY UNIQUE,
   picture_path varchar(500)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE reviews (
 
 
 CREATE TABLE games (
-  game_id bigint NOT NULL PRIMARY KEY,
+  game_id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
   game_title varchar(256) NOT NULL,
   game_price bigint NOT NULL,
   game_desc text NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE games (
 
 
 CREATE TABLE orders (
-  order_id bigint NOT NULL PRIMARY KEY,
+  order_id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
   order_userid bigint NOT NULL,
   order_gid bigint NOT NULL,
   order_gtitle varchar(256) NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE wishlists (
 
 
 CREATE TABLE genres (
-  genre_id int NOT NULL PRIMARY KEY,
+  genre_id int NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
   genre_tag varchar(128) NOT NULL
 );
 
