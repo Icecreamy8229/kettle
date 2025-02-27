@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import ForeignKey, DateTime
 from flask_bcrypt import Bcrypt
+from flask_login import UserMixin
 
 bcrypt = Bcrypt()
 
@@ -30,7 +31,7 @@ class ProfilePicture(db.Model):
     profile_pic_path: Mapped[str] = mapped_column(nullable=True) #TODO change this to a default picture path remove null
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, unique=True)
     user_alias: Mapped[str] = mapped_column(nullable=False)
