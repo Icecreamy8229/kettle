@@ -2,7 +2,9 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import ForeignKey, DateTime
+from flask_bcrypt import Bcrypt
 
+bcrypt = Bcrypt()
 
 class Base(DeclarativeBase):
     pass
@@ -37,6 +39,16 @@ class User(db.Model):
     user_password: Mapped[str] = mapped_column(nullable=False)
     user_balance: Mapped[int] = mapped_column(default=10_000, nullable=False)
     user_createdt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(), nullable=False)
+    @property
+    def password(self) -> str:
+        raise AttributeError("Password is write-only!")
+
+    @password.setter #when password is set, it is modified to be hashed.
+    def password(self, plain_password: str) -> str:
+        self.user_password = bcrypt.generate_password_hash(plain_password).decode('utf-8')
+
+    def verify_password(self, plain_password: str) -> bool: #compares the two hashes from attempted pass with stored pass
+        return bcrypt.check_password_hash(self.user_password, plain_password)
 
 
 class Game(db.Model):
