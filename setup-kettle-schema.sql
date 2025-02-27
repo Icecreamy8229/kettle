@@ -13,7 +13,8 @@ CREATE TABLE users (
   user_email varchar(320) NOT NULL UNIQUE,
   user_login varchar(128) NOT NULL UNIQUE,
   user_password char(60) NOT NULL UNIQUE,
-  user_balance integer NOT NULL DEFAULT 10000
+  user_balance integer NOT NULL DEFAULT 10000,
+  user_createdt datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -50,9 +51,9 @@ CREATE TABLE reviews (
 CREATE TABLE games (
   game_id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
   game_title varchar(256) NOT NULL,
-  game_price bigint NOT NULL,
+  game_price int NOT NULL,
   game_desc text NOT NULL,
-  game_sale float,
+  game_sale float DEFAULT 0.00,
   game_releasedate DATE,
   game_active boolean DEFAULT 1
 );
