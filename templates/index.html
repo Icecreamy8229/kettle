@@ -1,87 +1,94 @@
 {% extends "base.html" %}
-{% block content %}
-{% include "navbar.html" %}
+{% block head %}
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            text-align: center;
-            color: white;
-        }
+            body {
+                font-family: 'Roboto', sans-serif;
+                text-align: center;
+                color: white;
+            }
 
-        h1, h2, h3 {
-            position: relative;
-        }
+            h1, h2, h3 {
+                position: relative;
+            }
 
-        .landingBANNER {
-            background-image: url("");
-            opacity: 0.8;
-            background-color: #030303;
-            background-size: cover;
-            background-position: center;
-            height: 500px;
-            width: 100%;
+            .landingBANNER {
+
+                opacity: 0.8;
+
+                background-size: cover;
+                background-position: center;
+                height: 500px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            a.INDEXBUTTON {
+                background-color: #4C1D70;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                font-size: 16px;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            a.INDEXBUTTON:hover {
+                background-color: #371055;
+            }
+
+            .bannerBox {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            text-align: center;
-        }
+            }
 
-        a.INDEXBUTTON {
-            background-color: #4C1D70;
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+            .bannerBox img {
+                width: 150px;
+                height: 150px;
+            }
 
-        a.INDEXBUTTON:hover {
-            background-color: #371055;
-        }
+            .carousel {
 
-        .bannerBox {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        }
+                height: 300px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+        </style>
+{%  endblock %}
+{% block content %}
 
-        .bannerBox img {
-            width: 150px;
-            height: 150px;
-        }
+    <body>
 
-        .carousel {
-            background-color: #030303;
-            height: 300px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-    </style>
+        {% include "navbar.html" %}
+        {% include "flash.html" %}
 
-    <body class="brendans-body">
         <div class="landingBANNER">
             <div class="bannerBox">
                 <img src="static\images\kettlelogonobckrnd.png" alt="Kettle Logo">
-                <h1 style="bottom: 5px; ">KETTLE</h1>
-                <h3 style="bottom: 30px">Streamlining purchasing games & keys,</h3>
-                <h3 style="bottom: 60px; left: 35px"><em>IN THE SAME PLACE!</em></h3>
+                <h1>KETTLE</h1>
+                <h3>Streamlining purchasing games & keys,</h3>
+                <h3><em>IN THE SAME PLACE!</em></h3>
                 <a href="/game" class="INDEXBUTTON">Games</a>
             </div>
         </div>
         <div class="carousel">
             <h2>Featured Games</h2>
         </div>
-        <div class=""></div>
+        <div class="">
+
+        </div>
 
 
+        {% include "footer.html" %}
+    </body>
 
-</body>
-{% include "footer.html" %}
 {% endblock %}

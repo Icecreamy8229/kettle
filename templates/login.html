@@ -8,15 +8,15 @@
 {# This is a super basic form I setup just to make sure logging in on the backend was working #}
 {# You beautiful creative front end people make it look nice please :) #}
 
-<div class="container">
-    <form method="POST" action="{{ url_for('routes.login_route') }}">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+<div class="container" style="width: 60%; min-width: 320px",>
+    <form class="form-control" method="POST" action="{{ url_for('routes.login_route') }}">
+        <label class="form-label" for="username">Username:</label>
+        <input class="form-control" type="text" id="username" name="username" required>
         <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <label class="form-label" for="password">Password:</label>
+        <input class="form-control" type="password" id="password" name="password" required>
         <br>
-        <button type="submit">Login</button>
+        <button class="btn btn-primary" type="submit">Login</button>
     </form>
 </div>
 </body>

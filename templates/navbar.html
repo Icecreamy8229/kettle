@@ -2,10 +2,12 @@
 <style>
   /* Navbar styles */
   .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
+      background-color: #030303;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      margin-bottom: 25px;
   }
 
   /* Leftmost logo section */
@@ -65,10 +67,10 @@
 
   <!-- Links for nav bar -->
   <div class="links">
-    <a href="/game">Store</a>
+    <a href="{{ url_for('routes.store_route') }}">Store</a>
     <a href="#">Keys</a>
     <a href="#">Support</a>
-    <a href="/user" class="login-signup">Login / Sign Up</a>
+    <a href="{{ url_for('routes.login_route') }}" class="login-signup">Login / Sign Up</a>
   </div>
 </nav>
 

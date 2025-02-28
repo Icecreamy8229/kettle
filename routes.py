@@ -14,10 +14,10 @@ def index_route():
     return render_template('index.html')
 
 
-@routes.route('/game')  # this will be modified later, but adding so we can hit the game page url for now.
-def game_route():
+@routes.route('/store')  # this will be modified later, but adding so we can hit the game page url for now.
+def store_route():
     logging.debug('Game route called')
-    return render_template('game.html')
+    return render_template('store.html')
 
 
 @routes.route('/user')
@@ -39,7 +39,7 @@ def settings_route():
 def login_route():
 
     if current_user.is_authenticated: #no need for an authenticated logged in user to get to this page.
-        return redirect(url_for('index_route'))
+        return redirect(url_for('routes.index_route'))
 
     if request.method == "POST":
         username = request.form['username']
@@ -47,11 +47,13 @@ def login_route():
 
         user = db.session.query(User).filter_by(user_login=username).first()
         if user and user.verify_password(password):
+            logging.info(f"{user.user_login} has successfully logged in")
             login_user(user)
-            return user.user_email
+            flash(f'You are now logged in as {user.user_login}', "success")
+            return redirect(url_for('routes.index_route'))
 
         else:
-            logging.info("Invalid username or password, flashing warning to user.")
+            logging.info(f"Invalid username or password, attempted login: {user.user_login}")
             flash("Invalid username or password", "danger")
 
     return render_template('login.html')
