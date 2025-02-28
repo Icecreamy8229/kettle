@@ -40,9 +40,13 @@ class User(db.Model, UserMixin):
     user_password: Mapped[str] = mapped_column(nullable=False)
     user_balance: Mapped[int] = mapped_column(default=10_000, nullable=False)
     user_createdt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(), nullable=False)
+
     @property
     def password(self) -> str:
         raise AttributeError("Password is write-only!")
+
+    def get_id(self) -> str: #I have to override flasks builtin because of our naming convetion.
+        return str(self.user_id)
 
     @password.setter #when password is set, it is modified to be hashed.
     def password(self, plain_password: str) -> str:

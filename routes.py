@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, session, request, redirect, url_fo
 import logging
 import random
 from models import db, User
-from flask_login import LoginManager, login_required, login_user
+from flask_login import LoginManager, login_required, login_user, current_user
 from login import load_user
 
 routes = Blueprint('routes', __name__)  # this module points to itself for routes.
@@ -37,16 +37,24 @@ def settings_route():
 
 @routes.route("/login", methods=['GET', 'POST'])
 def login_route():
+
+    if current_user.is_authenticated: #no need for an authenticated logged in user to get to this page.
+        return redirect(url_for('index_route'))
+
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
 
-        user = db.session.query(User).filter_by(username=username).first()
+        user = db.session.query(User).filter_by(user_login=username).first()
         if user and user.verify_password(password):
             login_user(user)
-            return redirect(url_for("index_route"))
+            return user.user_email
 
-        flash("Invalid username or password", "danger")
+        else:
+            logging.info("Invalid username or password, flashing warning to user.")
+            flash("Invalid username or password", "danger")
+
+    return render_template('login.html')
 
 
 @routes.route("/logout")
