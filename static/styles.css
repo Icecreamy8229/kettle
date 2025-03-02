@@ -1,3 +1,4 @@
+
 /* General body styles */
 body {
     font-family: 'Roboto', sans-serif;
@@ -23,6 +24,70 @@ header h1 {
     font-size: 48px;
 }
 
+
+.navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #030303;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      margin-bottom: 25px;
+
+}
+
+  /* Leftmost logo section */
+.navbar .logo img {
+
+      height: 50px; /* Adjust logo size */
+      width: auto;
+      margin: 5px 15px;
+
+}
+
+  /* Right section with links and buttons */
+.navbar .links {
+    display: flex;
+    align-items: center;
+
+}
+
+  /* Navbar links */
+.navbar .links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 16px;
+    padding: 8px 12px;
+    transition: background-color 0.3s ease; /* Smooth transition for background change */
+}
+
+  /* Hover effect for links */
+.navbar .links a:hover {
+    background-color: #371055; /* Darker purple on hover */
+    border-radius: 4px; /* Optional: Add border radius for a more rounded effect */
+
+}
+
+  /* Button styles for login/signup */
+.navbar .login-signup {
+    background-color: #4C1D70;
+    color: #371055;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-left: 20px;
+
+}
+
+  /* Hover effect for login/signup button */
+.navbar .login-signup:hover {
+    background-color: #f1f1f1;
+
+}
 
 .banner-description {
     text-align: center;
@@ -70,4 +135,36 @@ header h1 {
 
 .buyButton {
     border-radius: 0;
+}
+
+/* footer styles */
+footer {
+        height: 200px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+footer hr {
+    width: 100%;
+}
+
+footer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+footer ul li a {
+    text-decoration: none;
+}
+
+footer ul li a:hover {
+    color: #4C1D70 !important;
+    color: inherit;
+}
+
+footer ul li a:visited {
+    color: inherit;
 }
