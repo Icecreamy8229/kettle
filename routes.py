@@ -34,6 +34,10 @@ def testing_route():
 def settings_route():
     pass
 
+@routes.route("/game/")
+def game_route():
+    return render_template('game.html', user=current_user)
+
 
 @routes.route("/login", methods=['GET', 'POST'])
 def login_route():
@@ -62,4 +66,5 @@ def login_route():
 @routes.route("/logout")
 @login_required
 def logout_route():
+    #a random comment
     pass
