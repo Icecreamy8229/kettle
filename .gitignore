@@ -1,6 +1,7 @@
 #added by gene
 .idea/
 config.yaml
+secret.py
 
 
 # Byte-compiled / optimized / DLL files

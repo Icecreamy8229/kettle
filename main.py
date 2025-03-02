@@ -1,9 +1,10 @@
 from flask import Flask
 from routes import routes
+from login import login_manager
 import yaml
-import logging, logging.config
-from flask_sqlalchemy import SQLAlchemy
+import logging.config
 from models import db
+from secret import secret_key
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -19,8 +20,9 @@ app = Flask(__name__, template_folder='templates')
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{config['database']['username']}:{config['database']['password']}@{config['database']['host']}/{config['database']['schema']}"
 logging.debug("Configured database url %s", app.config["SQLALCHEMY_DATABASE_URI"])
 
-
+app.secret_key = secret_key
 db.init_app(app)
+login_manager.init_app(app)
 
 #registers our endpoints.  "/" being the index page.
 app.register_blueprint(routes)
