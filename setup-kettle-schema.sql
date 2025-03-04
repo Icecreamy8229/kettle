@@ -9,7 +9,7 @@ USE kettle;
 
 CREATE TABLE users (
   user_id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
-  user_alias varchar(128),
+  user_alias varchar(128) NOT NULL,
   user_email varchar(320) NOT NULL UNIQUE,
   user_login varchar(128) NOT NULL UNIQUE,
   user_password char(60) NOT NULL UNIQUE,
