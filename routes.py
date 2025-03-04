@@ -19,6 +19,11 @@ def store_route():
     logging.debug('Game route called')
     return render_template('store.html')
 
+@routes.route('/checkout')
+def checkout_route():
+    logging.debug('Checkout route called')
+    return render_template('checkout.html')
+
 
 @routes.route('/user')
 def user_route():
