@@ -36,7 +36,7 @@ app.register_blueprint(routes)
 if __name__ == '__main__':
 
     if config['environment'] == 'production':
-        app.run(debug=False)
+        app.run(debug=False, port=4999)
     else:
         app.run(debug=True)
 
