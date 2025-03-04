@@ -28,7 +28,7 @@ def create_dummy_user(username: str, alias: str, email: str, plaintext_pass: str
     with app.app_context():
         user = User()
         user.user_login = username
-        user.alias = alias
+        user.user_alias = alias
         user.password = plaintext_pass
         user.user_email = email
         db.session.add(user)
