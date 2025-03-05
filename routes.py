@@ -95,7 +95,7 @@ def cart_route():
     game_ids = [i.game_id for i in cart_items]
     games = db.session.query(Game).filter(Game.game_id.in_(game_ids)).all()
     logging.info(f"Cart route called, with these items: {games}")
-    return render_template("cart.html", games=games)
+    return render_template("checkout.html", games=games)
 
 
 @routes.route("/library")
