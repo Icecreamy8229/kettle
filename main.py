@@ -15,6 +15,8 @@ logging.config.dictConfig(config["logging"])
 
 #initializes our app and tells it where to look for html pages.
 app = Flask(__name__, template_folder='templates')
+
+#This lets the get_profile_picture() function be usable in any html template.
 app.jinja_env.globals['get_profile_picture'] = get_profile_picture
 
 #make sure the correct info is filled out in your config.yaml for how you have your database setup, or it will fail

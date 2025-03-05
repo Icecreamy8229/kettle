@@ -315,7 +315,6 @@ header h1 {
 .user-info {
     display: flex;
     justify-content: space-between;
-    align-items: right;
     margin-bottom: 20px;
     border: solid #4C1D70;
 }
