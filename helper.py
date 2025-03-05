@@ -1,5 +1,6 @@
 import argparse
-
+from models import User
+from flask import url_for
 """
 Using this module to help you create dummy users for now.
 I may add other functions here in the future if we need other ways to generate content
@@ -33,6 +34,11 @@ def create_dummy_user(username: str, alias: str, email: str, plaintext_pass: str
         user.user_email = email
         db.session.add(user)
         db.session.commit()
+
+
+
+def get_profile_picture(user: User) -> str: #A function accessible globally inside of flask, called in jinja.
+    return url_for('static', filename=f'images/profile-pictures/{user.user_picture}')
 
 
 if __name__ == '__main__':

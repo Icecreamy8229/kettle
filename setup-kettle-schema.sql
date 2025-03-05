@@ -14,6 +14,7 @@ CREATE TABLE users (
   user_login varchar(128) NOT NULL UNIQUE,
   user_password char(60) NOT NULL UNIQUE,
   user_balance integer NOT NULL DEFAULT 10000,
+  user_picture varchar(128) NOT NULL,
   user_createdt datetime DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -23,13 +24,6 @@ CREATE TABLE libraries (
   game_id bigint NOT NULL,
   PRIMARY KEY (user_id, game_id)
 );
-
-
-CREATE TABLE profile_pictures (
-  user_id bigint NOT NULL PRIMARY KEY UNIQUE,
-  picture_path varchar(500)
-);
-
 
 CREATE TABLE carts (
   user_id bigint NOT NULL,
@@ -94,7 +88,6 @@ ALTER TABLE carts ADD CONSTRAINT cart_game_id_fk FOREIGN KEY (game_id) REFERENCE
 ALTER TABLE carts ADD CONSTRAINT cart_user_id_fk FOREIGN KEY (user_id) REFERENCES users (user_id);
 ALTER TABLE libraries ADD CONSTRAINT libraries_game_id_fk FOREIGN KEY (game_id) REFERENCES games (game_id);
 ALTER TABLE libraries ADD CONSTRAINT libraries_user_id_fk FOREIGN KEY (user_id) REFERENCES users (user_id);
-ALTER TABLE profile_pictures ADD CONSTRAINT profile_pictures_user_id_fk FOREIGN KEY (user_id) REFERENCES users (user_id);
 ALTER TABLE reviews ADD CONSTRAINT reviews_user_id_fk FOREIGN KEY (user_id) REFERENCES users (user_id);
 ALTER TABLE wishlists ADD CONSTRAINT wishlists_game_id_fk FOREIGN KEY (game_id) REFERENCES games (game_id);
 ALTER TABLE wishlists ADD CONSTRAINT wishlists_user_id_fk FOREIGN KEY (user_id) REFERENCES users (user_id);

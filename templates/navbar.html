@@ -1,21 +1,53 @@
 <!-- Navbar -->
-<nav class="navbar">
-  <!-- Logo -->
-  <div class="logo">
-    <!-- Temporary kettle logo -->
-    <a href="/">
-      <img src="static\images\kettlelogo.png" alt="Index page"> 
-    </a>
-  </div>
+
+
+
+{% if current_user.is_authenticated %}
+    {# The authenticated navbar, the cool people get this one. #}
+    <nav class="navbar">
+<!-- Logo -->
+        <div class="logo">
+        <!-- Temporary kettle logo -->
+            <a href="/">
+                <img src="static\images\kettlelogo.png" alt="Index page">
+            </a>
+        </div>
 
   <!-- Links for nav bar -->
-  <div class="links">
-    <a href="{{ url_for('routes.store_route') }}">Store</a>
-    <a href="#">About</a>
-    <a href="https://trello.com/b/nLR6hiT7/kettle">Trello</a>
-    <a href="https://github.com/Icecreamy8229/kettle">Github</a>
-    <a href="{{ url_for('routes.login_route') }}" class="login-signup">Login / Sign Up</a>
-  </div>
-</nav>
+        <div class="links">
+            <a href="{{ url_for('routes.store_route') }}">Store</a>
+            <a href="#">About</a>
+            <a href="https://trello.com/b/nLR6hiT7/kettle">Trello</a>
+            <a href="https://github.com/Icecreamy8229/kettle">Github</a>
+        </div>
+        <div>
+            <a>{{ current_user.user_alias }}</a>
+            <img class="navbar-pp" src="{{ get_profile_picture(current_user) }}">
+        </div>
+    </nav>
+{% else %}
+    {# The guest Navbar #}
+    <nav class="navbar">
+<!-- Logo -->
+        <div class="logo">
+        <!-- Temporary kettle logo -->
+            <a href="/">
+                <img src="static\images\kettlelogo.png" alt="Index page">
+            </a>
+        </div>
+
+  <!-- Links for nav bar -->
+        <div class="links">
+            <a href="{{ url_for('routes.store_route') }}">Store</a>
+            <a href="#">About</a>
+            <a href="https://trello.com/b/nLR6hiT7/kettle">Trello</a>
+            <a href="https://github.com/Icecreamy8229/kettle">Github</a>
+            <a href="{{ url_for('routes.login_route') }}" class="login-signup">Login / Sign Up</a>
+        </div>
+    </nav>
+{% endif %}
+
+
+
 
 

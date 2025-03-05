@@ -5,6 +5,7 @@ import yaml
 import logging.config
 from models import db
 from secret import secret_key
+from helper import get_profile_picture
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -14,7 +15,7 @@ logging.config.dictConfig(config["logging"])
 
 #initializes our app and tells it where to look for html pages.
 app = Flask(__name__, template_folder='templates')
-
+app.jinja_env.globals['get_profile_picture'] = get_profile_picture
 
 #make sure the correct info is filled out in your config.yaml for how you have your database setup, or it will fail
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{config['database']['username']}:{config['database']['password']}@{config['database']['host']}/{config['database']['schema']}"

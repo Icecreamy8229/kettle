@@ -4,8 +4,9 @@ from datetime import datetime
 from sqlalchemy import ForeignKey, DateTime, String, CHAR, Text
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
-
+import yaml
 bcrypt = Bcrypt()
+
 
 class Base(DeclarativeBase):
     pass
@@ -25,10 +26,10 @@ class Library(db.Model): #linking table
     game_id: Mapped[int] = mapped_column(ForeignKey('games.game_id'), primary_key=True, nullable=False)
 
 
-class ProfilePicture(db.Model):
-    __tablename__ = 'profile_pictures'
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.user_id'), primary_key=True, nullable=False)
-    profile_pic_path: Mapped[str] = mapped_column(String(500), nullable=True) #TODO change this to a default picture path remove null
+# class ProfilePicture(db.Model):
+#     __tablename__ = 'profile_pictures'
+#     user_id: Mapped[int] = mapped_column(ForeignKey('users.user_id'), primary_key=True, nullable=False)
+#     profile_pic_path: Mapped[str] = mapped_column(String(500), nullable=True) #TODO change this to a default picture path remove null
 
 
 class User(db.Model, UserMixin):
@@ -39,7 +40,9 @@ class User(db.Model, UserMixin):
     user_login: Mapped[str] = mapped_column(String(128), nullable=False, unique=True)
     user_password: Mapped[str] = mapped_column(CHAR(60), nullable=False)
     user_balance: Mapped[int] = mapped_column(default=10_000, nullable=False)
+    user_picture: Mapped[str] = mapped_column(default='default.png', nullable=False)
     user_createdt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(), nullable=False)
+
 
     @property
     def password(self) -> str:

@@ -39,12 +39,16 @@ header h1 {
 }
 
   /* Leftmost logo section */
-.navbar .logo img {
+.navbar img {
 
       height: 50px; /* Adjust logo size */
       width: auto;
       margin: 5px 15px;
 
+}
+
+.navbar .navbar-pp {
+    border-radius: 1rem;
 }
 
   /* Right section with links and buttons */

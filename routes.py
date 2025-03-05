@@ -62,7 +62,7 @@ def login_route():
             return redirect(url_for('routes.index_route'))
 
         else:
-            logging.info(f"Invalid username or password, attempted login: {user.user_login}")
+            logging.info(f"Invalid username or password, attempted login: {username}")
             flash("Invalid username or password", "danger")
 
     return render_template('login.html')
