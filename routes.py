@@ -68,6 +68,11 @@ def login_route():
     return render_template('login.html')
 
 
+@routes.route("/library")
+@login_required
+def library_route():
+    return render_template('library.html')
+
 @routes.route("/logout")
 @login_required
 def logout_route():

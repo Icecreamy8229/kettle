@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% include 'navbar.html' %}
 {% block content %}
 
     {#
@@ -38,6 +37,7 @@
     
 
     <body>
+    {% include 'navbar.html' %}  {# Any element that is visible to the user needs to be inside the body element. moving include down here. #}
         <div class="profile-container">
             <title>User Page</title>
             <h1>User Information & Settings Page</h1>
@@ -46,7 +46,7 @@
             <form action="" method="POST" enctype="multipart/form-data">
             <div class="profile-content">
                 <div class="profile-picture">
-                    <img id="profile-img" src="" alt="Profile Picture">
+                    <img id="profile-img" src="{{ get_profile_picture(current_user) }}" alt="Profile Picture">
                 </div>
                 <div class="profile-upload">
                     <input type="file" id="upload-image" accept="image/*" hidden>
