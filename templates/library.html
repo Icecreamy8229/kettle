@@ -1,21 +1,26 @@
 {% extends 'base.html' %}
-{% include 'navbar.html' %}
+
 {% block content %}
 
-    {#
-        Checklist for library:
-        show games for User
-        require login
-        redirect to game details on prompt
-        display basic game details on hover?
-        
-    #}
-    
-
-    
-
     <body>
-        
+        {% include 'navbar.html' %}
+        <div class="library-container">
+            <h1>{{ current_user.user_alias }}'s Library</h1>
+            <div class="library-list">
+                {% if games %}
+                    {% for game in games %}
+                        <div class="library-item">
+                            <img src="{{ url_for('static', filename='images/games/' ~ game.image) }}" alt="{{ game.game_title }}">
+                            <h2>{{ game.game_title }}</h2>
+                            <p>{{ game.game_desc }}</p>
+                            <p>Price: {{ game.game_price }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>You have no games in your library.</p>
+                {% endif %}
+            </div>
+        </div>
     </body>
 
 {% include 'footer.html' %}
