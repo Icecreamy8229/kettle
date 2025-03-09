@@ -25,6 +25,11 @@ def checkout_route():
     logging.debug('Checkout route called')
     return render_template('checkout.html')
 
+@routes.route('/about')
+def about_route():
+    logging.debug('About route called')
+    return render_template('about.html')
+
 
 @login_required
 @routes.route('/user')
