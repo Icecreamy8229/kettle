@@ -40,6 +40,14 @@ def user_route():
     else:
         return render_template('login.html')
 
+@login_required
+@routes.route('/library')
+def library_route():
+    logging.debug('Library route called')
+    if current_user.is_authenticated:
+        return render_template('library.html')
+    else:
+        return render_template('login.html')
 
 @routes.route('/testing')
 def testing_route():
@@ -101,12 +109,6 @@ def cart_route():
     games = db.session.query(Game).filter(Game.game_id.in_(game_ids)).all()
     logging.info(f"Cart route called, with these items: {games}")
     return render_template("checkout.html", games=games)
-
-
-@routes.route("/library")
-@login_required
-def library_route():
-    return render_template('library.html')
 
 
 @routes.route("/logout")
