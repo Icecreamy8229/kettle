@@ -1,93 +1,130 @@
-{% extends "base.html" %}
+<!-- Rough draft created on 2/16 -->
+<!-- Edited on 2/18 -->
+
+<!-- Temporary nav bar -->
+{% extends 'base.html' %}
 {% block head %}
     <style>
-            body {
-                font-family: 'Roboto', sans-serif;
-                text-align: center;
-            }
+        .gameList table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
 
-            h1, h2, h3 {
-                position: relative;
-                color: white;
-            }
 
-            .landingBANNER {
-                opacity: 0.8;
-                background-size: cover;
-                background-position: center;
-                height: 500px;
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-            }
+        .gameList th, .gameList td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: white;
+        }
 
-            a.INDEXBUTTON {
-                background-color: #4C1D70;
-                border: none;
-                color: white;
-                padding: 15px 32px;
-                text-align: center;
-                text-decoration: none;
-                font-size: 16px;
-                border-radius: 10px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
 
-            a.INDEXBUTTON:hover {
-                background-color: #371055;
-            }
+        .gameList th {
+            background-color: transparent;
+        }
 
-            .bannerBox {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            }
 
-            .bannerBox img {
-                width: auto;
-                height: 200px;
+        .gameItem td {
+            vertical-align: middle;
+        }
 
-            }
+        .gameInfo {
+            display: inline-block;
+            width: 100%;
+        }
 
-            .carousel {
-                height: 300px;
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-            }
-        </style>
-{%  endblock %}
+        .gameImage {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
+
+        .gameItem h3 {
+            font-size: 18px;
+            margin: 0;
+            display: inline-block;
+            color: white;
+        }
+
+    </style>
+{% endblock %}
 {% block content %}
+    {% include 'navbar.html' %}
 
-    <body>
+<body>
 
-        {% include "navbar.html" %}
-        {% include "flash.html" %}
+    
+    <!-- Banner -->
+    <header>
+        <h1>KETTLE COOL BANNER PLACEHOLDER</h1>
+    </header>
 
-        <div class="landingBANNER">
-            <div class="bannerBox">
-                <img src="static\images\kettlelogo.png" alt="Kettle Logo">
-                <h1><strong>KETTLE</strong></h1>
-                <a href="/checkout" class="INDEXBUTTON">Games</a>
-            </div>
+    <!-- Small description text below the banner -->
+    <div class="banner-description">
+        <p>Discover new games for an affordable price or whatever text we might want here! </p>
+    </div>
+
+    <main>
+        <!-- Container to hold game content and display them in a table-->
+        <div class="container">
+            <section class="gameList">
+                <table>
+                    <thead>
+                        <!-- Removed the table headers as requested -->
+                    </thead>
+                    <tbody>
+                        <tr class="gameItem">
+                            <td class="gameInfo">
+                                <img src="../static/images/games/game1.png" alt="Game 1" class="gameImage">
+                                <h3>McPawnolds Fast food Simulator</h3>
+                            </td>
+                            <td class="price">$2.99</td>
+                            <td><button class="buyButton">Add to cart</button></td>
+                        </tr>
+
+                        <tr class="gameItem">
+                            <td class="gameInfo">
+                                <img src="../static/images/games/game2.png" alt="Game 2" class="gameImage">
+                                <h3>Bald Man's Gate 3</h3>
+                            </td>
+                            <td class="price">$34.99</td>
+                            <td><button class="buyButton">Add to cart</button></td>
+                        </tr>
+
+                        <tr class="gameItem">
+                            <td class="gameInfo">
+                                <img src="../static/images/games/game3.png" alt="Game 3" class="gameImage">
+                                <h3>Shower With Your Dad Simulator 2077</h3>
+                            </td>
+                            <td class="price">$14.99</td>
+                            <td><button class="buyButton">Add to cart</button></td>
+                        </tr>
+
+                        <tr class="gameItem">
+                            <td class="gameInfo">
+                                <img src="../static/images/games/game4.png" alt="Game 4" class="gameImage">
+                                <h3>Overwatch</h3>
+                            </td>
+                            <td class="price">$60.00</td>
+                            <td><button class="buyButton">Add to cart</button></td>
+                        </tr>
+
+                        <tr class="gameItem">
+                            <td class="gameInfo">
+                                <img src="../static/images/games/game5.png" alt="Game 5" class="gameImage">
+                                <h3>Balatro</h3>
+                            </td>
+                            <td class="price">$4.99</td>
+                            <td><button class="buyButton">Add to cart</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
         </div>
-        {% include "carousel.html" %}
-        <div class="indexAccountPanel">
-            <h2></h2>
-            <div class="account-left">
-            </div>
-        </div>
-        <div class="">
+    </main>
+</body>
 
-        </div>
-
-
-        {% include "footer.html" %}
-    </body>
-
+{% include "footer.html" %}
 {% endblock %}

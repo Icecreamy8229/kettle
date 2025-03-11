@@ -13,13 +13,6 @@ def index_route():
     logging.debug('Index route called')
     return render_template('index.html')
 
-
-@routes.route('/store')  # this will be modified later, but adding so we can hit the game page url for now.
-def store_route():
-    logging.debug('Game route called')
-    return render_template('store.html', title='Store')
-
-
 @routes.route('/checkout')
 def checkout_route():
     logging.debug('Checkout route called')
@@ -56,8 +49,7 @@ def library_route():
 
 @routes.route('/testing')
 def testing_route():
-    return render_template(
-        'index.html')  # used for testing purposes.  when I need to test certain things I throw it under this route.
+    return render_template('index.html')  # used for testing purposes.  when I need to test certain things I throw it under this route.
 
 
 @routes.route("/settings")
