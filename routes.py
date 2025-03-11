@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, request, redirect, url_for, flash
 import logging
 import random
-from models import db, User, Cart, Game
+from models import db, User, Cart, Game, Library
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from login import load_user
 
@@ -44,10 +44,15 @@ def user_route():
 @routes.route('/library')
 def library_route():
     logging.debug('Library route called')
-    if current_user.is_authenticated:
-        return render_template('library.html')
-    else:
+    if not current_user.is_authenticated:
+
         return render_template('login.html')
+        
+    library_items = db.session.query(Library).filter_by(user_id=current_user.user_id).all()
+    game_ids = [i.game_id for i in library_items]
+    games = db.session.query(Game).filter(Game.game_id.in_(game_ids)).all()
+    logging.info(f"Library route called, with these items: {games}")
+    return render_template("library.html", games=games)
 
 @routes.route('/testing')
 def testing_route():
