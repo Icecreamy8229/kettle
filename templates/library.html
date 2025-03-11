@@ -1,5 +1,19 @@
 {% extends 'base.html' %}
 
+{% block head %}
+
+<style>
+
+    .library-container h1 {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+</style>
+
+
+{% endblock %}
+
 {% block content %}
 
     <body>
@@ -17,7 +31,11 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <p>You have no games in your library.</p>
+                    <div class="no-games">
+                        <p>You have no games in your library.</p>
+                        <br>
+                        <a href="{{ url_for('routes.store_route') }}">Go to Store</a>
+                    </div>
                 {% endif %}
             </div>
         </div>

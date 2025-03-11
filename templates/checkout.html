@@ -14,40 +14,37 @@
 
     .cart-list {
         display: flex;
-        justify-content: center; /* Ensures perfect centering */
-        flex-wrap: wrap; /* Allows the cart items to wrap */
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .cart-item-wrapper {
-        position: relative; /* Allows absolute positioning for remove button */
+        position: relative;
     }
 
     .cart-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 300px; /* Fixed width */
-        height: 60px; /* Fixed height */
+        width: 300px;
+        height: 60px;
         border: 1px solid black;
         background-color: #4C1D70;
         padding: 10px;
-        gap: 10px; /* Space between image, text, and price */
-        margin-bottom: 15px; /* Space between cart items */
+        gap: 10px;
+        margin-bottom: 15px;
     }
 
-    /* Aligns image and title */
     .cart-image-title {
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    /* Ensures the price is pushed to the right */
-    .cart-item-price {
+    .cart-item-points {
         margin-left: auto;
     }
 
-    /* Ensures proper text alignment */
     .cart-item h5 {
         margin: 0;
         text-align: left;
@@ -90,6 +87,16 @@
     .header h2 {
         font-weight: bold;
     }
+
+    body h1 {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .no-games h2 {
+        opacity: 0.5;
+    }
+    
 </style>
 {% endblock %}
 
@@ -98,47 +105,49 @@
     {% include "navbar.html" %}
     {% include "flash.html" %}
 
-    <div class="container">
-        <div class="row">
-            <div class="header">
-                <h2>CART</h2>
-                <br>
-            </div>
-            <div class="cart-list">
-                {% for game in games %}
-                <div class="cart-item-wrapper">
-                    <div class="cart-item">
-                        <div class="cart-image-title">
-                            <img src="{{ game.image_url }}" alt="{{ game.name }}" width="40" height="40">
-                            <h5>{{ game.name }}</h5>
-                        </div>
-                        <div class="cart-item-price">
-                            <p>${{ game.price }}</p>
-                        </div>
-                    </div>
-                    <button class="remove" onclick="this.parentElement.style.display='none'">X</button>
-                </div>
-                {% endfor %}
-            </div>
+    {% if games %}
+        <div class="container">
 
-            <div class="payment-container">
-                <div class="payment-row">
-                    <h5>Subtotal:</h5>
-                    <h5>${{ subtotal }}</h5>
+            <div class="row">
+                <div class="header">
+                    <h2>CART</h2>
+                    <br>
                 </div>
-                <div class="payment-row">
-                    <h5>Tax:</h5>
-                    <h5>${{ tax }}</h5>
+                <div class="cart-list">
+                    {% for game in games %}
+                    <div class="cart-item-wrapper">
+                        <div class="cart-item">
+                            <div class="cart-image-title">
+                                <img src="{{ game.image_url }}" alt="{{ game.name }}" width="40" height="40">
+                                <h5>{{ game.name }}</h5>
+                            </div>
+                            <div class="cart-item-points">
+                                <p>{{ game.points }} Points</p>
+                            </div>
+                        </div>
+                        <button class="remove" onclick="this.parentElement.style.display='none'">X</button>
+                    </div>
+                    {% endfor %}
                 </div>
-                <hr>
-                <div class="payment-row">
-                    <h5>Total:</h5>
-                    <h5>${{ total }}</h5>
+                <hr>    
+                <div class="payment-container">
+                    <div class="payment-row">
+                        <h5>Total Points:</h5>
+                        <h5>{{ total_points }} Points</h5>
+                    </div>
+                    <button class="btn btn-primary purchase-btn">Purchase</button>
                 </div>
-                <button class="btn btn-primary purchase-btn">Purchase</button>
             </div>
         </div>
+    {% else %}
+    <h1>Cart</h1>
+    <div class="no-games">
+        <h2> ... Theres nothing here ?!</h2>
+        <br>
+        <a href="{{ url_for('routes.store_route') }}">Get some games!</a>
     </div>
+    {% endif %}
+
 
     {% include "footer.html" %}
 </body>
