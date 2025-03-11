@@ -1,92 +1,154 @@
 {% extends 'base.html' %}
 {% block head %}
     {# These only apply to this page. #}
-    <style>
+   <style>
         h2 {
             color: white;
+            text-align: center;
         }
+
         #signup-container {
-            display: none
+            display: none;
         }
 
-        #signup-button:active {
-            #signup-container {
-                display: block;
-            }
+        #login-container, #signup-container {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #343538;
+            border-color:#343538;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
 
+        #login-container img {
+            width: 90px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: #4C1D70;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #6a2c9f;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .form-control {
+        width: 100%;
+        color:white;
+        margin-bottom: 15px;
+        background-color: #4a4b4d;
+        border-radius: 5px;
+        padding: 10px;
+        border: 1px solid #343538;
+}
+
+        .form-control:focus {
+        color:white;
+        background-color: #4a4b4d;
+        outline: none;
+}
+
+        .form-label {
+            font-size: 20px;
+            color: #A9A9A9;
         }
 
         .active-form {
             display: block;
         }
-
     </style>
-{%  endblock %}
-{% block content %}
-<body>
-{% include 'navbar.html' %}
-{% include 'flash.html' %}
+    {%  endblock %}
+    {% block content %}
+    <body>
+    {% include 'navbar.html' %}
+    {% include 'flash.html' %}
 
 
-{# This is a super basic form I setup just to make sure logging in on the backend was working #}
-{# You beautiful creative front end people make it look nice please :) #}
+    {# This is a super basic form I setup just to make sure logging in on the backend was working #}
+    {# You beautiful creative front end people make it look nice please :) #}
 
-<div class="container" style="width: 60%; min-width: 320px" id="login-container">
-    <h2>Login:</h2>
-    <form class="form-control" method="POST" action="{{ url_for('routes.login_route') }}">
-        <label class="form-label" for="username">Username:</label>
-        <input class="form-control" type="text" id="username" name="username" required>
-        <br>
-        <label class="form-label" for="password">Password:</label>
-        <input class="form-control" type="password" id="password" name="password" required>
-        <br>
-        <button class="btn btn-primary" type="submit">Login</button>
-        <button class="btn btn-secondary" type="button" id="signup-button" onclick="swapForms(this)">Sign Up</button>
-    </form>
-</div>
-<div class="container" id="signup-container">
-    <h2>Signup:</h2>
-    <form id="signup-form" class="form-control" method="POST" action="{{ url_for('routes.signup_route') }}">
-        <label class="form-label" for="email">Email</label>
-        <input class="form-control" type="email" name="email" id="email">
-        <br>
-        <label class="form-label" for="username">Username</label>
-        <input class="form-control" type="text" name="username" id="username">
-        <br>
-        <label class="form-label" for="alias">Alias</label>
-        <input class="form-control" id="alias" name="alias" type="text">
-        <br>
-        <label class="form-label" for="password">Password</label>
-        <input class="form-control" type="password" id="password">
-        <br>
-        <label class="form-label" for="password-confirm">Confirm Password</label>
-        <input class="form-control" type="password" id="password-confirm">
-        <br>
-        <button class="btn btn-primary" type="submit">Create Account</button>
-        <button class="btn btn-secondary" type="button" id="login-button" onclick="swapForms(this)">Login</button>
+    <div class="container" style="width: 60%; min-width: 320px" id="login-container">
+        <img src="static/images/kettlelogo.png" alt="logo">
+        <h2>Login</h2>
+        <form class="form-control" method="POST" action="{{ url_for('routes.login_route') }}">
+            <label class="form-label" for="username">Username:</label>
+            <input class="form-control" type="text" id="username" name="username" required>
+            <br>
+            <label class="form-label" for="password">Password:</label>
+            <input class="form-control" type="password" id="password" name="password" required>
+            <br>
+            <button class="btn btn-primary" type="submit">Login</button>
+            <button class="btn btn-secondary" type="button" id="signup-button" onclick="swapForms(this)">Sign Up</button>
+        </form>
+    </div>
+    <div class="container" id="signup-container">
+        <h2>Signup:</h2>
+        <form id="signup-form" class="form-control" method="POST" action="{{ url_for('routes.signup_route') }}">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" name="email" id="email">
+            <br>
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" type="text" name="username" id="username">
+            <br>
+            <label class="form-label" for="alias">Alias</label>
+            <input class="form-control" id="alias" name="alias" type="text">
+            <br>
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" type="password" id="password">
+            <br>
+            <label class="form-label" for="password-confirm">Confirm Password</label>
+            <input class="form-control" type="password" id="password-confirm">
+            <br>
+            <button class="btn btn-primary" type="submit">Create Account</button>
+            <button class="btn btn-secondary" type="button" id="login-button" onclick="swapForms(this)">Login</button>
 
-    </form>
-</div>
-</body>
-    <script>
-    function swapForms(button) {
-        const signupForm = document.getElementById('signup-container');
-        const loginForm = document.getElementById('login-container');
-        console.log(button.id)
-        if (button.id === "signup-button") {
-            loginForm.style.display = "none";
-            signupForm.style.display = "block";
+        </form>
+    </div>
+    </body>
+        <script>
+        function swapForms(button) {
+            const signupForm = document.getElementById('signup-container');
+            const loginForm = document.getElementById('login-container');
+            console.log(button.id)
+            if (button.id === "signup-button") {
+                loginForm.style.display = "none";
+                signupForm.style.display = "block";
+
+            }
+            else {
+                loginForm.style.display = "block";
+                signupForm.style.display = "none";
+
+            }
+
+
 
         }
-        else {
-            loginForm.style.display = "block";
-            signupForm.style.display = "none";
 
-        }
-
-
-
-    }
-
-    </script>
-{% endblock %}
+        </script>
+    {% endblock %}
