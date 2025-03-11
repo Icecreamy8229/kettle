@@ -17,18 +17,18 @@ def index_route():
 @routes.route('/store')  # this will be modified later, but adding so we can hit the game page url for now.
 def store_route():
     logging.debug('Game route called')
-    return render_template('store.html')
+    return render_template('store.html', title='Store')
 
 
 @routes.route('/checkout')
 def checkout_route():
     logging.debug('Checkout route called')
-    return render_template('checkout.html')
+    return render_template('checkout.html', title='Checkout')
 
 @routes.route('/about')
 def about_route():
     logging.debug('About route called')
-    return render_template('about.html')
+    return render_template('about.html', title='About')
 
 
 @login_required
@@ -38,7 +38,7 @@ def user_route():
     if current_user.is_authenticated:
         return render_template('user.html')
     else:
-        return render_template('login.html')
+        return render_template('login.html', title='Login')
 
 @login_required
 @routes.route('/library')
@@ -91,7 +91,7 @@ def login_route():
             logging.info(f"Invalid username or password, attempted login: {username}")
             flash("Invalid username or password", "danger")
 
-    return render_template('login.html')
+    return render_template('login.html', title='Login')
 
 
 @routes.route("/signup", methods=['POST'])
