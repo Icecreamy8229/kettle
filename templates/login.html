@@ -29,7 +29,7 @@
         }
 
         .btn-primary {
-            background-color: #4C1D70;
+            background-color: #4c1d70;
             border: none;
             color: white;
             padding: 10px 20px;
@@ -40,7 +40,7 @@
         }
 
         .btn-primary:hover {
-            background-color: #6a2c9f;
+            background-color: #371055;
         }
 
         .btn-secondary {
@@ -62,7 +62,8 @@
         color:white;
         margin-bottom: 15px;
         background-color: #4a4b4d;
-        border-radius: 5px;
+        border-radius: 10px;
+
         padding: 10px;
         border: 1px solid #343538;
 }
@@ -81,6 +82,7 @@
         .active-form {
             display: block;
         }
+
     </style>
     {%  endblock %}
     {% block content %}
@@ -100,26 +102,27 @@
             <input class="form-control" type="text" id="username" name="username" required>
             <br>
             <label class="form-label" for="password">Password:</label>
-            <input class="form-control" type="password" id="password" name="password" required>
+            <input class="form-control" type="password" id="login-password" name="password" required>
             <br>
             <button class="btn btn-primary" type="submit">Login</button>
             <button class="btn btn-secondary" type="button" id="signup-button" onclick="swapForms(this)">Sign Up</button>
         </form>
     </div>
+
     <div class="container" id="signup-container">
         <h2>Signup:</h2>
         <form id="signup-form" class="form-control" method="POST" action="{{ url_for('routes.signup_route') }}">
             <label class="form-label" for="email">Email</label>
-            <input class="form-control" type="email" name="email" id="email">
+            <input class="form-control" type="email" name="email" id="signup-email">
             <br>
             <label class="form-label" for="username">Username</label>
-            <input class="form-control" type="text" name="username" id="username">
+            <input class="form-control" type="text" name="username" id="signup-username">
             <br>
             <label class="form-label" for="alias">Alias</label>
-            <input class="form-control" id="alias" name="alias" type="text">
+            <input class="form-control" id="signup-alias" name="alias" type="text">
             <br>
             <label class="form-label" for="password">Password</label>
-            <input class="form-control" type="password" id="password" name="password">
+            <input class="form-control" type="password" id="signup-password" name="password">
             <br>
             <label class="form-label" for="password-confirm">Confirm Password</label>
             <input class="form-control" type="password" id="password-confirm" name="password-confirm">
@@ -130,25 +133,115 @@
         </form>
     </div>
     </body>
-        <script>
+
+    <script>
         function swapForms(button) {
             const signupForm = document.getElementById('signup-container');
             const loginForm = document.getElementById('login-container');
-            console.log(button.id)
+    
             if (button.id === "signup-button") {
                 loginForm.style.display = "none";
                 signupForm.style.display = "block";
-
-            }
-            else {
+            } else {
                 loginForm.style.display = "block";
                 signupForm.style.display = "none";
-
             }
-
-
-
         }
+    
+        document.addEventListener("DOMContentLoaded", function () {
+            const signupForm = document.getElementById("signup-form");
+    
+            const fields = [
+                { id: "signup-email", message: "A valid email is required." },
+                { id: "signup-username", message: "A username is required." },
+                { id: "signup-alias", message: "An alias is required." },                      // Change 'message' field if you want to change the error message.
+                { id: "signup-password", message: "A password is required." },
+                { id: "password-confirm", message: "Passwords do not match." }
+            ];
+    
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const errorDiv = document.createElement("div");
+                errorDiv.className = "error-message";
+                errorDiv.style.color = "red";
+                errorDiv.style.fontSize = "14px";
+                errorDiv.style.marginTop = "5px";
+                input.insertAdjacentElement("afterend", errorDiv);
+                field.errorDiv = errorDiv;
+            });
+    
+            function validatePassword() {
+                const passwordInput = document.getElementById("signup-password");
+                const passwordErrorDiv = fields.find(f => f.id === "signup-password").errorDiv;
+                let errorMessage = "";
+    
+                const minLength = 8;
+                const specialCharacters = /[^A-Za-z0-9]/;
+                const hasNumber = /\d/;
+                const hasUppercase = /[A-Z]/;
+    
+                if (passwordInput.value.length === 0) {
+                    errorMessage = "A password is required.";
+                } else if (passwordInput.value.length < minLength) {
+                    errorMessage = "Password must be at least 8 characters long.";
+                } else if (!hasNumber.test(passwordInput.value)) {
+                    errorMessage = "Password must contain at least one number.";
+                } else if (!hasUppercase.test(passwordInput.value)) {
+                    errorMessage = "Password must contain at least one uppercase letter.";
+                } else if (specialCharacters.test(passwordInput.value)) {
+                    errorMessage = "Password cannot contain special characters.";
+                }
+    
+                passwordErrorDiv.textContent = errorMessage;
+                return errorMessage === "";
+            }
+    
+            function validateConfirmPassword() {
+                const passwordInput = document.getElementById("signup-password");
+                const confirmPasswordInput = document.getElementById("password-confirm");
+                const confirmPasswordErrorDiv = fields.find(f => f.id === "password-confirm").errorDiv;
+                let errorMessage = "";
 
-        </script>
+                if (confirmPasswordInput.value !== passwordInput.value) {
+                    errorMessage = "Passwords do not match.";
+                }
+
+                confirmPasswordErrorDiv.textContent = errorMessage;
+                return errorMessage === "";
+            }
+    
+            function validateField(field) {
+                const input = document.getElementById(field.id);
+                field.errorDiv.textContent = input.value.trim() ? "" : field.message;
+                return !!input.value.trim();
+            }
+    
+            fields.forEach(field => {
+                document.getElementById(field.id).addEventListener("input", () => validateField(field));
+            });
+    
+            document.getElementById("signup-password").addEventListener("input", validatePassword);
+            document.getElementById("password-confirm").addEventListener("input", validateConfirmPassword);
+    
+            signupForm.addEventListener("submit", function (event) {
+                let isValid = true;
+    
+                fields.forEach(field => {
+                    if (!validateField(field)) {
+                        isValid = false;
+                    }
+                });
+    
+                if (!validatePassword() || !validateConfirmPassword()) {
+                    isValid = false;
+                }
+    
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+    
+    
     {% endblock %}
