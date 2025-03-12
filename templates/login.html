@@ -84,52 +84,52 @@
     </style>
     {%  endblock %}
     {% block content %}
-    <body>
-    {% include 'navbar.html' %}
-    {% include 'flash.html' %}
+        <body>
+        {% include 'navbar.html' %}
+        {% include 'flash.html' %}
 
 
-    {# This is a super basic form I setup just to make sure logging in on the backend was working #}
-    {# You beautiful creative front end people make it look nice please :) #}
+        {# This is a super basic form I setup just to make sure logging in on the backend was working #}
+        {# You beautiful creative front end people make it look nice please :) #}
 
-    <div class="container" style="width: 60%; min-width: 320px" id="login-container">
-        <img src="static/images/kettlelogo.png" alt="logo">
-        <h2>Login</h2>
-        <form class="form-control" method="POST" action="{{ url_for('routes.login_route') }}">
-            <label class="form-label" for="username">Username:</label>
-            <input class="form-control" type="text" id="username" name="username" required>
-            <br>
-            <label class="form-label" for="password">Password:</label>
-            <input class="form-control" type="password" id="password" name="password" required>
-            <br>
-            <button class="btn btn-primary" type="submit">Login</button>
-            <button class="btn btn-secondary" type="button" id="signup-button" onclick="swapForms(this)">Sign Up</button>
-        </form>
-    </div>
-    <div class="container" id="signup-container">
-        <h2>Signup:</h2>
-        <form id="signup-form" class="form-control" method="POST" action="{{ url_for('routes.signup_route') }}">
-            <label class="form-label" for="email">Email</label>
-            <input class="form-control" type="email" name="email" id="email">
-            <br>
-            <label class="form-label" for="username">Username</label>
-            <input class="form-control" type="text" name="username" id="username">
-            <br>
-            <label class="form-label" for="alias">Alias</label>
-            <input class="form-control" id="alias" name="alias" type="text">
-            <br>
-            <label class="form-label" for="password">Password</label>
-            <input class="form-control" type="password" id="password" name="password">
-            <br>
-            <label class="form-label" for="password-confirm">Confirm Password</label>
-            <input class="form-control" type="password" id="password-confirm" name="password-confirm">
-            <br>
-            <button class="btn btn-primary" type="submit">Create Account</button>
-            <button class="btn btn-secondary" type="button" id="login-button" onclick="swapForms(this)">Login</button>
+        <div class="container" style="width: 60%; min-width: 320px" id="login-container">
+            <img src="static/images/kettlelogo.png" alt="logo">
+            <h2>Login</h2>
+            <form class="form-control" method="POST" action="{{ url_for('routes.login_route') }}">
+                <label class="form-label" for="username">Username:</label>
+                <input class="form-control" type="text" id="username" name="username" required>
+                <br>
+                <label class="form-label" for="password">Password:</label>
+                <input class="form-control" type="password" id="password" name="password" required>
+                <br>
+                <button class="btn btn-primary" type="submit">Login</button>
+                <button class="btn btn-secondary" type="button" id="signup-button" onclick="swapForms(this)">Sign Up</button>
+            </form>
+        </div>
+        <div class="container" id="signup-container">
+            <h2>Signup:</h2>
+            <form id="signup-form" class="form-control" method="POST" action="{{ url_for('routes.signup_route') }}">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" type="email" name="email" id="email">
+                <br>
+                <label class="form-label" for="username">Username</label>
+                <input class="form-control" type="text" name="username" id="username">
+                <br>
+                <label class="form-label" for="alias">Alias</label>
+                <input class="form-control" id="alias" name="alias" type="text">
+                <br>
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" type="password" id="password" name="password">
+                <br>
+                <label class="form-label" for="password-confirm">Confirm Password</label>
+                <input class="form-control" type="password" id="password-confirm" name="password-confirm">
+                <br>
+                <button class="btn btn-primary" type="submit">Create Account</button>
+                <button class="btn btn-secondary" type="button" id="login-button" onclick="swapForms(this)">Login</button>
 
-        </form>
-    </div>
-    </body>
+            </form>
+        </div>
+        </body>
         <script>
         function swapForms(button) {
             const signupForm = document.getElementById('signup-container');

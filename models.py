@@ -48,7 +48,7 @@ class User(db.Model, UserMixin):
     def password(self) -> str:
         raise AttributeError("Password is write-only!")
 
-    def get_id(self) -> str: #I have to override flasks builtin because of our naming convetion.
+    def get_id(self) -> str: #I have to override flasks builtin because of our naming convention.
         return str(self.user_id)
 
     @password.setter #when password is set, it is modified to be hashed.

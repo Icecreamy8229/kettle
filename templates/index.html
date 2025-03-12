@@ -51,10 +51,11 @@
     </style>
 {% endblock %}
 {% block content %}
-    {% include 'navbar.html' %}
-    {% include 'flash.html' %} 
+
 
 <body>
+    {% include 'navbar.html' %}
+    {% include 'flash.html' %}
 
     
     <!-- Banner -->
@@ -73,53 +74,18 @@
             <section class="gameList">
                 <table>
                     <thead>
-                        <!-- Removed the table headers as requested -->
                     </thead>
                     <tbody>
-                        <tr class="gameItem">
-                            <td class="gameInfo">
-                                <img src="../static/images/games/game1.png" alt="Game 1" class="gameImage">
-                                <h3>McPawnolds Fast food Simulator</h3>
-                            </td>
-                            <td class="price">$2.99</td>
-                            <td><button class="buyButton">Add to cart</button></td>
-                        </tr>
-
-                        <tr class="gameItem">
-                            <td class="gameInfo">
-                                <img src="../static/images/games/game2.png" alt="Game 2" class="gameImage">
-                                <h3>Bald Man's Gate 3</h3>
-                            </td>
-                            <td class="price">$34.99</td>
-                            <td><button class="buyButton">Add to cart</button></td>
-                        </tr>
-
-                        <tr class="gameItem">
-                            <td class="gameInfo">
-                                <img src="../static/images/games/game3.png" alt="Game 3" class="gameImage">
-                                <h3>Shower With Your Dad Simulator 2077</h3>
-                            </td>
-                            <td class="price">$14.99</td>
-                            <td><button class="buyButton">Add to cart</button></td>
-                        </tr>
-
-                        <tr class="gameItem">
-                            <td class="gameInfo">
-                                <img src="../static/images/games/game4.png" alt="Game 4" class="gameImage">
-                                <h3>Overwatch</h3>
-                            </td>
-                            <td class="price">$60.00</td>
-                            <td><button class="buyButton">Add to cart</button></td>
-                        </tr>
-
-                        <tr class="gameItem">
-                            <td class="gameInfo">
-                                <img src="../static/images/games/game5.png" alt="Game 5" class="gameImage">
-                                <h3>Balatro</h3>
-                            </td>
-                            <td class="price">$4.99</td>
-                            <td><button class="buyButton">Add to cart</button></td>
-                        </tr>
+                        {% for game in games %}
+                            <tr class="gameItem">
+                                <td class="gameInfo">
+                                    <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="Game 1" class="gameImage">
+                                    <h3><a href="{{ url_for('routes.game_route') }}?id={{ game.game_id }}">{{ game.game_title }}</a></h3>
+                                </td>
+                                <td class="price">{{ game.game_price }}</td>
+                                <td><button class="buyButton">Add to cart</button></td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </section>

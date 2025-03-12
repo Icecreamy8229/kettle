@@ -1,16 +1,29 @@
-<link rel="stylesheet" href="carousel.css">
+{#
+in order to use the carousel,
+you must pass in a keyword argument of
+media_files to the template this is included in.
+You can see an example of how its being done in the game route.
+#}
 
 <section class="container">
 	<div class="slider-wrapper">
 		<div class="slider">
-			<img id="slide-1" src="game1.png" alt="" />
-			<img id="slide-2" src="game2.png" alt="" />
-			<img id="slide-3" src="game3.png" alt="" />
+            {% for media in media_files %}
+                {% if media.type == 'image' %}
+                    <img id="slide-{{ loop.index }}" src='{{ media.url }}' alt="game_image" />
+                {% elif media.type == 'video' %} {# This is probably broken for videos #}
+                    <video id="slide-{{ loop.index }}" controls>
+                        <source src='{{ media.url }}' type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% endif %}
+            {% endfor %}
 		</div>
+
 		<div class="slider-nav">
-			<a href="#slide-1"></a>
-			<a href="#slide-2"></a>
-			<a href="#slide-3"></a>
+            {% for media in media_files %}
+                <a href="#slide-{{ loop.index }}"></a>
+			{% endfor %}
 		</div>
 	</div>
 </section>
