@@ -183,6 +183,7 @@ def signup_route(): #this is only used to process data from the form and sign th
         return jsonify({'error': 'User already exists'}), 400
 
     if has_special_characters(user_login) or has_special_characters(email):
+        pass #TODO logic not finished yet.
 
     new_user = User()
     new_user.user_login = user_login

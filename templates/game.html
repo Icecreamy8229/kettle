@@ -123,23 +123,24 @@
             }
         </style>
 {% endblock %}
+
 {% block content %}
-<body>
-    {% include 'navbar.html' %}
-
+    <body>
+        {% include 'navbar.html' %}
     
-    <header>
-        <h1 id="gameTitle">{{ game.game_title }}</h1>
-    </header>
-	
-   
-	<section id="imagePlaceholderContainer">
-    {% include 'carousel.html' %}
-	</section>
+        <header>
+            <h1 id="gameTitle">{{ game.game_title }}</h1>
 
+
+            <section id="imagePlaceholderContainer">
+
+                {% include 'carousel.html' %}
+
+            </section>
+        </header>
 
     <section id="briefDescriptionBox">
-        <p>Help Nugget the cat run McPawnolds, serving delicious fast food to hungry felines and keeping the kitchen running smoothly!</p>
+        <p>Need to fix this so its dynamically generated.</p>
     </section>
 
     <section id="genreButtons">
@@ -151,6 +152,7 @@
   
     <section id="detailedDescriptionBox">
         <h2>About the Game</h2>
+
         <p>{{ game.game_desc }}</p>
 
     </section>
@@ -158,5 +160,7 @@
     <section id="addToCartSection">
         <button id="addToCartButton" class="button">Add to Cart</button>
     </section>
-</body>
+
+    </body>
+
 {% endblock %}
