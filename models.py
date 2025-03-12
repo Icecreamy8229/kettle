@@ -42,7 +42,7 @@ class User(db.Model, UserMixin):
     user_balance: Mapped[int] = mapped_column(default=10_000, nullable=False)
     user_picture: Mapped[str] = mapped_column(default='default.png', nullable=False)
     user_createdt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(), nullable=False)
-
+    user_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     @property
     def password(self) -> str:

@@ -6,6 +6,7 @@ import logging.config
 from models import db
 from secret import secret_key
 from helper import get_profile_picture
+from mailer import mail
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -23,9 +24,21 @@ app.jinja_env.globals['get_profile_picture'] = get_profile_picture
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{config['database']['username']}:{config['database']['password']}@{config['database']['host']}/{config['database']['schema']}"
 logging.debug("Configured database url %s", app.config["SQLALCHEMY_DATABASE_URI"])
 
+
+if config['environment'] == 'production':
+    app.config['MAIL_SERVER'] = config['mailchimp']['url']
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+    app.config['MAIL_USERNAME'] = config['mailchimp']['username']
+    app.config['MAIL_PASSWORD'] = config['mailchimp']['api_key']
+    app.config['MAIL_DEFAULT_SENDER'] = (config['mailchimp']['username'], "Team Kettle")
+    mail.init_app(app)
+
 app.secret_key = secret_key
 db.init_app(app)
 login_manager.init_app(app)
+
 
 #registers our endpoints.  "/" being the index page.
 app.register_blueprint(routes)

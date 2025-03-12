@@ -1,10 +1,14 @@
-from flask import render_template, Blueprint, request, redirect, url_for, flash
+import yaml
+from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify
 import logging
 import random
 from models import db, User, Cart, Game, Library
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from login import load_user
+from email_utils import send_verify_email, verify_token
 
+with open('config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
 routes = Blueprint('routes', __name__)  # this module points to itself for routes.
 
 
@@ -93,6 +97,43 @@ def signup_route(): #this is only used to process data from the form and sign th
     if current_user.is_authenticated:
         return redirect(url_for('routes.index_route'))
 
+    data = request.form
+    print(data)
+    alias = data.get('alias')
+    user_login = data.get('username')
+    password = data.get('password')
+    confirm_password = data.get('password-confirm')
+    email = data.get('email')
+    if not user_login or not email or not password:
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    if password != confirm_password:
+        return jsonify({'error': 'Passwords do not match'}), 400
+
+    existing_user = db.session.query(User).filter_by(user_login=user_login).first()
+    existing_email = db.session.query(User).filter_by(user_email=email).first()
+    if existing_user or existing_email:
+        return jsonify({'error': 'User already exists'}), 400
+
+    new_user = User()
+    new_user.user_login = user_login
+    new_user.user_email = email
+    new_user.user_alias = alias
+    new_user.password = password
+    if config['environment'] != 'production':
+        new_user.user_verified = True
+    db.session.add(new_user)
+    db.session.commit()
+    if config['environment'] == 'production':
+        send_verify_email(new_user)
+
+    return jsonify({'message': 'User registered successfully', 'user_login': user_login})
+
+
+
+
+
+
 
 @login_required
 @routes.route("/cart")
@@ -114,3 +155,21 @@ def logout_route():
     logout_user()
     flash("You have been logged out", "success")
     return redirect(url_for('routes.index_route'))
+
+@routes.route("/verify-email/<token>")
+def verify_email(token):
+
+    email = verify_token(token)
+    if not email:
+        return redirect("/")
+
+    user = User.query.filter_by(user_email=email).first()
+    if not user:
+        flash("User not found.", "error")
+        return redirect("/")
+
+    user.user_verified = True  # Mark user as verified
+    db.session.commit()
+
+    flash("Your email has been verified!", "success")
+    return redirect("/")
