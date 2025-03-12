@@ -15,7 +15,8 @@ CREATE TABLE users (
   user_password char(60) NOT NULL UNIQUE,
   user_balance integer NOT NULL DEFAULT 10000,
   user_picture varchar(128) NOT NULL,
-  user_createdt datetime DEFAULT CURRENT_TIMESTAMP
+  user_createdt datetime DEFAULT CURRENT_TIMESTAMP,
+  user_verified tinyint NOT NULL DEFAULT 0
 );
 
 
