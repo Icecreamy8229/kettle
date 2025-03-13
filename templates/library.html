@@ -2,13 +2,18 @@
 
 {% block head %}
 
-<title>Hey!</title>
-
 <style>
 
     .library-container h1 {
         text-align: center;
         margin-top: 50px;
+    }
+    {# This was a temporary fix so that the image was not massive #}
+    {# feel free to blow away with better styling. #}
+    .library-list img {
+        width: 200px;
+        height: auto;
+        margin-right: 20px;
     }
 
 </style>
@@ -27,6 +32,7 @@
                 {% if games %}
                     {% for game in games %}
                         <div class="library-item">
+                            <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
                             <h2>{{ game.game_title }}</h2>
                             <p>{{ game.game_desc }}</p>
                             <p>Price: {{ game.game_price }}</p>
@@ -36,7 +42,7 @@
                     <div class="no-games">
                         <p>You have no games in your library.</p>
                         <br>
-                        <a href="{{ url_for('routes.store_route') }}">Go to Store</a>
+                        <a href="{{ url_for('routes.index_route') }}">Go to Store</a>
                     </div>
                 {% endif %}
             </div>
