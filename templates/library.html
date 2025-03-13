@@ -20,13 +20,13 @@
 
     <body>
         {% include 'navbar.html' %}
+        {% include 'flash.html' %}
         <div class="library-container">
             <h1>{{ current_user.user_alias }}'s Library</h1>
             <div class="library-list">
                 {% if games %}
                     {% for game in games %}
                         <div class="library-item">
-                            <img src="{{ url_for('static', filename='images/games/' ~ game.image) }}" alt="{{ game.game_title }}">
                             <h2>{{ game.game_title }}</h2>
                             <p>{{ game.game_desc }}</p>
                             <p>Price: {{ game.game_price }}</p>
