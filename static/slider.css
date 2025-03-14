@@ -61,19 +61,19 @@ body {
 	transform: translateY(-50%);
 	font-size: 2rem;
 	color: #fff;
-	background-color: rgba(0, 0, 0, 0.5);
-	padding: 0.5rem;
-	border-radius: 50%;
+	background-color: rgba(0, 0, 0, 0.2);
+	padding: 1rem .5rem;
+
 	cursor: pointer;
 	z-index: 2;
 }
 
 .slider-nav-left {
-	left: 1rem;
+	left: 0;
 }
 
 .slider-nav-right {
-	right: 1rem;
+	right: 0;
 }
 
 .slider-nav-left:hover,

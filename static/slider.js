@@ -14,6 +14,9 @@ function moveToSlide(index) {
     const items = document.querySelectorAll('.slide');
     const totalSlides = items.length;
 
+    if (index === currentIndex) {
+        return;
+    }
     if (totalSlides === 0 || index < 0 || index >= totalSlides) return; //this is a failsafe.  just an early return if the index is outside of the realm of possibility
 
     // Remove active class from slide and button
