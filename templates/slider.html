@@ -4,6 +4,9 @@ you must pass in a keyword argument of
 media_files to the template this is included in.
 You can see an example of how its being done in the game route.
 #}
+{% block head %}
+<script src="../static/slider.js"></script>
+{% endblock %}
 
 <section class="container">
 	<div class="slider-wrapper">
@@ -24,12 +27,13 @@ You can see an example of how its being done in the game route.
             {% endfor %}
 		</div>
 
-		<div class="slider-nav">
-            {% for media in media_files %}
-                <button id="slide-dot-{{ loop.index0 }}" onclick="moveToSlide({{ loop.index0 }})"></button>
-			{% endfor %}
-		</div>
+
         <div class="slider-nav-left" onclick="moveSlide(-1)">&#10094;</div>
         <div class="slider-nav-right" onclick="moveSlide(1)">&#10095;</div>
 	</div>
+    <div class="slider-nav">
+        {% for media in media_files %}
+            <button class="slide-button" id="slide-dot-{{ loop.index0 }}" onclick="moveToSlide({{ loop.index0 }})"></button>
+        {% endfor %}
+    </div>
 </section>

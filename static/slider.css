@@ -83,19 +83,20 @@ body {
 
 .slider-nav {
 	display: flex;
+	justify-content: center;
+	padding: 25px;
 	column-gap: 1rem;
-	position: absolute;
-	bottom: 1.25rem;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 1;
+}
+
+.slide.active {
+
 }
 
 .slider-nav button {
 	border: none;
 	width: 1rem;
 	height: 1rem;
-	border-radius: 50%;
+
 	background-color: #fff;
 	opacity: 0.65;
 	transition: opacity ease 250ms;
@@ -103,7 +104,27 @@ body {
 .slider-nav button:hover {
 	opacity: 1;
 }
-
-.slider-nav a:hover {
+.slider-nav button.active {
 	opacity: 1;
+}
+
+@keyframes easeInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-25%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes easeInFromRight {
+	from {
+		opacity: 0;
+		transform: translateX(25%);
+	}
+	to {
+		opacity: 1;
+	}
 }
