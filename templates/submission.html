@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+<form method="POST" enctype="multipart/form-data" action="{{ url_for('routes.submit_game_route') }}">
+{# This form will be used to submit a game, with image and videos #}
+    <label for="game-title">Game Title:</label>
+    <input type="text" id="game-title" name="game-title" required><br><br>
+    <label for="game-desc">Game Description:</label><br>
+    <textarea id="game-desc" name="game-desc" required cols="100" rows="10"></textarea><br>
+
+    <label for="game-images">Upload Images (each less than 4MB):</label>
+    <input type="file" id="game-images" name="game-images" accept="image/*" multiple
+           onchange="validateImagesAndVideos()" required><br><br>
+
+    <label for="game-videos">Upload Videos (each less than 25MB):</label>
+    <input type="file" id="game-videos" name="game-videos" accept="video/*" multiple
+           onchange="validateImagesAndVideos()"><br><br>
+
+    <button type="submit">Submit</button>
+    <h2>Your first selected image will be the cover.  Only 8 total items allowed and only 1 Video allowed.</h2>
+    <script>
+        function validateImagesAndVideos() {
+            const maxImageSize = 4 * 1024 * 1024; // 4MB in bytes
+            const maxVideoSize = 25 * 1024 * 1024; // 25MB in bytes
+            const maxFiles = 10;
+
+            const imageInput = document.getElementById("game-images");
+            const videoInput = document.getElementById("game-videos");
+
+            const imageFiles = imageInput.files;
+            const videoFiles = videoInput.files;
+            const totalFiles = (imageFiles ? imageFiles.length : 0) + (videoFiles ? videoFiles.length : 0);
+
+            if (totalFiles > maxFiles) {
+                alert("You can only upload a total of 10 files (images and videos combined).");
+                imageInput.value = "";
+                videoInput.value = "";
+                return false;
+            }
+
+            for (let file of imageFiles) {
+                if (file.size > maxImageSize) {
+                    alert("Each image file must be smaller than 4MB.");
+                    imageInput.value = "";
+                    return false;
+                }
+            }
+
+            for (let file of videoFiles) {
+                if (file.size > maxVideoSize) {
+                    alert("Video file must be smaller than 25MB.");
+                    videoInput.value = "";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    </script>
+
+</form>
+</div>
+</body>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<style>
+
+    .container h1 {
+        text-align: center;
+        margin-top: 25px;
+    }
+    {# This was a temporary fix so that the image was not massive #}
+    {# feel free to blow away with better styling. #}
+    .library-item img {
+        float: left;
+        width: auto;
+        height: 150px;
+        margin-right: 20px;
+    }
+
+</style>
+
+
+{% endblock %}
+
+{% block content %}
+
+    <body>
+        {% include 'navbar.html' %}
+        {% include 'flash.html' %}
+        <div class="container">
+            <h1>{{ current_user.user_alias }}'s Library</h1>
+            <div>
+                {% if games %}
+                    {% for game in games %}
+                        <div class="library-item">
+                            <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
+                            <h2>{{ game.game_title }}</h2>
+                            <p>{{ game.game_desc|truncate(100) }}</p> {# Helps with consistent style of items. #}
+                            <p>Price: {{ game.game_price }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-games">
+                        <p>You have no games in your library.</p>
+                        <br>
+                        <a href="{{ url_for('routes.index_route') }}">Go to Store</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% include 'footer.html' %}
+    </body>
+
+
+{% endblock %}
+
+

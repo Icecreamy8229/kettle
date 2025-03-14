@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+    .container {
+        text-align: center;
+        color: white;
+    }
+
+    .container hr {
+        width: 100%;
+        margin: 20px auto;
+        border: 1px solid black;
+    }
+
+    .cart-list {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cart-item-wrapper {
+        position: relative;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 300px;
+        height: 60px;
+        border: 1px solid black;
+        background-color: #4c1d70;
+        padding: 10px;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .cart-image-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .cart-item-points {
+        margin-left: auto;
+    }
+
+    .cart-item h5 {
+        margin: 0;
+        text-align: left;
+    }
+
+    .cart-item p {
+        margin: 0;
+        text-align: right;
+    }
+
+    .remove {
+        position: absolute;
+        right: -30px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        border: none;
+        background: none;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .payment-container {
+        width: 300px;
+        margin: 20px auto;
+        text-align: left;
+    }
+
+    .payment-row {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .purchase-btn {
+        display: block;
+        margin: 20px auto;
+    }
+
+    .header h2 {
+        font-weight: bold;
+    }
+
+    body h1 {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .no-games h2 {
+        opacity: 0.5;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<body>
+    {% include "navbar.html" %}
+    {% include "flash.html" %}
+
+    {% if games %}
+        <div class="container">
+
+            <div class="row">
+                <div class="header">
+                    <h2>CART</h2>
+                    <br>
+                </div>
+                <div class="cart-list">
+                    {% for game in games %}
+                    <div class="cart-item-wrapper">
+                        <div class="cart-item">
+                            <div class="cart-image-title">
+                                <img src="{{ game.image_url }}" alt="{{ game.name }}" width="40" height="40">
+                                <h5>{{ game.name }}</h5>
+                            </div>
+                            <div class="cart-item-points">
+                                <p>{{ game.points }} Points</p>
+                            </div>
+                        </div>
+                        <button class="remove" onclick="this.parentElement.style.display='none'">X</button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <hr>    
+                <div class="payment-container">
+                    <div class="payment-row">
+                        <h5>Total Points:</h5>
+                        <h5>{{ total_points }} Points</h5>
+                    </div>
+                    <button class="btn btn-primary purchase-btn">Purchase</button>
+                </div>
+            </div>
+        </div>
+    {% else %}
+    <h1>Cart</h1>
+    <div class="no-games">
+        <h2> ... Theres nothing here ?!</h2>
+        <br>
+        <a href="{{ url_for('routes.store_route') }}">Get some games!</a>
+    </div>
+    {% endif %}
+
+
+    {% include "footer.html" %}
+</body>
+{% endblock %}

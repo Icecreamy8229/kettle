@@ -1,23 +1,250 @@
 {% extends 'base.html' %}
-{% block content %}
-<body>
-{% include 'navbar.html' %}
-{% include 'flash.html' %}
+{% block head %}
+    {# These only apply to this page. #}
+   <style>
+        h2 {
+            color: white;
+            text-align: center;
+        }
+
+        #signup-container {
+            display: none;
+        }
+
+        #login-container, #signup-container {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #343538;
+            border-color:#343538;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        #login-container img {
+            width: 90px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: #4c1d70;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #371055;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .form-control {
+        width: 100%;
+        color:white;
+        margin-bottom: 15px;
+        background-color: #4a4b4d;
+        border-radius: 10px;
+
+        padding: 10px;
+        border: 1px solid #343538;
+}
+
+        .form-control:focus {
+        color:white;
+        background-color: #4a4b4d;
+        outline: none;
+}
+
+        .form-label {
+            font-size: 20px;
+            color: #A9A9A9;
+        }
+
+        .active-form {
+            display: block;
+        }
+
+    </style>
+    {%  endblock %}
+    {% block content %}
+        <body>
+        {% include 'navbar.html' %}
+        {% include 'flash.html' %}
 
 
-{# This is a super basic form I setup just to make sure logging in on the backend was working #}
-{# You beautiful creative front end people make it look nice please :) #}
+        {# This is a super basic form I setup just to make sure logging in on the backend was working #}
+        {# You beautiful creative front end people make it look nice please :) #}
 
-<div class="container" style="width: 60%; min-width: 320px",>
-    <form class="form-control" method="POST" action="{{ url_for('routes.login_route') }}">
-        <label class="form-label" for="username">Username:</label>
-        <input class="form-control" type="text" id="username" name="username" required>
-        <br>
-        <label class="form-label" for="password">Password:</label>
-        <input class="form-control" type="password" id="password" name="password" required>
-        <br>
-        <button class="btn btn-primary" type="submit">Login</button>
-    </form>
-</div>
-</body>
-{% endblock %}
+
+    <div class="container" style="width: 60%; min-width: 320px" id="login-container">
+        <img src="static/images/kettlelogo.png" alt="logo">
+        <h2>Login</h2>
+        <form class="form-control" method="POST" action="{{ url_for('routes.login_route') }}">
+            <label class="form-label" for="username">Username:</label>
+            <input class="form-control" type="text" id="username" name="username" required>
+            <br>
+            <label class="form-label" for="password">Password:</label>
+            <input class="form-control" type="password" id="login-password" name="password" required>
+            <br>
+            <button class="btn btn-primary" type="submit">Login</button>
+            <button class="btn btn-secondary" type="button" id="signup-button" onclick="swapForms(this)">Sign Up</button>
+        </form>
+    </div>
+
+    <div class="container" id="signup-container">
+        <h2>Signup:</h2>
+        <form id="signup-form" class="form-control" method="POST" action="{{ url_for('routes.signup_route') }}">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" name="email" id="signup-email">
+            <br>
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" type="text" name="username" id="signup-username">
+            <br>
+            <label class="form-label" for="alias">Alias</label>
+            <input class="form-control" id="signup-alias" name="alias" type="text">
+            <br>
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" type="password" id="signup-password" name="password">
+            <br>
+            <label class="form-label" for="password-confirm">Confirm Password</label>
+            <input class="form-control" type="password" id="password-confirm" name="password-confirm">
+            <br>
+            <button class="btn btn-primary" type="submit">Create Account</button>
+            <button class="btn btn-secondary" type="button" id="login-button" onclick="swapForms(this)">Login</button>
+
+        </form>
+    </div>
+    </body>
+
+    <script>
+
+        function swapForms(button) {
+            const signupForm = document.getElementById('signup-container');
+            const loginForm = document.getElementById('login-container');
+
+            if (button.id === "signup-button") {
+                loginForm.style.display = "none";
+                signupForm.style.display = "block";
+            } else {
+                loginForm.style.display = "block";
+                signupForm.style.display = "none";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const signupForm = document.getElementById("signup-form");
+
+            const fields = [
+                { id: "signup-email", message: "A valid email is required." },
+                { id: "signup-username", message: "A username is required." },
+                { id: "signup-alias", message: "An alias is required." },                      // Change 'message' field if you want to change the error message.
+                { id: "signup-password", message: "A password is required." },
+                { id: "password-confirm", message: "Passwords do not match." }
+            ];
+
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const errorDiv = document.createElement("div");
+                errorDiv.className = "error-message";
+                errorDiv.style.color = "red";
+                errorDiv.style.fontSize = "14px";
+                errorDiv.style.marginTop = "5px";
+                input.insertAdjacentElement("afterend", errorDiv);
+                field.errorDiv = errorDiv;
+            });
+
+            function validatePassword() {
+                const passwordInput = document.getElementById("signup-password");
+                const passwordErrorDiv = fields.find(f => f.id === "signup-password").errorDiv;
+                let errorMessage = "";
+
+                const minLength = 8;
+                const specialCharacters = /[^A-Za-z0-9]/;
+                const hasNumber = /\d/;
+                const hasUppercase = /[A-Z]/;
+
+                if (passwordInput.value.length === 0) {
+                    errorMessage = "A password is required.";
+                } else if (passwordInput.value.length < minLength) {
+                    errorMessage = "Password must be at least 8 characters long.";
+                } else if (!hasNumber.test(passwordInput.value)) {
+                    errorMessage = "Password must contain at least one number.";
+                } else if (!hasUppercase.test(passwordInput.value)) {
+                    errorMessage = "Password must contain at least one uppercase letter.";
+                } else if (!specialCharacters.test(passwordInput.value)) {
+                    errorMessage = "Password must contain a special character.";
+                }
+
+                passwordErrorDiv.textContent = errorMessage;
+                return errorMessage === "";
+            }
+
+            function validateConfirmPassword() {
+                const passwordInput = document.getElementById("signup-password");
+                const confirmPasswordInput = document.getElementById("password-confirm");
+                const confirmPasswordErrorDiv = fields.find(f => f.id === "password-confirm").errorDiv;
+                let errorMessage = "";
+
+                if (confirmPasswordInput.value !== passwordInput.value) {
+                    errorMessage = "Passwords do not match.";
+                }
+
+                confirmPasswordErrorDiv.textContent = errorMessage;
+                return errorMessage === "";
+            }
+
+            function validateField(field) {
+                const input = document.getElementById(field.id);
+                field.errorDiv.textContent = input.value.trim() ? "" : field.message;
+                return !!input.value.trim();
+            }
+
+            fields.forEach(field => {
+                document.getElementById(field.id).addEventListener("input", () => validateField(field));
+            });
+
+            document.getElementById("signup-password").addEventListener("input", validatePassword);
+            document.getElementById("password-confirm").addEventListener("input", validateConfirmPassword);
+
+            signupForm.addEventListener("submit", function (event) {
+                let isValid = true;
+
+                fields.forEach(field => {
+                    if (!validateField(field)) {
+                        isValid = false;
+                    }
+                });
+
+                if (!validatePassword() || !validateConfirmPassword()) {
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+        </script>
+
+
+    
+    {% endblock %}

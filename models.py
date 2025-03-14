@@ -1,11 +1,12 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy import ForeignKey, DateTime
+from sqlalchemy import ForeignKey, DateTime, String, CHAR, Text
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
-
+import yaml
 bcrypt = Bcrypt()
+
 
 class Base(DeclarativeBase):
     pass
@@ -25,27 +26,29 @@ class Library(db.Model): #linking table
     game_id: Mapped[int] = mapped_column(ForeignKey('games.game_id'), primary_key=True, nullable=False)
 
 
-class ProfilePicture(db.Model):
-    __tablename__ = 'profile_pictures'
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.user_id'), primary_key=True, nullable=False)
-    profile_pic_path: Mapped[str] = mapped_column(nullable=True) #TODO change this to a default picture path remove null
+# class ProfilePicture(db.Model):
+#     __tablename__ = 'profile_pictures'
+#     user_id: Mapped[int] = mapped_column(ForeignKey('users.user_id'), primary_key=True, nullable=False)
+#     profile_pic_path: Mapped[str] = mapped_column(String(500), nullable=True) #TODO change this to a default picture path remove null
 
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, unique=True)
-    user_alias: Mapped[str] = mapped_column(nullable=False)
-    user_email: Mapped[str] = mapped_column(nullable=False, unique=True)
-    user_login: Mapped[str] = mapped_column(nullable=False, unique=True)
-    user_password: Mapped[str] = mapped_column(nullable=False)
+    user_alias: Mapped[str] = mapped_column(String(128), nullable=False)
+    user_email: Mapped[str] = mapped_column(String(320), nullable=False, unique=True)
+    user_login: Mapped[str] = mapped_column(String(128), nullable=False, unique=True)
+    user_password: Mapped[str] = mapped_column(CHAR(60), nullable=False)
     user_balance: Mapped[int] = mapped_column(default=10_000, nullable=False)
+    user_picture: Mapped[str] = mapped_column(default='default.png', nullable=False)
     user_createdt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(), nullable=False)
+    user_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     @property
     def password(self) -> str:
         raise AttributeError("Password is write-only!")
 
-    def get_id(self) -> str: #I have to override flasks builtin because of our naming convetion.
+    def get_id(self) -> str: #I have to override flasks builtin because of our naming convention.
         return str(self.user_id)
 
     @password.setter #when password is set, it is modified to be hashed.
@@ -59,17 +62,17 @@ class User(db.Model, UserMixin):
 class Game(db.Model):
     __tablename__ = 'games'
     game_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, unique=True)
-    game_title: Mapped[str] = mapped_column(nullable=False)
+    game_title: Mapped[str] = mapped_column(String(256), nullable=False)
     game_price: Mapped[int] = mapped_column(nullable=False)
-    game_desc: Mapped[str] = mapped_column(nullable=False)
+    game_desc: Mapped[str] = mapped_column(Text, nullable=False)
     game_sale: Mapped[float] = mapped_column(nullable=False, default=0.00)
-    game_releasedate: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    game_releasedate: Mapped[datetime.date] = mapped_column(DateTime, nullable=False)
     game_active: Mapped[bool] = mapped_column(default=True, nullable=False)
 
 class Genre(db.Model):
     __tablename__ = 'genres'
     genre_id: Mapped[int] = mapped_column(primary_key=True, nullable=False, autoincrement=True, unique=True)
-    genre_name: Mapped[str] = mapped_column(nullable=False, unique=True)
+    genre_name: Mapped[str] = mapped_column(String(128), nullable=False, unique=True)
 
 class GameGenre(db.Model): #linking table
     __tablename__ = 'game_genres'
@@ -82,7 +85,7 @@ class Order(db.Model):
     order_id: Mapped[int] = mapped_column(nullable=False, primary_key=True, autoincrement=True, unique=True)
     order_userid: Mapped[int] = mapped_column(nullable=False)
     order_gid: Mapped[int] = mapped_column(nullable=False)
-    order_gtitle: Mapped[str] = mapped_column(nullable=False)
+    order_gtitle: Mapped[str] = mapped_column(String(256), nullable=False)
     order_price: Mapped[int] = mapped_column(nullable=False)
     order_dt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(), nullable=False)
 
