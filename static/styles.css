@@ -328,3 +328,24 @@ footer ul li a:visited {
     color: inherit;
 }
 
+.flash-msg {
+    transition: opacity 300ms ease-out;
+}
+
+.purple-button {
+    text-decoration: none;
+    background-color: #4C1D70;
+    font-size: 18px;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    width: 150px;
+    text-align: center;
+    margin: 5px;
+}
+
+.purple-button:hover {
+    background-color: #371055;
+}

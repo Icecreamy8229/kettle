@@ -66,7 +66,7 @@ class Game(db.Model):
     game_price: Mapped[int] = mapped_column(nullable=False)
     game_desc: Mapped[str] = mapped_column(Text, nullable=False)
     game_sale: Mapped[float] = mapped_column(nullable=False, default=0.00)
-    game_releasedate: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    game_releasedate: Mapped[datetime.date] = mapped_column(DateTime, nullable=False)
     game_active: Mapped[bool] = mapped_column(default=True, nullable=False)
 
 class Genre(db.Model):

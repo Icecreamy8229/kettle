@@ -190,8 +190,8 @@
                     errorMessage = "Password must contain at least one number.";
                 } else if (!hasUppercase.test(passwordInput.value)) {
                     errorMessage = "Password must contain at least one uppercase letter.";
-                } else if (specialCharacters.test(passwordInput.value)) {
-                    errorMessage = "Password cannot contain special characters.";
+                } else if (!specialCharacters.test(passwordInput.value)) {
+                    errorMessage = "Password must contain a special character.";
                 }
 
                 passwordErrorDiv.textContent = errorMessage;

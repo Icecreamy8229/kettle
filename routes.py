@@ -1,3 +1,4 @@
+import datetime
 import os
 import re
 import yaml
@@ -12,7 +13,7 @@ from email_utils import send_verify_email, verify_token
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 routes = Blueprint('routes', __name__)  # this module points to itself for routes.
-
+trusted_users = "kero rubber gene savbun squarebrian".split()
 
 @routes.route('/')  # This is the general syntax for creating a route in flask.
 def index_route():
@@ -62,8 +63,8 @@ def testing_route():
 
 @routes.route("/settings")
 @login_required
-def settings_route():
-    pass
+def settings_route(): #not used yet.
+    return url_for('routes.index_route')
 
 
 @routes.route("/game")
@@ -150,13 +151,6 @@ def signup_route(): #this is only used to process data from the form and sign th
 
         return True
 
-
-    def has_uppercase(s):
-        return any(char.isupper() for char in s)
-
-    def has_minimum_length(s):
-        return len(s) >= 8
-
     #the logic is not done yet.
     #use helper.py to create users for dev environment
     if current_user.is_authenticated:
@@ -176,14 +170,19 @@ def signup_route(): #this is only used to process data from the form and sign th
         logging.info(f"Passwords do not match for {user_login}")
         return jsonify({'error': 'Passwords do not match'}), 400
 
+    if not verify_password(password):
+        logging.info(f"Password for {user_login} is not strong enough.")
+        return jsonify({'error': 'Password is not strong enough'}), 400
+
     existing_user = db.session.query(User).filter_by(user_login=user_login).first()
     existing_email = db.session.query(User).filter_by(user_email=email).first()
     if existing_user or existing_email:
         logging.info(f"User already exists for login: {user_login} or email: {email}")
         return jsonify({'error': 'User already exists'}), 400
 
-    if has_special_characters(user_login) or has_special_characters(email):
-        pass #TODO logic not finished yet.
+    if has_special_characters(user_login) or not verify_email(email):
+        logging.info(f"Invalid username or email for {user_login}")
+        return jsonify({'error': 'Invalid username or email'}), 400
 
     new_user = User()
     new_user.user_login = user_login
@@ -198,7 +197,9 @@ def signup_route(): #this is only used to process data from the form and sign th
     if config['environment'] == 'production':
         send_verify_email(new_user)
 
-    return jsonify({'message': 'User registered successfully', 'user_login': user_login})
+    login_user(new_user)
+    flash("Please check your email for a verification link.", "success")
+    return redirect(url_for('routes.index_route'))
 
 
 
@@ -226,6 +227,103 @@ def logout_route():
     logout_user()
     flash("You have been logged out", "success")
     return redirect(url_for('routes.index_route'))
+
+@login_required
+@routes.route("/submission")
+def submission_route(): #trusted users can create games here.
+    global trusted_users
+
+    if current_user.is_authenticated and current_user.user_login in trusted_users:
+        return render_template('submission.html')
+
+    return redirect(url_for('routes.index_route'))
+
+
+@routes.route("/submit-game", methods=['POST'])
+def submit_game_route():
+    global trusted_users
+
+    if current_user.is_authenticated and current_user.user_login not in trusted_users:
+        return jsonify({'error': 'User not allowed.'}), 400
+    if 'game-images' not in request.files or 'game-videos' not in request.files:
+        return jsonify({'error': 'Files are missing'}), 400
+
+    game_title = request.form.get('game-title', '').strip()
+    if not game_title:
+        return jsonify({'error': 'Game title is required'}), 400
+
+    image_files = request.files.getlist('game-images')
+    video_files = request.files.getlist('game-videos')
+    print(len(video_files))
+    print(len(image_files))
+
+    max_files = 10
+    max_image_size = 4 * 1024 * 1024  # 4MB in bytes
+    max_video_size = 25 * 1024 * 1024  # 25MB in bytes
+
+    if len(image_files) + len(video_files) > max_files:
+        return jsonify({'error': 'A maximum of 10 files (images and videos) is allowed'}), 400
+
+    if len(video_files) > 1:
+        return jsonify({'error': 'Only one video file is allowed'}), 400
+
+    for file in image_files:
+        print(f"image file: {file.filename}")
+        if file.content_type.split('/')[0] != 'image':
+            return jsonify(
+                {'error': f"Only image files are allowed in the image upload (problem with {file.filename})"}), 400
+        if file.content_length > max_image_size:
+            return jsonify({'error': 'Each image must be smaller than 4MB'}), 400
+
+    for file in video_files:
+        # Check if the file is empty or not
+        if file.filename and file.content_type.split('/')[0] != 'video':
+            return jsonify(
+                {'error': f"Only video files are allowed in the video upload (problem with {file.filename})"}), 400
+        if file.content_length > max_video_size:
+            return jsonify({'error': 'Each video must be smaller than 25MB'}), 400
+
+    # Check if the game already exists (case-insensitive check)
+    game = Game.query.filter(Game.game_title.ilike(game_title)).first()
+    if game:
+        return jsonify({'error': 'Game already exists'}), 400
+
+    game = Game()
+    game.game_title = game_title
+    game.game_desc = request.form.get('game-desc', '')
+
+    try:
+        game.game_price = int(request.form.get('game-price', 0))
+    except ValueError:
+        return jsonify({'error': 'Game price must be a valid number'}), 400
+
+    game.game_releasedate = datetime.date.today()
+    db.session.add(game)
+    db.session.commit()
+
+    MEDIA_DIR = 'game_media'
+    game_dir = os.path.join(MEDIA_DIR, str(game.game_id))
+    images_dir = os.path.join(game_dir, 'images')
+    videos_dir = os.path.join(game_dir, 'videos')
+
+    os.makedirs(images_dir, exist_ok=True)
+    os.makedirs(videos_dir, exist_ok=True)
+
+    # Save files
+    for index, file in enumerate(image_files):
+        filename = 'cover.png' if index == 0 else file.filename
+        # Check if a cover image already exists
+        if filename == 'cover.png' and os.path.exists(os.path.join(images_dir, filename)):
+            return jsonify({'error': 'Cover image already exists, please upload a different one'}), 400
+        file.save(os.path.join(images_dir, filename))
+
+    for file in video_files:
+        # If there's a file to save, do it
+        if file.filename:
+            file.save(os.path.join(videos_dir, file.filename))
+    flash(f"{game_title} has submitted successfully!", "success")
+    return redirect(url_for('routes.index_route'))
+
 
 @routes.route("/verify-email/<token>")
 def verify_email(token):

@@ -66,7 +66,13 @@
     <!-- Small description text below the banner -->
     <div class="banner-description">
         <p>Discover new games for an affordable price or whatever text we might want here! </p>
-    </div>
+
+    {% if current_user.is_authenticated and current_user.user_verified %}
+        <div>
+        <h2>Want to add a game?</h2>
+        <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Click here</button>
+        </div>
+    {% endif %}
 
     <main>
         <!-- Container to hold game content and display them in a table-->

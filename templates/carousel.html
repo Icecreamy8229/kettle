@@ -10,20 +10,26 @@ You can see an example of how its being done in the game route.
 		<div class="slider">
             {% for media in media_files %}
                 {% if media.type == 'image' %}
+                    <div class="slide">
                     <img id="slide-{{ loop.index }}" src='{{ media.url }}' alt="game_image" />
+                    </div>
                 {% elif media.type == 'video' %} {# This is probably broken for videos #}
+                    <div class="slide">
                     <video id="slide-{{ loop.index }}" controls>
                         <source src='{{ media.url }}' type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
+                    </div>
                 {% endif %}
             {% endfor %}
 		</div>
 
 		<div class="slider-nav">
             {% for media in media_files %}
-                <a href="#slide-{{ loop.index }}"></a>
+                <button id="slide-dot-{{ loop.index0 }}" onclick="moveToSlide({{ loop.index0 }})"></button>
 			{% endfor %}
 		</div>
+        <div class="slider-nav-left" onclick="moveSlide(-1)">&#10094;</div>
+        <div class="slider-nav-right" onclick="moveSlide(1)">&#10095;</div>
 	</div>
 </section>
