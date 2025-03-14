@@ -4,15 +4,16 @@
 
 <style>
 
-    .library-container h1 {
+    .container h1 {
         text-align: center;
-        margin-top: 50px;
+        margin-top: 25px;
     }
     {# This was a temporary fix so that the image was not massive #}
     {# feel free to blow away with better styling. #}
-    .library-list img {
-        width: 200px;
-        height: auto;
+    .library-item img {
+        float: left;
+        width: auto;
+        height: 150px;
         margin-right: 20px;
     }
 
@@ -26,15 +27,15 @@
     <body>
         {% include 'navbar.html' %}
         {% include 'flash.html' %}
-        <div class="library-container">
+        <div class="container">
             <h1>{{ current_user.user_alias }}'s Library</h1>
-            <div class="library-list">
+            <div>
                 {% if games %}
                     {% for game in games %}
                         <div class="library-item">
                             <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
                             <h2>{{ game.game_title }}</h2>
-                            <p>{{ game.game_desc }}</p>
+                            <p>{{ game.game_desc|truncate(100) }}</p> {# Helps with consistent style of items. #}
                             <p>Price: {{ game.game_price }}</p>
                         </div>
                     {% endfor %}
