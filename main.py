@@ -26,6 +26,7 @@ logging.debug("Configured database url %s", app.config["SQLALCHEMY_DATABASE_URI"
 
 
 if config['environment'] == 'production':
+    logging.debug("Configured mailchimp url %s", config['mailchimp']['url'])
     app.config['MAIL_SERVER'] = config['mailchimp']['url']
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
@@ -34,6 +35,7 @@ if config['environment'] == 'production':
     app.config['MAIL_PASSWORD'] = config['mailchimp']['api_key']
     app.config['MAIL_DEFAULT_SENDER'] = (config['mailchimp']['username'], "Team Kettle")
     mail.init_app(app)
+    logging.debug("mailer setup")
 
 app.secret_key = secret_key
 db.init_app(app)

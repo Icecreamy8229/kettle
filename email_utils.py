@@ -5,6 +5,7 @@ from flask_mail import Message
 from models import User
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import url_for, flash
+import logging
 
 with open("config.yaml") as f:
     config = yaml.safe_load(f)
@@ -26,9 +27,11 @@ def send_verify_email(user: User):
     msg = Message(
         subject="Kettle Email Verification",
         recipients=[user.user_email],
-        html=html_template.render(user=user, verification_url=verification_url)
+        html=html_template.render(user=user, verification_url=verification_url),
+        sender=("Team Kettle", config['mailchimp']["username"])
     )
     mail.send(msg)
+    logging.info("Sent verification email to %s", user.user_email)
 
 
 def verify_token(token, expiration=3600):
