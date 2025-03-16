@@ -41,6 +41,33 @@ def user_route():
         return render_template('user.html')
     else:
         return render_template('login.html', title='Login')
+    
+@login_required
+@routes.route('/update_user', methods=['POST'])
+def update_user():
+    logging.debug('Update user route called')
+    if current_user.is_authenticated:
+        alias = request.form.get('alias')
+        bio = request.form.get('bio')
+        profile_picture = request.files.get('profile_picture')
+
+        # Update user information
+        current_user.user_alias = alias
+        current_user.user_bio = bio
+
+        # Handle profile picture upload
+        if profile_picture:
+            profile_picture_filename = f"profile_{current_user.user_id}.png"
+            profile_picture_path = os.path.join('static/profile_pictures', profile_picture_filename)
+            profile_picture.save(profile_picture_path)
+            current_user.profile_picture = profile_picture_filename
+
+        db.session.commit()
+        flash('Your profile has been updated.', 'success')
+        return redirect(url_for('routes.user_route'))
+    else:
+        flash('You need to be logged in to update your profile.', 'danger')
+        return redirect(url_for('routes.login_route'))
 
 @login_required
 @routes.route('/library')
