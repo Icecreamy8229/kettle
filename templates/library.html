@@ -37,6 +37,7 @@
                             <h2>{{ game.game_title }}</h2>
                             <p>{{ game.game_desc|truncate(100) }}</p> {# Helps with consistent style of items. #}
                             <p>Price: {{ game.game_price }}</p>
+                            <a href="{{ url_for('routes.game_route')}}id?={{ game.game_id}}">{{ game.game_title }} Store Page</a>
                         </div>
                     {% endfor %}
                 {% else %}
