@@ -48,10 +48,84 @@
             color: white;
         }
 
+        .searchContainer {
+        text-align: center;
+        margin: 20px 0;
+}
+
+        #searchInput {
+        padding: 10px;
+        width: 50%;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+}
+
+        button {
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-left: 10px;
+        background-color: white;
+        color: black;
+        border: none;
+}
+
+        button:hover {
+        background-color: #ddd;
+}
+
+
     </style>
 {% endblock %}
 {% block content %}
 
+
+{% block content %}
+  <script>
+    function searchFunction() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const gameItems = document.querySelectorAll('#gameList .gameItem');
+
+      let found = false;
+
+      gameItems.forEach(item => {
+        const gameName = item.querySelector('h3').innerText.toLowerCase();
+        if (gameName.includes(input)) {
+
+          item.style.display = '';
+          found = true;
+        } else {
+
+          item.style.display = 'none';
+        }
+      });
+
+
+      const noGamesMessage = document.getElementById('noGamesMessage');
+
+      if (!found) {
+
+        if (!noGamesMessage) {
+          const tbody = document.getElementById('gameList');
+          const tr = document.createElement('tr');
+          tr.id = 'noGamesMessage';
+
+          tr.innerHTML = '<td colspan="3" style="text-align: center; padding: 20px; color: white;"> No games match your search.</td>';
+          tbody.appendChild(tr);
+        }
+      } else {
+        if (noGamesMessage) {
+          noGamesMessage.remove();
+        }
+      }
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      searchFunction();
+    }
+  </script>
+{% endblock %}
 
 <body>
     {% include 'navbar.html' %}
@@ -67,12 +141,17 @@
     <div class="banner-description">
         <p>Discover new games for an affordable price or whatever text we might want here! </p>
 
+
     {% if current_user.is_authenticated and current_user.user_verified %}
         <div>
         <h2>Want to add a game?</h2>
         <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Click here</button>
         </div>
     {% endif %}
+
+     <div class="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search" oninput="searchFunction()">
+        <button onclick="clearSearch()">Clear</button>
 
     <main>
         <!-- Container to hold game content and display them in a table-->
