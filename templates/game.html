@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block head %}
-    <link rel="stylesheet" href="../static/carousel.css">
+    <link rel="stylesheet" href="../static/slider.css">
     <style>
             body {
                 font-family: Arial, sans-serif;
@@ -123,49 +123,7 @@
             }
         </style>
     <script>
-    let currentIndex = 0;
-    document.addEventListener('DOMContentLoaded', () => {
-        const items = document.querySelectorAll('.slide');
-        items[0].classList.add('active');
 
-
-    })
-    function moveToSlide(index) {
-        const items = document.querySelectorAll('.slide');
-        items[currentIndex].classList.remove('active');
-        currentIndex = index;
-        items[currentIndex].classList.add('active');
-    }
-
-
-    function moveSlide(step) {
-        const items = document.querySelectorAll('.slide');
-
-        const totalSlides = items.length;
-        // Remove the active class from the current slide
-
-
-        // Update the current index
-        if (currentIndex + step < 0) {
-            items[0].classList.remove('active');
-            currentIndex = totalSlides - 1;
-        } else if (currentIndex + step >= totalSlides) {
-            items[currentIndex].classList.remove('active');
-            currentIndex = 0;
-        } else {
-            items[currentIndex].classList.remove('active');
-            currentIndex += step;
-
-        }
-
-        console.log(currentIndex);
-
-        // Add the active class to the new slide
-        items[currentIndex].classList.add('active');
-
-        // Swap the positions of the slides
-
-    }
 
 
 
@@ -184,7 +142,7 @@
 
                 <section id="imagePlaceholderContainer">
 
-                    {% include 'carousel.html' %}
+                    {% include 'slider.html' %}
 
                 </section>
             </header>

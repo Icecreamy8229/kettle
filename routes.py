@@ -346,3 +346,4 @@ def verify_email(token):
 @routes.route('/game_media/<int:game_id>/<path:filename>')
 def serve_game_media(game_id, filename):
     return send_from_directory(f'game_media/{game_id}/', filename)
+#TODO I dont think I ended up needing this route, probably can be deleted.
