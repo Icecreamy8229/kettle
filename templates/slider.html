@@ -33,7 +33,7 @@ You can see an example of how its being done in the game route.
 	</div>
     <div class="slider-nav">
         {% for media in media_files %}
-            <button class="slide-button" id="slide-dot-{{ loop.index0 }}" onclick="moveToSlide({{ loop.index0 }})"></button>
+            <button class="slide-button" id="slide-dot-{{ loop.index0 }}" onclick="moveToSlide('{{ loop.index0 }}')"></button>
         {% endfor %}
     </div>
 </section>
