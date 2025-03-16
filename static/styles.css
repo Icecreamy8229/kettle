@@ -336,22 +336,48 @@ footer {
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-top: auto;
+    margin-top: 100px;
+    position: relative;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
 }
 
 .footer-logo {
-    height: 60px;
+    height: 40px;
     width: auto;
     position: absolute;
     left: 37%;
 }
+
+
+.footer-links ul {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 
 footer .footer_content {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+footer .footer-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    margin-top: 5px;
 }
 
 footer hr {
