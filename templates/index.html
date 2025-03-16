@@ -76,12 +76,8 @@
 
 
     </style>
-{% endblock %}
-{% block content %}
 
-
-{% block content %}
-  <script>
+     <script>
     function searchFunction() {
       const input = document.getElementById('searchInput').value.toLowerCase();
       const gameItems = document.querySelectorAll('#gameList .gameItem');
@@ -126,6 +122,9 @@
     }
   </script>
 {% endblock %}
+{% block content %}
+
+
 
 <body>
     {% include 'navbar.html' %}
