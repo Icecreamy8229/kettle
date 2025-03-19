@@ -98,6 +98,35 @@
     }
     
 </style>
+
+<script>
+    function removeFromCart(gameId, buttonElement) {
+        fetch('/remove-from-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ game_id: gameId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the cart item from the UI
+                let cartItemWrapper = buttonElement.closest(".cart-item-wrapper");
+                cartItemWrapper.remove();
+
+                // Optionally, update total points in the UI
+                let totalPointsElement = document.querySelector('.payment-row h5:last-child');
+                let currentTotal = parseInt(totalPointsElement.innerText) || 0;
+                let gamePoints = parseInt(buttonElement.dataset.points) || 0;
+                totalPointsElement.innerText = (currentTotal - gamePoints) + " Points";
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+}
+</script>
 {% endblock %}
 
 {% block content %}
@@ -125,8 +154,8 @@
                                 <p>{{ game.points }} Points</p>
                             </div>
                         </div>
-                        <button class="remove" onclick="this.parentElement.style.display='none'">X</button>
-                    </div>
+                            <button class="remove" data-points="{{ game.points }}" onclick="removeFromCart('{{ game.game_id }}', this)">X</button>                    
+                        </div>
                     {% endfor %}
                 </div>
                 <hr>    
@@ -144,7 +173,7 @@
     <div class="no-games">
         <h2> ... Theres nothing here ?!</h2>
         <br>
-        <a href="{{ url_for('routes.store_route') }}">Get some games!</a>
+        <a href="{{ url_for('routes.index_route') }}">Get some games!</a>
     </div>
     {% endif %}
 

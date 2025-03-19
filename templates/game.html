@@ -123,6 +123,33 @@
             }
         </style>
     <script>
+        function addToCart() {
+            let gameId = new URLSearchParams(window.location.search).get('id'); // Get game ID from URL
+            
+            if (!gameId) {
+                alert("Game ID is missing!");
+                return;
+            }
+        
+            fetch('/add-to-cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ game_id: gameId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Game added to cart!");
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+</script>
 
 
 
@@ -167,7 +194,7 @@
     </section>
 
     <section id="addToCartSection">
-        <button id="addToCartButton" class="button">Add to Cart</button>
+        <button id="addToCartButton" class="button" onclick="addToCart()">Add to Cart</button>
     </section>
 
     </body>

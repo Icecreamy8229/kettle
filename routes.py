@@ -374,3 +374,49 @@ def verify_email(token):
 def serve_game_media(game_id, filename):
     return send_from_directory(f'game_media/{game_id}/', filename)
 #TODO I dont think I ended up needing this route, probably can be deleted.
+
+#ALL AI GENERATED, JUST SO I CAN SEE IF THE CART PAGE WORKS.
+@routes.route("/add-to-cart", methods=['POST'])
+@login_required
+def add_to_cart():
+    data = request.get_json()
+    game_id = data.get("game_id")
+
+    if not game_id:
+        return jsonify({'error': 'Game ID is required'}), 400
+
+    game = db.session.query(Game).filter_by(game_id=game_id).first()
+    if not game:
+        return jsonify({'error': 'Game not found'}), 404
+
+    # Check if game is already in cart
+    existing_cart_item = db.session.query(Cart).filter_by(user_id=current_user.user_id, game_id=game_id).first()
+    if existing_cart_item:
+        return jsonify({'error': 'Game is already in the cart'}), 400
+
+    cart_item = Cart(user_id=current_user.user_id, game_id=game_id)
+    db.session.add(cart_item)
+    db.session.commit()
+
+    return jsonify({'success': True}), 200
+
+
+#ALL AI GENERATED, JUST SO I CAN SEE IF THE CART PAGE WORKS.
+@routes.route("/remove-from-cart", methods=['POST'])
+@login_required
+def remove_from_cart():
+    data = request.get_json()
+    game_id = data.get("game_id")
+
+    if not game_id:
+        return jsonify({'error': 'Game ID is required'}), 400
+
+    cart_item = db.session.query(Cart).filter_by(user_id=current_user.user_id, game_id=game_id).first()
+    
+    if not cart_item:
+        return jsonify({'error': 'Game not found in cart'}), 404
+
+    db.session.delete(cart_item)
+    db.session.commit()
+
+    return jsonify({'success': True}), 200
