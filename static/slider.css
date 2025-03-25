@@ -95,9 +95,9 @@ body {
 
 .slider-nav button {
 	border: none;
-	width: 1rem;
-	height: 1rem;
-
+	width: 12px;
+	height: 12px;
+	border-radius: 3em;
 	background-color: #fff;
 	opacity: 0.65;
 	transition: opacity ease 250ms;
