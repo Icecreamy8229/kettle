@@ -1,5 +1,5 @@
 let currentIndex = 0;
-const transitionSpeed = "200ms";
+const transitionSpeed = "300ms";
 document.addEventListener('DOMContentLoaded', () => {
 
     const slideButtons = document.querySelectorAll('.slide-button');
