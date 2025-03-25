@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <style>
+        .checkout-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #343538;
+            border: 1px solid #504d54;
+            padding: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .checkout-container h1 {
+            text-align: center;
+            font-size: 1.8em;
+            color: white;
+        }
+
+        h2 {
+            color: white;
+            text-align: center;
+        }
+
+        .order-summary {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .total {
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .thank-you-message {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .button {
+            padding: 10px 60px;
+            background-color: #4c1d70;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .button:hover {
+            background-color: #371055;
+        }
+
+        .checkout-container img {
+            display: block;
+            margin-top: 0;
+            margin-right: auto;
+            margin-bottom: 10px;
+            margin-left: auto;
+            width: 100px;
+            height: auto;
+
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {% include 'navbar.html' %}
+    {% include 'flash.html' %}
+
+    <div class="checkout-container">
+        <img src="{{ url_for('static', filename='images/controllericon.png') }}" alt="logo">
+        <h1>Thank you for your purchase!</h1>
+        <div class="thank-you-message">
+            <p>You can find your new games in your library.</p>
+        </div>
+
+        <h2>Order Summary</h2>
+        <ul class="order-summary">
+            {% for item in order_items %}
+                <li class="order-item">
+                    <span>  <img src="{{ game.image_url }}" alt="{{ game.name }}" width="40" height="40">
+                    <h5>{{ game.name }}</h5>
+                    </span>
+                    <span>{{ game.points }} points</span>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="total">
+            <span>Total</span>
+            <span>{{ total_points }} Points</span>
+        </div>
+
+        <div class="button-group">
+            <button class="button" onclick="goToLibrary()">Library</button>
+        </div>
+    </div>
+
+    <script>
+        function goToLibrary() {
+            window.location.href = "{{ url_for('routes.library_route') }}";
+        }
+    </script>
+{% endblock %}
