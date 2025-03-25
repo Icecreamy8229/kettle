@@ -7,8 +7,17 @@ import logging
 import random
 from models import db, User, Cart, Game, Library
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
+from flask_bcrypt import Bcrypt
+from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash, generate_password_hash
 from login import load_user
 from email_utils import send_verify_email, verify_token
+
+# User media limitations
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+MAX_FILE_SIZE = 1_048_576  # 1MB
+
+bcyrpt = Bcrypt()
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -33,8 +42,8 @@ def about_route():
     return render_template('about.html', title='About')
 
 
-@login_required
 @routes.route('/user')
+@login_required
 def user_route():
     logging.debug('User route called')
     if current_user.is_authenticated:
@@ -42,32 +51,91 @@ def user_route():
     else:
         return render_template('login.html', title='Login')
     
+
+@routes.route('/validate_password', methods=['POST'])
 @login_required
+def validate_password():
+    data = request.get_json()
+    current_password = data.get('password')
+    if check_password_hash(current_user.user_password, current_password):
+        logging.info("Password validation successful.")
+        return jsonify({'valid': True})
+    else:
+        return jsonify({'valid': False})
+    
 @routes.route('/update_user', methods=['POST'])
+@login_required
 def update_user():
     logging.debug('Update user route called')
-    if current_user.is_authenticated:
-        alias = request.form.get('alias')
-        bio = request.form.get('bio')
-        profile_picture = request.files.get('profile_picture')
 
-        # Update user information
+    # Validate CSRF Token
+    csrf_token = request.form.get("csrf_token")
+    if not csrf_token or csrf_token != request.cookies.get("csrf_token"):
+        flash("CSRF token missing or invalid!", "danger")
+        return redirect(url_for("routes.user_route"))
+
+    # Get form data
+    alias = request.form.get('alias')
+    bio = request.form.get('bio')
+    profile_picture = request.files.get('profile_picture')
+    current_password = request.form.get('current_password')
+    new_password = request.form.get('new_password')
+    confirm_password = request.form.get('confirm_password')
+
+    # Update user alias and bio if provided
+    if alias:
         current_user.user_alias = alias
+    if bio:
         current_user.user_bio = bio
 
-        # Handle profile picture upload
-        if profile_picture:
+    # Profile Picture Upload Handling
+    if profile_picture:
+        filename = secure_filename(profile_picture.filename)
+        if '.' in filename:
+            file_ext = filename.rsplit('.', 1)[1].lower()
+
+            if file_ext not in ALLOWED_EXTENSIONS:
+                flash('Invalid file type. Only PNG, JPG, and JPEG are allowed.', 'danger')
+                return redirect(url_for('routes.user_route'))
+
+            if profile_picture.content_length > MAX_FILE_SIZE:
+                flash('Profile picture size should be less than 1MB.', 'danger')
+                return redirect(url_for('routes.user_route'))
+
+            # Save profile picture with a user-specific filename
             profile_picture_filename = f"profile_{current_user.user_id}.png"
             profile_picture_path = os.path.join('static/profile_pictures', profile_picture_filename)
             profile_picture.save(profile_picture_path)
-            current_user.profile_picture = profile_picture_filename
+            current_user.user_picture = profile_picture_filename
 
+    # Password Update Handling
+    if new_password:
+        if not check_password_hash(current_user.user_password, current_password):
+            flash('Incorrect current password.', 'danger')
+            return redirect(url_for('routes.user_route'))
+
+        if new_password != confirm_password:
+            flash('New password and confirmation do not match.', 'danger')
+            return redirect(url_for('routes.user_route'))
+
+        # Update password
+        current_user.user_password = generate_password_hash(new_password)
+        flash('Your password has been updated.', 'success')
+
+    # Save all changes to database
+    try:
         db.session.commit()
         flash('Your profile has been updated.', 'success')
-        return redirect(url_for('routes.user_route'))
-    else:
-        flash('You need to be logged in to update your profile.', 'danger')
-        return redirect(url_for('routes.login_route'))
+    except Exception as e:
+        db.session.rollback()
+        flash("An error occurred. Please try again.", "danger")
+        logging.error(f"Error updating user: {e}")
+
+    return redirect(url_for('routes.user_route'))
+    
+
+        
+    
 
 @login_required
 @routes.route('/library')

@@ -7,6 +7,7 @@ from models import db
 from secret import secret_key
 from helper import get_profile_picture
 from mailer import mail
+from flask_wtf.csrf import CSRFProtect
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -16,6 +17,9 @@ logging.config.dictConfig(config["logging"])
 
 #initializes our app and tells it where to look for html pages.
 app = Flask(__name__, template_folder='templates')
+
+#Enable CSRF for password validation
+csrf = CSRFProtect(app)
 
 #This lets the get_profile_picture() function be usable in any html template.
 app.jinja_env.globals['get_profile_picture'] = get_profile_picture

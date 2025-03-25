@@ -4,18 +4,9 @@
 
 <style>
 
-    .container h1 {
-        text-align: center;
-        margin-top: 25px;
-    }
-    {# This was a temporary fix so that the image was not massive #}
-    {# feel free to blow away with better styling. #}
-    .library-item img {
-        float: left;
-        width: auto;
-        height: 150px;
-        margin-right: 20px;
-    }
+    
+    
+    
 
 </style>
 
@@ -31,15 +22,23 @@
             <h1>{{ current_user.user_alias }}'s Library</h1>
             <div>
                 {% if games %}
+                <div class="library-container">
                     {% for game in games %}
                         <div class="library-item">
-                            <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
-                            <h2>{{ game.game_title }}</h2>
-                            <p>{{ game.game_desc|truncate(100) }}</p> {# Helps with consistent style of items. #}
-                            <p>Price: {{ game.game_price }}</p>
-                            <a href="{{ url_for('routes.game_route')}}id?={{ game.game_id}}">{{ game.game_title }} Store Page</a>
+                            <div class="library-content">
+                                <div>
+                                    <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
+                                </div>
+                                <div>
+                                    <h2><a href="{{ url_for('routes.game_route')}}id?={{ game.game_id}}">{{ game.game_title }}</a></h2>
+                                </div>
+                                <div>
+                                    <p>{{ game.game_desc|truncate(100) }}</p> {# Helps with consistent style of items. #}
+                                </div>
+                            </div>
                         </div>
                     {% endfor %}
+                </div>
                 {% else %}
                     <div class="no-games">
                         <p>You have no games in your library.</p>
