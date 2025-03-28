@@ -12,7 +12,7 @@ CREATE TABLE users (
   user_alias varchar(128) NOT NULL,
   user_email varchar(320) NOT NULL UNIQUE,
   user_login varchar(128) NOT NULL UNIQUE,
-  user_password char(60) NOT NULL UNIQUE,
+  user_password char(60) NOT NULL,
   user_balance integer NOT NULL DEFAULT 10000,
   user_picture varchar(128) NOT NULL,
   user_createdt datetime DEFAULT CURRENT_TIMESTAMP,

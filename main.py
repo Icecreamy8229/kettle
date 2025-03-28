@@ -19,7 +19,7 @@ logging.config.dictConfig(config["logging"])
 app = Flask(__name__, template_folder='templates')
 
 #Enable CSRF for password validation
-csrf = CSRFProtect(app)
+csrf = CSRFProtect()
 
 #This lets the get_profile_picture() function be usable in any html template.
 app.jinja_env.globals['get_profile_picture'] = get_profile_picture
@@ -42,7 +42,7 @@ if config['environment'] == 'production':
 app.secret_key = secret_key
 db.init_app(app)
 login_manager.init_app(app)
-
+csrf.init_app(app)
 
 #registers our endpoints.  "/" being the index page.
 app.register_blueprint(routes)

@@ -5,6 +5,10 @@ import yaml
 from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_from_directory
 import logging
 import random
+
+from flask_wtf.csrf import CSRFError
+from requests import session
+
 from models import db, User, Cart, Game, Library
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from flask_bcrypt import Bcrypt
@@ -65,14 +69,8 @@ def validate_password():
     
 @routes.route('/update_user', methods=['POST'])
 @login_required
-def update_user():
+def update_user_route():
     logging.debug('Update user route called')
-
-    # Validate CSRF Token
-    csrf_token = request.form.get("csrf_token")
-    if not csrf_token or csrf_token != request.cookies.get("csrf_token"):
-        flash("CSRF token missing or invalid!", "danger")
-        return redirect(url_for("routes.user_route"))
 
     # Get form data
     alias = request.form.get('alias')
@@ -108,9 +106,17 @@ def update_user():
             profile_picture.save(profile_picture_path)
             current_user.user_picture = profile_picture_filename
 
+    if request.is_json and request.json.get('password'):
+        validate = current_user.verify_password(request.json.get('password'))
+        if validate:
+            return jsonify({'valid': True})
+        else:
+            return jsonify({'valid': False})
+
+
     # Password Update Handling
     if new_password:
-        if not check_password_hash(current_user.user_password, current_password):
+        if not current_user.verify_password(current_password):
             flash('Incorrect current password.', 'danger')
             return redirect(url_for('routes.user_route'))
 
@@ -119,7 +125,8 @@ def update_user():
             return redirect(url_for('routes.user_route'))
 
         # Update password
-        current_user.user_password = generate_password_hash(new_password)
+
+        current_user.password = confirm_password
         flash('Your password has been updated.', 'success')
 
     # Save all changes to database
@@ -488,3 +495,7 @@ def remove_from_cart():
     db.session.commit()
 
     return jsonify({'success': True}), 200
+
+@routes.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return str(e.description), 400

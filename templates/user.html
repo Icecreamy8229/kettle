@@ -1,8 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}  
 
+
+
+    
+
+    <body>
+    {% include 'flash.html' %}
+    {% include 'navbar.html' %}  {# Any element that is visible to the user needs to be inside the body element. moving include down here. #}
+        <div class="container">
+            <title>User Page</title>
+            <h1>User Information & Settings Page</h1>
+            <h1> {{ current_user.user_alias }}'s Account Balance: {{ current_user.user_balance }}</h1>
+            <div class="username-display"></div>
+
+            <form action="{{ url_for('routes.update_user_route') }}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="profile-content">
+                    <div class="profile-picture">
+                        <img id="profile-img" src="{{ get_profile_picture(current_user) }}" alt="Profile Picture">
+                    </div>
+                    <div class="profile-upload">
+                        <input type="file" id="upload-image" name="profile_picture" accept="image/*" 
+                        onchange="validateImagesAndVideos()" hidden>
+                        <label for="upload-image" class="upload-button">Upload File for Profile Picture</label>
+                    </div>
+                </div>
+                <input type="text" id="username" name="username" class="username" placeholder="Username" value="{{ current_user.user_login }}" readonly>
+                <input type="email" id="email" name="email" class="username" placeholder="Email" value="{{ current_user.user_email }}" readonly>
+                <input type="text" id="alias" name="alias" class="custom-username" placeholder="Alias" value="{{ current_user.user_alias }}">
+
+                <div class="password-section">
+                    <input type="password" id="current-password" name="current_password" class="current-pass" placeholder="Current Password">
+                    <p style="display: inline-block" id="validate-emoji"> </p>
+                    <input type="password" id="new-password" name="new_password" class="password-change" placeholder="New Password" disabled>
+                    <input type="password" id="confirm-password" name="confirm_password" class="password-change" placeholder="Confirm New Password" disabled>
+                </div>
+
+                <div class="bio-section">
+                    <textarea class="profile-bio" name="bio" placeholder="About me">{{ current_user.user_bio }}</textarea>
+                </div>
+                <button class="save-button" type="submit">Save Changes</button>
+            </form>
+        </div>
+    </body>
+
+{% include 'footer.html' %}
+{% endblock %}
+
+{% block aftercontent %}
     <script>
-        
+
         document.getElementById('upload-image').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -14,24 +62,27 @@
             }
         });
 
-        function validateCurrentPassword() {
-            const currentPassword = document.getElementById('current-password').value;
-            const csrfToken = document.querySelector('input[name="csrf_token"]').value;
-            fetch('{{ url_for("routes.validate_password") }}', {
+
+        function validatePassword(plaintext_password) {
+            const validateEmoji = document.getElementById('validate-emoji');
+
+            //const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+            fetch('{{ url_for("routes.update_user_route") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
                 },
-                body: JSON.stringify({ password: currentPassword })
+                body: JSON.stringify({ password: plaintext_password })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.valid) {
+                    validateEmoji.innerHTML = "✅";
                     document.getElementById('new-password').disabled = false;
                     document.getElementById('confirm-password').disabled = false;
                 } else {
-                    alert('Current password is incorrect.');
+                    validateEmoji.innerHTML = "❌";
                     document.getElementById('new-password').disabled = true;
                     document.getElementById('confirm-password').disabled = true;
                 }
@@ -56,51 +107,19 @@
             }
             return true;
         }
+        let timeout = null;
+        const currentPassword = document.getElementById('current-password');
+
+        currentPassword.addEventListener('input', function() {
+            console.log("user started typing");
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                console.log("User stopped typing, sending data.");
+                validatePassword(currentPassword.value);
+
+            }, 1000);
+
+        });
     </script>
-
-    
-
-    <body>
-    {% include 'flash.html' %}
-    {% include 'navbar.html' %}  {# Any element that is visible to the user needs to be inside the body element. moving include down here. #}
-        <div class="container">
-            <title>User Page</title>
-            <h1>User Information & Settings Page</h1>
-            <h1> {{ current_user.user_alias }}'s Account Balance: {{ current_user.user_balance }}</h1>
-            <div class="username-display"></div>
-
-            <form action="{{ url_for('routes.update_user') }}" method="POST" enctype="multipart/form-data">
-                {{ csrf_token() }}
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="profile-content">
-                    <div class="profile-picture">
-                        <img id="profile-img" src="{{ get_profile_picture(current_user) }}" alt="Profile Picture">
-                    </div>
-                    <div class="profile-upload">
-                        <input type="file" id="upload-image" name="profile_picture" accept="image/*" 
-                        onchange="validateImagesAndVideos()" hidden>
-                        <label for="upload-image" class="upload-button">Upload File for Profile Picture</label>
-                    </div>
-                </div>
-                <input type="text" id="username" name="username" class="username" placeholder="Username" value="{{ current_user.user_login }}" readonly>
-                <input type="email" id="email" name="email" class="username" placeholder="Email" value="{{ current_user.user_email }}" readonly>
-                <input type="text" id="alias" name="alias" class="custom-username" placeholder="Alias" value="{{ current_user.user_alias }}">
-
-                <div class="password-section">
-                    <input type="password" id="current-password" name="current_password" class="current-pass" placeholder="Current Password" oninput="validateCurrentPassword()">
-                    <input type="password" id="new-password" name="new_password" class="password-change" placeholder="New Password" disabled>
-                    <input type="password" id="confirm-password" name="confirm_password" class="password-change" placeholder="Confirm New Password" disabled>
-                </div>
-
-                <div class="bio-section">
-                    <textarea class="profile-bio" name="bio" placeholder="About me">{{ current_user.user_bio }}</textarea>
-                </div>
-                <button class="save-button" type="submit">Save Changes</button>
-            </form>
-        </div>
-    </body>
-
-{% include 'footer.html' %}
 {% endblock %}
-
 
