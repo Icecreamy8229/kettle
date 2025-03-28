@@ -54,19 +54,7 @@ def user_route():
         return render_template('user.html')
     else:
         return render_template('login.html', title='Login')
-    
 
-@routes.route('/validate_password', methods=['POST'])
-@login_required
-def validate_password():
-    data = request.get_json()
-    current_password = data.get('password')
-    if check_password_hash(current_user.user_password, current_password):
-        logging.info("Password validation successful.")
-        return jsonify({'valid': True})
-    else:
-        return jsonify({'valid': False})
-    
 @routes.route('/update_user', methods=['POST'])
 @login_required
 def update_user_route():
