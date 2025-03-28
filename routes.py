@@ -89,8 +89,10 @@ def update_user_route():
                 return redirect(url_for('routes.user_route'))
 
             # Save profile picture with a user-specific filename
-            profile_picture_filename = f"profile_{current_user.user_id}.png"
-            profile_picture_path = os.path.join('static/profile_pictures', profile_picture_filename)
+            profile_picture_filename = f"profile_picture.{file_ext}"
+            profile_picture_path = os.path.join(f'user_profiles\\{current_user.user_id}', profile_picture_filename)
+            folder = os.path.dirname(profile_picture_path)
+            os.makedirs(folder, exist_ok=True)
             profile_picture.save(profile_picture_path)
             current_user.user_picture = profile_picture_filename
 
@@ -483,6 +485,11 @@ def remove_from_cart():
     db.session.commit()
 
     return jsonify({'success': True}), 200
+
+
+@routes.route('/profile_pictures/<path:filename>')
+def profile_pictures(filename):
+    return send_from_directory('user_profiles', filename)
 
 @routes.errorhandler(CSRFError)
 def handle_csrf_error(e):
