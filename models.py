@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.mysql import VARCHAR
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -41,6 +42,7 @@ class User(db.Model, UserMixin):
     user_password: Mapped[str] = mapped_column(CHAR(60), nullable=False)
     user_balance: Mapped[int] = mapped_column(default=10_000, nullable=False)
     user_picture: Mapped[str] = mapped_column(default='default.png', nullable=False)
+    user_bio: Mapped[str] = mapped_column(VARCHAR(225), nullable=True, default="No bio provided.")
     user_createdt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(), nullable=False)
     user_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
 
