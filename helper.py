@@ -37,8 +37,9 @@ def create_dummy_user(username: str, alias: str, email: str, plaintext_pass: str
 
 
 
-def get_profile_picture(user: User) -> str: #A function accessible globally inside of flask, called in jinja.
-    return url_for('routes.profile_pictures', filename=f'{user.user_id}/profile_picture.png')
+def get_profile_picture(user: User) -> str:
+    return url_for('routes.profile_pictures', filename=f'{user.user_id}/profile_picture.jpg')
+
 
 
 if __name__ == '__main__':

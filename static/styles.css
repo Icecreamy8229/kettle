@@ -142,14 +142,36 @@ header h1 {
 }
 
 .profile-picture {
+    position: relative;
     width: 150px;
     height: 150px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #ccc;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.profile-picture .hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.profile-picture:hover .hover-overlay {
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .profile-picture img {
@@ -171,15 +193,24 @@ header h1 {
 }
 
 .upload-button {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #4caf50;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4C1D70;
     color: white;
-    border: none;
     border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     cursor: pointer;
     text-align: center;
-    font-size: 14px;
+    white-space: nowrap;
+}
+
+.profile-picture:hover .upload-button {
+    opacity: 1;
 }
 
 .username, .custom-username, .profile-bio {
@@ -267,75 +298,114 @@ header h1 {
 
 /* Library styles */
 .library-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 20px 0;
+    gap: 25px;
 }
 
 .library-item {
     background-color: #343538;
     border: solid 4px #4C1D70;
     border-radius: 10px;
-    width: calc(50% - 10px);
-    height: 200px;
-    display: inline-block;
-    vertical-align: top;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-direction: column;
     padding: 15px;
-    gap: 10px;
-    box-shadow: 0 6px 10px #4C1D70;
-    margin: 5px 0;
-    align-items: center;
-    margin-bottom: 15px;
+    box-shadow: 0 6px 10px rgba(76, 29, 112, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     min-height: 220px;
+    overflow: hidden;
     box-sizing: border-box;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .library-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+    transform: scale(1.03);
+    box-shadow: 0 8px 15px rgba(76, 29, 112, 0.7);
     background-color: #4C1D70;
 }
 
 .library-content {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 20px;
-    width: 100%;
-    max-width: 250px;
-    justify-content: space-around;
+    flex-direction: column;
+    height: 100%;
+    gap: 15px;
 }
 
-.library-content div {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
+.library-content > div:first-child {
+    background-color: #1a1a1a;
+    height: 150px;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.library-content > div:last-child {
+    position: relative;
+    max-height: 4.2em;
+    overflow: hidden;
+    padding-right: 1em;
+}
+
+.library-content > div:last-child::after {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, transparent, #343538 50%);
+    padding-left: 5px;
+}
+
+.library-item:hover .library-content > div:last-child::after {
+    background: linear-gradient(to right, transparent, #4C1D70 50%);
 }
 
 .library-content img {
-    width: 30%;
-    height: auto;
-    max-height: 100px;
-    border-radius: 5px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-}
-
-.library-content p {
-    font-size: 14px;
 }
 
 .library-content h2 {
     font-size: 16px;
     color: white;
+    margin: 0;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.library-content h2 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.library-content h2 a:hover {
+    text-decoration: underline;
+}
+
+.library-content p {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+    color: #ccc;
+    padding: 0 10px;
+    text-align: center;
+    display: block;
+    /* In case of non-webkit browsers */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.library-content div {
+    background: none !important;
+    border-radius: 0 !important;
+    display: block !important;
+    align-items: normal !important;
+    gap: 0 !important;
 }
 
 /* Footer styles */

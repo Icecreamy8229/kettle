@@ -19,11 +19,9 @@
                 <div class="profile-content">
                     <div class="profile-picture">
                         <img id="profile-img" src="{{ get_profile_picture(current_user) }}" alt="Profile Picture">
-                    </div>
-                    <div class="profile-upload">
-                        <input type="file" id="upload-image" name="profile_picture" accept="image/*" 
-                        onchange="validateImagesAndVideos()" hidden>
-                        <label for="upload-image" class="upload-button">Upload File for Profile Picture</label>
+                        <div class="hover-overlay">Update Picture</div>
+                        <label for="upload-image" class="upload-button">📷 Change</label>
+                        <input type="file" id="upload-image" name="profile_picture" accept="image/*" onchange="validateImagesAndVideos()" hidden>
                     </div>
                 </div>
                 <input type="text" id="username" name="username" class="username" placeholder="Username" value="{{ current_user.user_login }}" readonly>
@@ -66,7 +64,7 @@
         function validatePassword(plaintext_password) {
             const validateEmoji = document.getElementById('validate-emoji');
 
-            //const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+            const csrfToken = document.querySelector('input[name="csrf_token"]').value;
             fetch('{{ url_for("routes.update_user_route") }}', {
                 method: 'POST',
                 headers: {
@@ -94,7 +92,7 @@
         function validateImagesAndVideos() {
             const maxImageSize = 1 * 1024 * 1024; //1MB
 
-            const imageInput = document.getElementById("game-images");
+            const imageInput = document.getElementById("upload-image");
 
             const imageFiles = imageInput.files;
 
