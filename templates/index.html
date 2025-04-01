@@ -143,7 +143,7 @@
     <!-- Small description text below the banner -->
     <div class="banner-description">
         <p>Discover new games for an affordable price or whatever text we might want here! </p>
-
+    </div>
 
     {% if current_user.is_authenticated and current_user.user_verified %}
         <div>
@@ -152,13 +152,11 @@
         </div>
     {% endif %}
 
-     <div class="searchContainer">
+    <div class="searchContainer">
         <input type="text" id="searchInput" placeholder="Search" oninput="searchFunction()">
         <button onclick="clearSearch()">Clear</button>
         <button onclick="window.location.href='{{ url_for('routes.cart_route') }}'">Cart</button>
     </div>
-
-
 
         <main>
             <div class="container">
