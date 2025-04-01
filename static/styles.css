@@ -472,14 +472,11 @@ footer ul {
 
 footer ul li a {
     text-decoration: none;
+    color: #A9A9A9;
 }
 
 footer ul li a:hover {
-    color: #4C1D70;
-    color: inherit;
+    color: #ffffff;
 }
 
-footer ul li a:visited {
-    color: inherit;
-}
 

@@ -13,7 +13,6 @@ from io import BytesIO
 #TODO move over to Selenium to let javascript render bigger images.
 
 
-
 GAME_LIMIT = 25 #number of games you want to download data for.
 games_added = 0
 
