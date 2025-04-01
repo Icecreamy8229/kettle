@@ -81,50 +81,7 @@
 
     </style>
 
-    <script>
-    function searchFunction() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
-      const gameItems = document.querySelectorAll('#gameList .gameItem');
 
-      let found = false;
-
-      gameItems.forEach(item => {
-        const gameName = item.querySelector('h3').innerText.toLowerCase();
-        if (gameName.includes(input)) {
-
-          item.style.display = '';
-          found = true;
-        } else {
-
-          item.style.display = 'none';
-        }
-      });
-
-
-      const noGamesMessage = document.getElementById('noGamesMessage');
-
-      if (!found) {
-
-        if (!noGamesMessage) {
-          const tbody = document.getElementById('gameList');
-          const tr = document.createElement('tr');
-          tr.id = 'noGamesMessage';
-
-          tr.innerHTML = '<td colspan="3" style="text-align: center; padding: 20px; color: white;"> No games match your search.</td>';
-          tbody.appendChild(tr);
-        }
-      } else {
-        if (noGamesMessage) {
-          noGamesMessage.remove();
-        }
-      }
-    }
-
-    function clearSearch() {
-      document.getElementById('searchInput').value = '';
-      searchFunction();
-    }
-  </script>
 {% endblock %}
 {% block content %}
 
@@ -147,16 +104,19 @@
 
     {% if current_user.is_authenticated and current_user.user_verified %}
         <div>
-        <h2>Want to add a game?</h2>
-        <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Click here</button>
+            <h2>Want to add a game?</h2>
+            <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Click here</button>
         </div>
     {% endif %}
 
-    <div class="searchContainer">
-        <input type="text" id="searchInput" placeholder="Search" oninput="searchFunction()">
+     <div class="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search">
         <button onclick="clearSearch()">Clear</button>
         <button onclick="window.location.href='{{ url_for('routes.cart_route') }}'">Cart</button>
     </div>
+
+    <div id="results-container" class="games-container"></div>
+
 
         <main>
             <div class="container">
@@ -176,8 +136,7 @@
                 </div>
             </div>
         </main>
-            
+    <script src="{{ url_for('static', filename='searchbar.js') }}"></script>
 </body>
-
 {% include "footer.html" %}
 {% endblock %}

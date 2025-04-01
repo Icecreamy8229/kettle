@@ -55,6 +55,33 @@ def user_route():
     else:
         return render_template('login.html', title='Login')
 
+
+@routes.route('/search-results', methods=['GET'])
+def search_results_route():
+    def create_json(game: Game):
+        return {
+            "game_id": game.game_id,
+            "game_title": game.game_title,
+            "game_desc": game.game_desc,
+            "game_price": game.game_price,
+        }
+
+    search_param = request.args.get('search', type=str)
+    try:
+        # Query the games table for titles that match the search term (case-insensitive)
+        games = db.query(Game).filter(Game.game_title.ilike(f"%{search_param}%")).all()
+    except Exception as e:
+        logging.error(f"Error while querying the database: {e}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
+    if not games:
+        return jsonify([])  # If no games are found, return an empty list
+
+    # If games are found, convert them to JSON
+    results = [create_json(game) for game in games]
+    return jsonify(results)
+
+
 @routes.route('/update_user', methods=['POST'])
 @login_required
 def update_user_route():
