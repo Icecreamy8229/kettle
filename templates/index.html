@@ -109,17 +109,16 @@
         </div>
     {% endif %}
 
-     <div class="searchContainer">
-        <input type="text" id="searchInput" placeholder="Search">
-        <button onclick="clearSearch()">Clear</button>
-        <button onclick="window.location.href='{{ url_for('routes.cart_route') }}'">Cart</button>
-    </div>
 
-    <div id="results-container" class="games-container"></div>
+    {% include "searchbar.html" %}
+
+
+
+    </div>
 
 
         <main>
-            <div class="container">
+            <div id="results-container" class="container">
                 <div class="games-container">
                     {% for game in games %}
                         <a href="{{ url_for('routes.game_route') }}?id={{ game.game_id }}" class="hitbox">
@@ -136,7 +135,8 @@
                 </div>
             </div>
         </main>
-    <script src="{{ url_for('static', filename='searchbar.js') }}"></script>
 </body>
 {% include "footer.html" %}
+{% endblock %}
+{% block aftercontent %}
 {% endblock %}

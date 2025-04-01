@@ -69,7 +69,9 @@ def search_results_route():
     search_param = request.args.get('search', type=str)
     try:
         # Query the games table for titles that match the search term (case-insensitive)
-        games = db.query(Game).filter(Game.game_title.ilike(f"%{search_param}%")).all()
+        games = Game.query.filter(Game.game_title.ilike(f"%{search_param}%")).all()
+        #games = db.query(Game).filter(Game.game_title.ilike(search_param)).all() savannahs code
+        print(games)
     except Exception as e:
         logging.error(f"Error while querying the database: {e}")
         return jsonify({"error": "Internal Server Error"}), 500

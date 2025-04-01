@@ -1,0 +1,9 @@
+<div class="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search">
+        <button onclick="clearSearch()">Clear</button>
+        <button onclick="window.location.href='{{ url_for('routes.cart_route') }}'">Cart</button>
+</div>
+
+{% block aftercontent %}
+    <script src="../static/searchbar.js"></script>
+{% endblock %}

@@ -2,6 +2,8 @@ let timeout = null;
 
 function returnResults(user_query) {
     const resultsContainer = document.getElementById('results-container');
+    console.log(user_query);
+    console.log(resultsContainer);
 
 
     if (user_query.trim() === "") {
