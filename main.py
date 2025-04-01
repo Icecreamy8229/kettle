@@ -8,6 +8,7 @@ from secret import secret_key
 from helper import get_profile_picture
 from mailer import mail
 from flask_wtf.csrf import CSRFProtect
+from middleware import optimize
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -54,6 +55,7 @@ app.register_blueprint(routes)
 
 #this if statement just checks that you are running main.py, rather than an import
 if __name__ == '__main__':
+
 
     if config['environment'] == 'production':
         app.run(debug=False)
