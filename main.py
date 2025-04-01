@@ -8,7 +8,6 @@ from secret import secret_key
 from helper import get_profile_picture
 from mailer import mail
 from flask_wtf.csrf import CSRFProtect
-from middleware import optimize
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
