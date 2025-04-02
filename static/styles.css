@@ -11,6 +11,16 @@ html, body {
     overflow-x: hidden;
 }
 
+.flash-msg {
+    text-align: center;
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    width: 40%;
+    z-index: 100;
+}
+
+
 .content {
     flex: 1;
 }
@@ -44,11 +54,12 @@ header h1 {
 
 .navbar img {
     height: 50px;
-    width: auto;
+    width: 50px;
     margin: 5px 15px;
 }
 
 .navbar .navbar-pp {
+
     border-radius: 1rem;
     width: 50px;
     height: 50px;
@@ -484,4 +495,26 @@ footer ul li a:hover {
     color: #ffffff;
 }
 
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
 
+}
+
+.cart-icon {
+    filter: invert(1) opacity(0.7) hue-rotate(180deg);
+
+    scale: .70;
+}
+
+#cursor {
+    display: inline-block;
+    width: 8px; /* Adjust the cursor width as needed */
+    height: .8em; /* Adjust the cursor height as needed */
+    background-color: white; /* Cursor color */
+    animation: blink 1s infinite; /* Blinking animation */
+}

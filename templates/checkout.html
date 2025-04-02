@@ -103,19 +103,19 @@
 
         <h2>Order Summary</h2>
         <ul class="order-summary">
-            {% for item in order_items %}
+            {% for game in purchases %}
                 <li class="order-item">
-                    <span>  <img src="{{ game.image_url }}" alt="{{ game.name }}" width="40" height="40">
-                    <h5>{{ game.name }}</h5>
+                    <span>  <img src="game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}" width="40" height="40">
+                    <h5>{{ game.game_title }}</h5>
                     </span>
-                    <span>{{ game.points }} points</span>
+                    <span>{{ game.game_price }} points</span>
                 </li>
             {% endfor %}
         </ul>
 
         <div class="total">
             <span>Total</span>
-            <span>{{ total_points }} Points</span>
+            <span>{{ total_price }} Points</span>
         </div>
 
         <div class="button-group">

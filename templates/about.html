@@ -65,7 +65,7 @@
 
             <div class="about-kettle">
                 <h1>About Kettle</h1>
-                <p>Kettle is meant to be a mock game distribution site that is similar to that of Steam. It was created for the <strong>CIS-273</strong> final project. </p>
+                <p class="type-text">Kettle is meant to be a mock game distribution site that is similar to that of Steam. It was created for the <strong>CIS-273</strong> final project. </p>
             </div>
 
             <img src="static\images\kettlelogo.png" alt="Kettle Logo">
@@ -73,10 +73,10 @@
             <div class="team-box">
                 <h1>Our Team</h1>
                 <ul>
-                    <li>Brendan Fulmerhouser</li>
-                    <li>Benjamin Warner</li>
-                    <li>Gene Waynick</li>
-                    <li>Savannah Yager</li>
+                    <li class="type-text">Brendan Fulmerhouser</li>
+                    <li class="type-text">Benjamin Warner</li>
+                    <li class="type-text">Gene Waynick</li>
+                    <li class="type-text">Savannah Yager</li>
                 </ul>
             </div>
         </div>
@@ -90,4 +90,7 @@
     {% include "footer.html" %}
 </body>
 
+{% endblock %}
+{% block aftercontent %}
+<script>typeText(50, 1000)</script>
 {% endblock %}

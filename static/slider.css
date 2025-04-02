@@ -41,7 +41,7 @@ body {
 .slide img {
 	object-fit: cover;
 	height: 100%;
-	width: auto;
+	width: 100%;
 }
 
 .active {
