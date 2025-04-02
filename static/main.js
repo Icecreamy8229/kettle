@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-function typeText(speed) {
+function typeText(speed, delay) {
     const typingSpeed = speed;
     const texts = Array.from(document.querySelectorAll('.type-text')).map(el => el.textContent);
     const elements = document.querySelectorAll(".type-text");
@@ -64,7 +64,10 @@ function typeText(speed) {
                 clearInterval(typeInterval);
 
                 currentIndex++; // Move to the next element
-                typeNextElement(); // Start typing the next element, recursive call to itself.
+                setTimeout(
+                () => typeNextElement(),
+                        delay
+                ) // Start typing the next element, recursive call to itself.
             }
         }, typingSpeed);
     }
