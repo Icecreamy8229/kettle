@@ -4,14 +4,12 @@
 
 {% if current_user.is_authenticated %}
     {# The authenticated navbar, the cool people get this one. #}
-    <nav class="navbar">
+    <nav id="navbar">
 <!-- Logo -->
-        <div class="logo">
-        <!-- Temporary kettle logo -->
-            <a href="/">
-                <img src="static\images\kettlelogo.png" alt="Index page">
-            </a>
-        </div>
+        <a id="navbar-logo" href="/">
+
+            <img src="static\images\kettlelogo.png" alt="Index page">
+        </a>
 
   <!-- Links for nav bar -->
         <div class="links">
@@ -22,28 +20,27 @@
             <a href="{{ url_for('routes.logout_route') }}">Logout</a>
         </div>
 
-        <div>
-            <a href="{{ url_for('routes.cart_route') }}"><img src="static/images/icons/cart-shopping.svg" alt="cart-icon" class="cart-icon"></a>
-            <a>{{ current_user.user_alias }}</a>
+        <div class="navbar-user-div">
+            <p id="navbar-user-alias">{{ current_user.user_alias }}</p>
             <a href="{{ url_for('routes.user_route') }}"><img class="navbar-pp" src="{{ get_profile_picture(current_user) }}"></a>
-
+            <a href="{{ url_for('routes.cart_route') }}"><img src="static/images/icons/cart-shopping.svg" alt="cart-icon" class="cart-icon"></a>
         </div>
 
 
     </nav>
 {% else %}
     {# The guest Navbar #}
-    <nav class="navbar">
+    <nav id="navbar">
 <!-- Logo -->
-        <div class="logo">
+
         <!-- Temporary kettle logo -->
-            <a href="/">
-                <img src="static\images\kettlelogo.png" alt="Index page">
-            </a>
-        </div>
+        <a id="navbar-logo" href="/">
+            <img src="static\images\kettlelogo.png" alt="Index page">
+        </a>
+
 
   <!-- Links for nav bar -->
-        <div class="links">
+        <div class="links" style="justify-content: right;">
             <a href="{{ url_for('routes.about_route') }}">About</a>
             <a href="https://trello.com/b/nLR6hiT7/kettle" target="_blank">Trello</a>
             <a href="https://github.com/Icecreamy8229/kettle" target="_blank">Github</a>

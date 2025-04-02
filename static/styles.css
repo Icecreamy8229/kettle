@@ -4,12 +4,14 @@ html, body {
     margin: 0;
     display: flex;
     flex-direction: column;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Silkscreen', sans-serif;
     background-color: #121212;
     color: #A9A9A9;
     padding: 0;
     overflow-x: hidden;
 }
+
+
 
 .flash-msg {
     text-align: center;
@@ -40,7 +42,7 @@ header h1 {
     font-size: 48px;
 }
 
-.navbar {
+#navbar {
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -48,17 +50,56 @@ header h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 20px 20px;
     margin-bottom: 25px;
 }
 
-.navbar img {
-    height: 50px;
-    width: 50px;
-    margin: 5px 15px;
+.navbar-user-div {
+    flex: 1;
+    justify-content: flex-end;
+    display: flex;
+    width: 300px;
+    align-items: center;
 }
 
-.navbar .navbar-pp {
+.navbar-user-div > * {
+    padding: 0 10px;
+}
+
+.navbar-user-div .cart-icon {
+    height: 50px;
+
+}
+
+
+
+#navbar-user-alias {
+    all: unset;
+    display: block; /* overrides some margin style being applied from bootstrap..  */
+    color: white;
+    font-size: 16px;
+    overflow: hidden;
+    text-align: center;
+    justify-self: center;
+
+
+}
+
+#navbar-logo {
+    flex: 1;
+
+}
+
+
+#navbar-logo img {
+
+    height: 60px;
+    width: auto;
+
+
+}
+
+#navbar .navbar-pp {
 
     border-radius: 1rem;
     width: 50px;
@@ -68,12 +109,15 @@ header h1 {
     overflow: hidden;
 }
 
-.navbar .links {
+.links {
+    flex: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
+
 }
 
-.navbar .links a {
+#navbar .links a {
     color: white;
     text-decoration: none;
     margin-left: 20px;
@@ -82,12 +126,12 @@ header h1 {
     transition: background-color 0.3s ease;
 }
 
-.navbar .links a:hover {
+#navbar .links a:hover {
     background-color: #371055;
     border-radius: 4px;
 }
 
-.navbar .login-signup {
+#navbar .login-signup {
     background-color: #4C1D70;
     color: #371055;
     border: none;
@@ -97,7 +141,7 @@ header h1 {
     margin-left: 20px;
 }
 
-.navbar .login-signup:hover {
+#navbar .login-signup:hover {
     background-color: #f1f1f1;
 }
 
@@ -109,6 +153,8 @@ header h1 {
     margin-bottom: 80px;
 }
 
+
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -118,6 +164,10 @@ header h1 {
     padding-top: 30px;
     padding-bottom: 50px;
     border-radius: 0;
+}
+
+.container p, h2 {
+    font-family: 'Roboto', sans-serif;
 }
 
 .price {
@@ -517,4 +567,27 @@ footer ul li a:hover {
     height: .8em; /* Adjust the cursor height as needed */
     background-color: white; /* Cursor color */
     animation: blink 1s infinite; /* Blinking animation */
+}
+
+#searchbar-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+#searchbar-row div {
+
+    display: flex;
+}
+
+#searchbar-row button {
+    align-self: center;
+
+}
+
+#searchbar-row:last-of-type(button) {
+    justify-content: flex-end;
+}
+
+#searchbar-row button {
+    height: 50px;
 }

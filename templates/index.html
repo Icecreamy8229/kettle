@@ -53,18 +53,8 @@
         margin-left: auto;
     }
 
-    .searchContainer {
-        text-align: center;
-        margin: 20px 0;
-    }
 
-    #searchInput {
-        padding: 10px;
-        width: 50%;
-        font-size: 16px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
+
 
     button {
         padding: 10px 15px;
@@ -103,23 +93,27 @@
     </div>
 
     {% if current_user.is_authenticated and current_user.user_verified %}
-        <div>
-            <h2>Want to add a game?</h2>
-            <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Click here</button>
-        </div>
+
     {% endif %}
 
 
-    {% include "searchbar.html" %}
 
 
-
-    </div>
 
 
         <main>
-            <div id="results-container" class="container">
-                <div class="games-container">
+            <div  class="container">
+
+                <div id="searchbar-row">
+
+                    {% include "searchbar.html" %}
+
+                    <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
+
+
+                </div>
+
+                <div id="results-container" class="games-container">
                     {% for game in games %}
                         <a href="{{ url_for('routes.game_route') }}?id={{ game.game_id }}" class="hitbox">
                             <div class="content">
