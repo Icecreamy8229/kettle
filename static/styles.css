@@ -54,11 +54,12 @@ header h1 {
 
 .navbar img {
     height: 50px;
-    width: auto;
+    width: 50px;
     margin: 5px 15px;
 }
 
 .navbar .navbar-pp {
+
     border-radius: 1rem;
 }
 
