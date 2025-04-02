@@ -479,4 +479,20 @@ footer ul li a:hover {
     color: #ffffff;
 }
 
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
 
+}
+
+#cursor {
+    display: inline-block;
+    width: 8px; /* Adjust the cursor width as needed */
+    height: .8em; /* Adjust the cursor height as needed */
+    background-color: white; /* Cursor color */
+    animation: blink 1s infinite; /* Blinking animation */
+}

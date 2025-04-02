@@ -19,7 +19,7 @@
         {% include 'navbar.html' %}
         {% include 'flash.html' %}
         <div class="container">
-            <h1>{{ current_user.user_alias }}'s Library</h1>
+            <h1 class="type-text">{{ current_user.user_alias }}'s Library</h1>
             <div>
                 {% if games %}
                 <div class="library-container">
@@ -54,4 +54,9 @@
 
 {% endblock %}
 
+{% block aftercontent %}
+ <script>
+     typeText(50)
+ </script>
+{% endblock %}
 
