@@ -193,8 +193,16 @@
 
     </section>
 
+
+
+
     <section id="addToCartSection">
-        <button id="addToCartButton" class="button" onclick="addToCart()">Add to Cart</button>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="game_id" value="{{ game.game_id }}"/>
+            <button id="addToCartButton" class="button">Add to Cart</button>
+
+        </form>
     </section>
 
     </body>

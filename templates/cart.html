@@ -13,21 +13,18 @@
     }
 
     .cart-list {
-        display: flex;
+
         justify-content: center;
         flex-wrap: wrap;
     }
 
-    .cart-item-wrapper {
-        position: relative;
-    }
 
     .cart-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 300px;
-        height: 60px;
+        width: 100%;
+        height: 100px;
         border: 1px solid black;
         background-color: #4c1d70;
         padding: 10px;
@@ -35,7 +32,16 @@
         margin-bottom: 15px;
     }
 
+    .cart-image {
+        border: 1px solid black;
+
+        height: 100%;
+        width: auto;
+    }
+
+
     .cart-image-title {
+        height: 100%;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -147,11 +153,11 @@
                     <div class="cart-item-wrapper">
                         <div class="cart-item">
                             <div class="cart-image-title">
-                                <img src="{{ game.image_url }}" alt="{{ game.name }}" width="40" height="40">
-                                <h5>{{ game.name }}</h5>
+                                <img class="cart-image" src="/game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
+                                <h5>{{ game.game_title }}</h5>
                             </div>
                             <div class="cart-item-points">
-                                <p>{{ game.points }} Points</p>
+                                <p>{{ game.game_price }} Points</p>
                             </div>
                         </div>
                             <button class="remove" data-points="{{ game.points }}" onclick="removeFromCart('{{ game.game_id }}', this)">X</button>                    
@@ -161,10 +167,14 @@
                 <hr>    
                 <div class="payment-container">
                     <div class="payment-row">
-                        <h5>Total Points:</h5>
-                        <h5>{{ total_points }} Points</h5>
+                        <h5>Total Cost:</h5>
+                        <h5>{{ total_price }} Points</h5>
                     </div>
-                    <button class="btn btn-primary purchase-btn">Purchase</button>
+
+                    <form method="GET" action="/checkout">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <button class="btn btn-primary purchase-btn">Purchase</button>
+                    </form>
                 </div>
             </div>
         </div>

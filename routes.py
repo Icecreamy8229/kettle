@@ -35,10 +35,38 @@ def index_route():
     logging.debug('Index route called')
     return render_template('index.html',games=games)
 
-@routes.route('/checkout')
+@login_required
+@routes.route('/checkout', methods=['GET', 'POST',])
 def checkout_route():
-    logging.debug('Checkout route called')
-    return render_template('checkout.html', title='Checkout')
+    exists_in_library = db.session.query(
+        db.session.query(Library).filter(
+            Library.user_id == current_user.user_id,
+            Library.game_id == Cart.game_id
+        ).exists()
+    ).filter(Cart.user_id == current_user.user_id).scalar()
+
+    if exists_in_library:
+        flash(f"error: some games already owned.", "danger")
+        return redirect(url_for('routes.cart_route'))
+    users_cart = db.session.query(Cart).filter_by(user_id=current_user.user_id).all()
+
+    game_ids = [cart_item.game_id for cart_item in users_cart]
+    games = db.session.query(Game).filter(Game.game_id.in_(game_ids)).all()
+    total_price = sum([x.game_price for x in games])
+    if total_price == 0:
+        return redirect(url_for('routes.index_route'))
+    if total_price > current_user.user_balance:
+        flash("You don't have enough points to complete the purchase.", "danger")
+        return redirect(url_for('routes.cart_route'))
+
+    current_user.user_balance -= total_price
+    db.session.flush()
+    for cart_item in users_cart:
+        db.session.add(Library(user_id=current_user.user_id, game_id=cart_item.game_id))
+        db.session.delete(cart_item)
+    db.session.commit()
+
+    return render_template('checkout.html', title='Checkout', purchases=games, total_price=total_price)
 
 @routes.route('/about')
 def about_route():
@@ -339,7 +367,7 @@ def cart_route():
     game_ids = [i.game_id for i in cart_items]
     games = db.session.query(Game).filter(Game.game_id.in_(game_ids)).all()
     logging.info(f"Cart route called, with these items: {games}")
-    return render_template("cart.html", games=games)
+    return render_template("cart.html", games=games, total_price=sum([i.game_price for i in games]))
 
 
 @routes.route("/logout")
@@ -472,8 +500,8 @@ def serve_game_media(game_id, filename):
 #ALL AI GENERATED, JUST SO I CAN SEE IF THE CART PAGE WORKS.
 @routes.route("/add-to-cart", methods=['POST'])
 @login_required
-def add_to_cart():
-    data = request.get_json()
+def add_to_cart_route():
+    data = request.form
     game_id = data.get("game_id")
 
     if not game_id:
@@ -486,13 +514,19 @@ def add_to_cart():
     # Check if game is already in cart
     existing_cart_item = db.session.query(Cart).filter_by(user_id=current_user.user_id, game_id=game_id).first()
     if existing_cart_item:
-        return jsonify({'error': 'Game is already in the cart'}), 400
+        flash(f"{game.game_title} is already in your cart", "warning")
+        return redirect(url_for('routes.index_route'))
 
+    check_in_library = db.session.query(Library).filter_by(user_id=current_user.user_id, game_id=game_id).first()
+    if check_in_library:
+        flash(f"{game.game_title} is already in your library", "warning")
+        return redirect(url_for('routes.index_route'))
     cart_item = Cart(user_id=current_user.user_id, game_id=game_id)
     db.session.add(cart_item)
     db.session.commit()
 
-    return jsonify({'success': True}), 200
+    flash(f"{game.game_title} added to cart", "success")
+    return redirect(url_for('routes.index_route'))
 
 
 #ALL AI GENERATED, JUST SO I CAN SEE IF THE CART PAGE WORKS.
