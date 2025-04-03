@@ -92,14 +92,6 @@
         <p>Discover new games for an affordable price or whatever text we might want here! </p>
     </div>
 
-    {% if current_user.is_authenticated and current_user.user_verified %}
-
-    {% endif %}
-
-
-
-
-
 
         <main>
             <div  class="container">
@@ -107,7 +99,7 @@
                 <div id="searchbar-row">
 
                     {% include "searchbar.html" %}
-                    {% if current_user.user_privilege > 0 %}
+                    {% if current_user.is_authenticated and current_user.user_privilege > 0 %}
                         <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
                     {% endif %}
 
