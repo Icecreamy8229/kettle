@@ -16,10 +16,16 @@ html, body {
 .flash-msg {
     text-align: center;
     position: absolute;
-    top: 10%;
+    top: 100px;
     left: 30%;
     width: 40%;
     z-index: 100;
+}
+
+.flash-msg button {
+    padding: 0;
+    margin: 0;
+    justify-self: center;
 }
 
 
@@ -45,7 +51,7 @@ header h1 {
 #navbar {
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 90;
     background-color: #030303;
     display: flex;
     justify-content: space-between;
