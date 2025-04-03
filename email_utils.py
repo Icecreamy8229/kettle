@@ -5,6 +5,7 @@ from flask_mail import Message
 from models import User
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import url_for, flash
+import logging
 
 with open("config.yaml") as f:
     config = yaml.safe_load(f)
@@ -24,10 +25,12 @@ def send_verify_email(user: User):
     html_template = jinja2.Template(open("templates/eml_verify.html").read())
 
     msg = Message(
+        sender=("Kettle Team", config['mailchimp']["username"]),
         subject="Kettle Email Verification",
         recipients=[user.user_email],
         html=html_template.render(user=user, verification_url=verification_url)
     )
+    logging.info("Sending verification email to %s", user.user_email)
     mail.send(msg)
 
 
