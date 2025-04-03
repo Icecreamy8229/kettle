@@ -26,7 +26,7 @@ bcyrpt = Bcrypt()
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 routes = Blueprint('routes', __name__)  # this module points to itself for routes.
-trusted_users = "kero rubber gene savbun squarebrian".split()
+
 
 @routes.route('/')  # This is the general syntax for creating a route in flask.
 def index_route():
@@ -380,9 +380,9 @@ def logout_route():
 @login_required
 @routes.route("/submission")
 def submission_route(): #trusted users can create games here.
-    global trusted_users
 
-    if current_user.is_authenticated and current_user.user_login in trusted_users:
+
+    if current_user.is_authenticated and current_user.user_privilege > 0:
         return render_template('submission.html')
 
     return redirect(url_for('routes.index_route'))
@@ -390,9 +390,9 @@ def submission_route(): #trusted users can create games here.
 
 @routes.route("/submit-game", methods=['POST'])
 def submit_game_route():
-    global trusted_users
 
-    if current_user.is_authenticated and current_user.user_login not in trusted_users:
+
+    if current_user.is_authenticated and current_user.user_privilege > 0:
         return jsonify({'error': 'User not allowed.'}), 400
     if 'game-images' not in request.files or 'game-videos' not in request.files:
         return jsonify({'error': 'Files are missing'}), 400

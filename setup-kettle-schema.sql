@@ -15,8 +15,10 @@ CREATE TABLE users (
   user_password char(60) NOT NULL,
   user_balance integer NOT NULL DEFAULT 10000,
   user_picture varchar(128) NOT NULL,
-  user_createdt datetime DEFAULT CURRENT_TIMESTAMP,
-  user_verified tinyint NOT NULL DEFAULT 0
+  user_bio varchar(255) NOT NULL DEFAULT "This user has no bio.",
+  user_verified tinyint NOT NULL DEFAULT 0,
+  user_privilege tinyint NOT NULL DEFAULT 0,
+  user_createdt datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 

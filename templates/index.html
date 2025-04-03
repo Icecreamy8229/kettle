@@ -107,8 +107,9 @@
                 <div id="searchbar-row">
 
                     {% include "searchbar.html" %}
-
-                    <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
+                    {% if current_user.user_privilege > 0 %}
+                        <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
+                    {% endif %}
 
 
                 </div>
