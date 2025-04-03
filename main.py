@@ -26,7 +26,7 @@ app.jinja_env.globals['get_profile_picture'] = get_profile_picture
 
 #make sure the correct info is filled out in your config.yaml for how you have your database setup, or it will fail
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{config['database']['username']}:{config['database']['password']}@{config['database']['host']}/{config['database']['schema']}"
-logging.debug("Configured database url %s", app.config["SQLALCHEMY_DATABASE_URI"])
+#logging.debug("Configured database url %s", app.config["SQLALCHEMY_DATABASE_URI"])
 
 
 if config['environment'] == 'production':
