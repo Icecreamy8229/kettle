@@ -6,6 +6,29 @@ init()
 last_status = None
 
 
+def set_privilege_level():
+    global last_status
+    level = input("Enter the privilege level you want to set: ")
+    try:
+        level = int(level)
+    except Exception as e:
+        last_status = Fore.RED + f"Error setting privilege level: {e}" + Style.RESET_ALL
+        return
+
+    username = input("Enter the username of the user you want to set the privilege level for: ")
+    from main import app
+    from models import User, db
+    try:
+        with app.app_context():
+            user = User.query.filter_by(user_login=username).first()
+            if not user:
+                last_status = Fore.RED + f"User not found." + Style.RESET_ALL
+                return
+            user.user_privilege = int(level)
+            db.session.commit()
+            last_status = Fore.GREEN + f"Privilege level for {username} set to {level}." + Style.RESET_ALL
+    except Exception as e:
+        last_status = Fore.RED + f"Error setting privilege level: {e}" + Style.RESET_ALL
 
 
 def check_selection(selection):
@@ -18,7 +41,7 @@ def main():
 
     os.system("cls")
     print(f"Admin Tools\nLast Status:  {last_status}")
-    selection = input("\nType a number with what action you want to do: \n1. Create a dummy user\n2. Create a user.\n3. Reset Password\nX to Exit.\n>")
+    selection = input("\nType a number with what action you want to do: \n1. Create a dummy user\n2. Create a user.\n3. Reset Password\n4. Set Privilege level\nX to Exit.\n>")
     if selection.lower() == "x": exit()
 
     if not check_selection(selection):
@@ -94,7 +117,7 @@ def set_password():
     except Exception as e:
         last_status = Fore.RED + f"Error resetting password: {e}" + Style.RESET_ALL
 
-commands = [create_dummy_user,create_user_options, set_password]
+commands = [create_dummy_user,create_user_options, set_password, set_privilege_level]
 
 if __name__ == "__main__":
     while True:
