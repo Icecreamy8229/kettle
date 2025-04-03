@@ -1,12 +1,30 @@
-
 /* General body styles */
-body {
-    font-family: 'Roboto', sans-serif;
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Silkscreen', sans-serif;
     background-color: #121212;
     color: #A9A9A9;
-    margin: 0;
     padding: 0;
     overflow-x: hidden;
+}
+
+
+
+.flash-msg {
+    text-align: center;
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    width: 40%;
+    z-index: 100;
+}
+
+
+.content {
+    flex: 1;
 }
 
 header {
@@ -24,55 +42,96 @@ header h1 {
     font-size: 48px;
 }
 
+#navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #030303;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+    margin-bottom: 25px;
+}
 
-.navbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background-color: #030303;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      margin-bottom: 25px;
+.navbar-user-div {
+    flex: 1;
+    justify-content: flex-end;
+    display: flex;
+    width: 300px;
+    align-items: center;
+}
+
+.navbar-user-div > * {
+    padding: 0 10px;
+}
+
+.navbar-user-div .cart-icon {
+    height: 50px;
 
 }
 
-  /* Leftmost logo section */
-.navbar .logo img {
 
-      height: 50px; /* Adjust logo size */
-      width: auto;
-      margin: 5px 15px;
+
+#navbar-user-alias {
+    all: unset;
+    display: block; /* overrides some margin style being applied from bootstrap..  */
+    color: white;
+    font-size: 16px;
+    overflow: hidden;
+    text-align: center;
+    justify-self: center;
+
 
 }
 
-  /* Right section with links and buttons */
-.navbar .links {
+#navbar-logo {
+    flex: 1;
+
+}
+
+
+#navbar-logo img {
+
+    height: 60px;
+    width: auto;
+
+
+}
+
+#navbar .navbar-pp {
+
+    border-radius: 1rem;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 2px solid #4C1D70;
+    overflow: hidden;
+}
+
+.links {
+    flex: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
 
 }
 
-  /* Navbar links */
-.navbar .links a {
+#navbar .links a {
     color: white;
     text-decoration: none;
     margin-left: 20px;
     font-size: 16px;
     padding: 8px 12px;
-    transition: background-color 0.3s ease; /* Smooth transition for background change */
+    transition: background-color 0.3s ease;
 }
 
-  /* Hover effect for links */
-.navbar .links a:hover {
-    background-color: #371055; /* Darker purple on hover */
-    border-radius: 4px; /* Optional: Add border radius for a more rounded effect */
-
+#navbar .links a:hover {
+    background-color: #371055;
+    border-radius: 4px;
 }
 
-  /* Button styles for login/signup */
-.navbar .login-signup {
+#navbar .login-signup {
     background-color: #4C1D70;
     color: #371055;
     border: none;
@@ -80,13 +139,10 @@ header h1 {
     padding: 8px 16px;
     cursor: pointer;
     margin-left: 20px;
-
 }
 
-  /* Hover effect for login/signup button */
-.navbar .login-signup:hover {
+#navbar .login-signup:hover {
     background-color: #f1f1f1;
-
 }
 
 .banner-description {
@@ -94,8 +150,10 @@ header h1 {
     color: white;
     font-size: 16px;
     margin-top: 40px;
-	margin-bottom: 80px;
+    margin-bottom: 80px;
 }
+
+
 
 .container {
     max-width: 1200px;
@@ -104,7 +162,12 @@ header h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #504d54;
     padding-top: 30px;
-	padding-bottom: 50px;
+    padding-bottom: 50px;
+    border-radius: 0;
+}
+
+.container p, h2 {
+    font-family: 'Roboto', sans-serif;
 }
 
 .price {
@@ -122,22 +185,13 @@ header h1 {
     cursor: pointer;
     transition: background-color 0.3s;
     text-align: center;
-
+    border-radius: 0;
 }
 
 .buyButton:hover {
-    background-color: #ddd;
+    background-color: #371055;
 }
 
-.container {
-    border-radius: 0;
-}
-
-.buyButton {
-    border-radius: 0;
-}
-
-/* user styles */
 .profile-container {
     background: #121212;
     padding: 50px;
@@ -154,14 +208,36 @@ header h1 {
 }
 
 .profile-picture {
+    position: relative;
     width: 150px;
     height: 150px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #ccc;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.profile-picture .hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.profile-picture:hover .hover-overlay {
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .profile-picture img {
@@ -183,15 +259,24 @@ header h1 {
 }
 
 .upload-button {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #4caf50;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4C1D70;
     color: white;
-    border: none;
     border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     cursor: pointer;
     text-align: center;
-    font-size: 14px;
+    white-space: nowrap;
+}
+
+.profile-picture:hover .upload-button {
+    opacity: 1;
 }
 
 .username, .custom-username, .profile-bio {
@@ -214,6 +299,30 @@ header h1 {
     margin-top: 30px;
 }
 
+.no-games {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10em;
+}
+
+.no-games a {
+    background-color: #4C1D70;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.no-games a:hover {
+    background-color: #371055;
+}
+
 .game {
     width: 250px;
     height: 300px;
@@ -234,7 +343,7 @@ header h1 {
 }
 
 .save-button {
-    width: 80%;
+    width: 30%;
     padding: 15px;
     margin-top: 30px;
     background: #28a745;
@@ -246,15 +355,176 @@ header h1 {
     font-weight: bold;
 }
 
-/* footer styles */
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: solid #4C1D70;
+}
+
+/* Library styles */
+.library-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 20px 0;
+    gap: 25px;
+}
+
+.library-item {
+    background-color: #343538;
+    border: solid 4px #4C1D70;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    box-shadow: 0 6px 10px rgba(76, 29, 112, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    min-height: 220px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.library-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 15px rgba(76, 29, 112, 0.7);
+    background-color: #4C1D70;
+}
+
+.library-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 15px;
+}
+
+.library-content > div:first-child {
+    background-color: #1a1a1a;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.library-content > div:last-child {
+    position: relative;
+    max-height: 4.2em;
+    overflow: hidden;
+    padding-right: 1em;
+}
+
+.library-content > div:last-child::after {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, transparent, #343538 50%);
+    padding-left: 5px;
+}
+
+.library-item:hover .library-content > div:last-child::after {
+    background: linear-gradient(to right, transparent, #4C1D70 50%);
+}
+
+.library-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.library-content h2 {
+    font-size: 16px;
+    color: white;
+    margin: 0;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.library-content h2 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.library-content h2 a:hover {
+    text-decoration: underline;
+}
+
+.library-content p {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+    color: #ccc;
+    padding: 0 10px;
+    text-align: center;
+    display: block;
+    /* In case of non-webkit browsers */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.library-content div {
+    background: none !important;
+    border-radius: 0 !important;
+    display: block !important;
+    align-items: normal !important;
+    gap: 0 !important;
+}
+
+/* Footer styles */
 footer {
-        height: 200px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
+    height: 200px;
+    width: 100%;
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 100px;
+    position: relative;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.footer-logo {
+    height: 40px;
+    width: auto;
+    position: absolute;
+    left: 37%;
+}
+
+
+.footer-links ul {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+footer .footer_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+footer .footer-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    margin-top: 5px;
+}
 
 footer hr {
     width: 100%;
@@ -263,17 +533,61 @@ footer hr {
 footer ul {
     list-style-type: none;
     padding: 0;
+    text-align: center;
 }
 
 footer ul li a {
     text-decoration: none;
+    color: #A9A9A9;
 }
 
 footer ul li a:hover {
-    color: #4C1D70 !important;
-    color: inherit;
+    color: #ffffff;
 }
 
-footer ul li a:visited {
-    color: inherit;
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+
+}
+
+.cart-icon {
+    filter: invert(1) opacity(0.7) hue-rotate(180deg);
+
+    scale: .70;
+}
+
+#cursor {
+    display: inline-block;
+    width: 8px; /* Adjust the cursor width as needed */
+    height: .8em; /* Adjust the cursor height as needed */
+    background-color: white; /* Cursor color */
+    animation: blink 1s infinite; /* Blinking animation */
+}
+
+#searchbar-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+#searchbar-row div {
+
+    display: flex;
+}
+
+#searchbar-row button {
+    align-self: center;
+
+}
+
+#searchbar-row:last-of-type(button) {
+    justify-content: flex-end;
+}
+
+#searchbar-row button {
+    height: 50px;
 }
