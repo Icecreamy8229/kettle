@@ -287,17 +287,15 @@ header h1 {
 }
 
 /*User text input style */
-.username, .email, .custom-username, .current-pass, .password-change, .profile-bio, .password-section {
-    width: 70%;
-    max-width: 600px;
-    text-align: left;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 18px;
-    padding: 15px;
-    margin: 10px 0;
+.password-section {
+    border: 1px solid white;
+    border-radius: .5em;
+    margin: 10px 0 0 0;
+    padding: 5px;
+
 }
+
+
 
 .bio-section {
     text-align: left;
