@@ -41,7 +41,7 @@ def main():
 
     os.system("cls")
     print(f"Admin Tools\nLast Status:  {last_status}")
-    selection = input("\nType a number with what action you want to do: \n1. Create a dummy user\n2. Create a user.\n3. Reset Password\n4. Set Privilege level\nX to Exit.\n>")
+    selection = input("\nType a number with what action you want to do: \n1. Create a dummy user\n2. Create a user.\n3. Reset Password\n4. Set Privilege level\n5. Set users points\nX to Exit.\n>")
     if selection.lower() == "x": exit()
 
     if not check_selection(selection):
@@ -96,6 +96,23 @@ def create_user(username, alias, plaintext_pass, email):
 
 
 
+def update_points():
+    global last_status
+    from main import app
+    from models import User, db
+    try:
+        username = input("Enter a username: ")
+        points = input("Set the users points: ")
+        points = int(points)
+        with app.app_context():
+            user = User.query.filter_by(user_login=username).first()
+            user.user_balance = points
+            db.session.commit()
+            last_status = Fore.GREEN + f"Updated {user.user_login} points to : {points} points" + Style.RESET_ALL
+    except Exception as e:
+        last_status = Fore.RED + f"Error setting privilege level: {e}" + Style.RESET_ALL
+        return
+
 
 
 
@@ -117,7 +134,7 @@ def set_password():
     except Exception as e:
         last_status = Fore.RED + f"Error resetting password: {e}" + Style.RESET_ALL
 
-commands = [create_dummy_user,create_user_options, set_password, set_privilege_level]
+commands = [create_dummy_user,create_user_options, set_password, set_privilege_level, update_points]
 
 if __name__ == "__main__":
     while True:
