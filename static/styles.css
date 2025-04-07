@@ -284,12 +284,10 @@ header h1 {
     white-space: nowrap;
 }
 
-
 .profile-picture:hover .upload-button {
     opacity: 1;
 }
 
-/*User text input style */
 .password-section {
     border: 1px solid white;
     border-radius: .5em;
@@ -298,14 +296,10 @@ header h1 {
 
 }
 
-
-
 .bio-section {
     text-align: left;
     margin-top: 20px;
 }
-
-
 
 .save-button {
     width: 30%;
@@ -343,6 +337,7 @@ header h1 {
     padding: 2rem;
     box-sizing: border-box;
 }
+
 
 /* Library styles */
 .library-container {

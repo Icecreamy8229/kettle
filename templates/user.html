@@ -12,7 +12,7 @@
     }
 
     .container {
-        max-width:700px;
+        max-width: 650px;
     }
     </style>
 {% endblock %}
@@ -37,8 +37,18 @@
                     </div>
                 </div>
                 <input type="text" id="username" name="username" class="username" placeholder="Username" value="{{ current_user.user_login }}" readonly>
-                <input type="email" id="email" name="email" class="username" placeholder="Email" value="{{ current_user.user_email }}" readonly>
-                <input type="text" id="alias" name="alias" class="custom-username" placeholder="Alias" value="{{ current_user.user_alias }}">
+                <input type="email" id="email" name="email" class="email" placeholder="Email" value="{{ current_user.user_email }}" readonly>
+                <input type="text" 
+                    id="alias" 
+                    name="alias" 
+                    class="custom-username" 
+                    placeholder="Alias" 
+                    value="{{ current_user.user_alias }}" 
+                    required
+                    minlength="3"
+                    maxlength="20"
+                    pattern=".*\S.*"
+                    oninput="validateAliasInput(this)">
 
                 <div class="password-section">
                     <input type="password" id="current-password" name="current_password" class="current-pass" placeholder="Current Password">
@@ -131,6 +141,16 @@
             }, 1000);
 
         });
+
+        //input validation for alias
+        function validateAliasInput(input) {
+            const trimmedValue = input.value.trim();
+            if (trimmedValue.length < 3 || trimmedValue.length > 20) {
+                input.setCustomValidity("Alias must be 3-20 characters and not just whitespace.");
+            } else {
+                input.setCustomValidity("");
+            }
+        }
     </script>
 {% endblock %}
 
