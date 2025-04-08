@@ -293,17 +293,23 @@ header h1 {
     border-radius: .5em;
     margin: 10px 0 0 0;
     padding: 5px;
+}
 
+.profile-bio {
+    text-align: left;
+    margin-top: 20px;
+    height: auto;
+    min-height: 100px;
+    padding: 10px;
 }
 
 .bio-section {
-    text-align: left;
-    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
 }
 
 .save-button {
-    width: 30%;
-    padding: 15px;
+    padding: 24px 40px;
     margin-top: 30px;
     background: #28a745;
     color: white;
@@ -337,7 +343,6 @@ header h1 {
     padding: 2rem;
     box-sizing: border-box;
 }
-
 
 /* Library styles */
 .library-container {

@@ -13,7 +13,81 @@
 
     .container {
         max-width: 650px;
+        min-width: 340px;
     }
+
+    .user-header, label {
+        color: #4C1D70;
+    }
+
+    input, textarea, .password-section {
+        width: 100%;
+        max-width: 100%;
+        margin: 8px auto;
+        padding: 10px 14px;
+        font-size: 14px;
+        font-family: 'Courier New', monospace;
+        color: #121212;
+        background-color: #f8f8f8;
+        border: 2px solid #4C1D70;
+        border-radius: 4px;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    }
+
+    .password-section {
+        background-color: #40798C;
+    }
+
+    .password-section #validate-emoji {
+        text-size-adjust: 40px;
+    }
+
+    /* Breakpoints */
+        /* Extra small devices (phones, <576px) */
+        @media (max-width: 575.98px) {
+            .profile-picture {
+                width: 100px;
+                height: 100px;
+            }
+
+            .save-button {
+                width: 140px;
+                padding: 20px 32px;
+                min-width: 260px;
+            }
+        }
+
+        /* Small devices (landscape phones, 576px and up) */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .profile-picture {
+                width: 120px;
+                height: 120px;
+            }
+
+            .save-button {
+                padding: 20px 32px;
+                min-width: 260px;
+            }
+        }
+
+        /* Medium devices (tablets, 768px and up) */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .save-button {
+                padding: 20px 32px;
+                min-width: 260px;
+            }
+        }
+
+        /* Large devices (desktops, 992px and up) */
+        @media (min-width: 992px) {
+            .save-button { 
+                padding: 20px 32px;
+                min-width: 260px;
+            }
+        }
+
     </style>
 {% endblock %}
 
@@ -58,9 +132,10 @@
                 </div>
 
                 <div class="bio-section">
+                    <label for="profile-bio">Bio</label>
                     <textarea class="profile-bio" name="bio" placeholder="About me">{{ current_user.user_bio }}</textarea>
                 </div>
-                <button class="save-button" type="submit">Save Changes</button>
+                <button class="save-button" type="submit">Save<br> Changes</button>
             </form>
 
         </div>
