@@ -11,8 +11,12 @@ html, body {
 }
 
 body {
+    /*
     background: url('../static/images/kettlebg.png') repeat;
+    */
+    background: linear-gradient(to bottom, #40798C, #075c73, #000000);
 }
+
 
 
 .flash-msg {
@@ -55,6 +59,7 @@ header h1 {
     top: 0;
     z-index: 90;
     background-color: #030303;
+    box-shadow: #4C1D70 0 5px 1em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -161,12 +166,24 @@ header h1 {
     margin-bottom: 80px;
 }
 
+.outer-container {
+    justify-self: center;
+    margin: 0 5%;
+}
 
+.outer-container h1 {
+    font-size: 36px;
+    text-align: center;
+    color: white;
+    background-color: #1e1e1e;
+    margin: 0;
+
+}
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: #40798C;
+
+    max-width: none;
+    background: url('../static/images/kettlebg.png') repeat;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #504d54;
     padding-top: 30px;
@@ -353,7 +370,7 @@ header h1 {
 }
 
 .library-item {
-    background-color: #343538;
+    background-color: #212020;
     border: solid 4px #4C1D70;
     border-radius: 10px;
     display: flex;

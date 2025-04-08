@@ -43,9 +43,9 @@ def checkout_route():
             Library.user_id == current_user.user_id,
             Library.game_id == Cart.game_id
         ).exists()
-    ).filter(Cart.user_id == current_user.user_id).scalar()
+    ).filter(Cart.user_id == current_user.user_id).all()
 
-    if exists_in_library:
+    if True in exists_in_library:
         flash(f"error: some games already owned.", "danger")
         return redirect(url_for('routes.cart_route'))
     users_cart = db.session.query(Cart).filter_by(user_id=current_user.user_id).all()
