@@ -2,23 +2,34 @@
 {% block head %}
 
 <style>
-.about-container {
+    .about-container {
     display: flex;
-    justify-content: center;  /* Centers everything horizontally */
-    align-items: flex-start;
-    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 5%;
     margin-top: 2em;
-    padding: 0 10%;
+}
+
+.about-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4em;
+    flex-wrap: nowrap;
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
 }
 
 .about-kettle, .team-box {
-    margin-top: 15em;
     width: 25%;
+    min-width: 260px;
 }
 
-.team-box ul {
-    list-style-type: none;
-    padding: 0;
+.about-image {
+    width: 220px;
+    height: 200px;
+    flex-shrink: 0;
 }
 
 .button-container {
@@ -44,13 +55,41 @@
     background-color: #371055;
 }
 
-.about-container img {
-    width: 220px;
-    height: 200px;
+.team-box ul {
+    list-style-type: none;
+    padding: 0;
 }
 
+/* Breakpoints */
+@media (max-width: 900px) {
+    .about-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
 
-</style>
+    .about-kettle, .team-box {
+        width: 100%;
+    }
+
+    .about-image {
+        order: -1;
+        margin-bottom: 5px;
+        width: 150px;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-image {
+        width: 120px;
+    }
+
+    .button-container a {
+        width: 100%;
+    }
+}
+    </style>
+
 
 {% endblock %}
 {% block content %}
@@ -62,28 +101,34 @@
 
     <div class="content">
         <div class="about-container">
-
-            <div class="about-kettle container">
-                <h1>About Kettle</h1>
-                <p class="type-text">Kettle is meant to be a mock game distribution site that is similar to that of Steam. It was created for the <strong>CIS-273</strong> final project. </p>
+    
+            <div class="about-wrapper">
+                <div class="about-kettle container">
+                    <h1>About Kettle</h1>
+                    <p class="type-text">
+                        Kettle is meant to be a mock game distribution site that is similar to that of Steam.
+                        It was created for the <strong>CIS-273</strong> final project.
+                    </p>
+                </div>
+    
+                <img src="static/images/kettlelogo.png" alt="Kettle Logo" class="about-image">
+    
+                <div class="team-box container">
+                    <h1>Our Team</h1>
+                    <ul>
+                        <li class="type-text">Brendan Fulmerhouser</li>
+                        <li class="type-text">Benjamin Warner</li>
+                        <li class="type-text">Gene Waynick</li>
+                        <li class="type-text">Savannah Yager</li>
+                    </ul>
+                </div>
             </div>
-
-            <img src="static\images\kettlelogo.png" alt="Kettle Logo">
-
-            <div class="team-box container">
-                <h1>Our Team</h1>
-                <ul>
-                    <li class="type-text">Brendan Fulmerhouser</li>
-                    <li class="type-text">Benjamin Warner</li>
-                    <li class="type-text">Gene Waynick</li>
-                    <li class="type-text">Savannah Yager</li>
-                </ul>
+    
+            <!-- Buttons: always centered at bottom -->
+            <div class="button-container">
+                <a href="https://github.com/Icecreamy8229/kettle" target="_blank">GitHub</a>
+                <a href="https://trello.com/b/nLR6hiT7/kettle" target="_blank">Trello</a>
             </div>
-        </div>
-
-        <div class="button-container">
-            <a href="https://github.com/Icecreamy8229/kettle" target="_blank">GitHub</a>
-            <a href="https://trello.com/b/nLR6hiT7/kettle" target="_blank">Trello</a>
         </div>
     </div>
 
