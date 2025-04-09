@@ -16,8 +16,13 @@
         min-width: 340px;
     }
 
-    .user-header, label {
-        color: #4C1D70;
+    .outer-container {
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    label {
+        color: white;
     }
 
     input, textarea, .password-section {
@@ -37,7 +42,7 @@
     }
 
     .password-section {
-        background-color: #40798C;
+        background: url('../static/images/kettlebackground1.png'); /* intentional bad link to match container background */
     }
 
     .password-section #validate-emoji {
@@ -47,11 +52,6 @@
     /* Breakpoints */
         /* Extra small devices (phones, <576px) */
         @media (max-width: 575.98px) {
-            .profile-picture {
-                width: 100px;
-                height: 100px;
-            }
-
             .save-button {
                 width: 140px;
                 padding: 20px 32px;
@@ -61,11 +61,6 @@
 
         /* Small devices (landscape phones, 576px and up) */
         @media (min-width: 576px) and (max-width: 767.98px) {
-            .profile-picture {
-                width: 120px;
-                height: 120px;
-            }
-
             .save-button {
                 padding: 20px 32px;
                 min-width: 260px;
@@ -94,12 +89,10 @@
 {% block content %}
     {% include 'flash.html' %}
     {% include 'navbar.html' %}  {# Any element that is visible to the user needs to be inside the body element. moving include down here. #}
+    <div class="outer-container">
+        <h1>User Information & Settings</h1>
+        <h1> {{ current_user.user_alias }}'s Balance: {{ current_user.user_balance }}</h1>
         <div class="container">
-            <div class="user-header">
-                <h1>User Information & Settings</h1>
-                <h1> {{ current_user.user_alias }}'s Balance: {{ current_user.user_balance }}</h1>
-            </div>
-
             <form class="user-content" action="{{ url_for('routes.update_user_route') }}" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="profile-content">
@@ -125,6 +118,7 @@
                     oninput="validateAliasInput(this)">
 
                 <div class="password-section">
+                    <label for="current-password"><h1>Change Password</h1></label>
                     <input type="password" id="current-password" name="current_password" class="current-pass" placeholder="Current Password">
                     <p style="display: inline-block" id="validate-emoji"> </p>
                     <input type="password" id="new-password" name="new_password" class="password-change" placeholder="New Password" disabled>
@@ -132,12 +126,13 @@
                 </div>
 
                 <div class="bio-section">
-                    <label for="profile-bio">Bio</label>
+                    <label for="profile-bio"><h1>Bio</h1></label>
                     <textarea class="profile-bio" name="bio" placeholder="About me">{{ current_user.user_bio }}</textarea>
                 </div>
                 <button class="save-button" type="submit">Save<br> Changes</button>
             </form>
 
+        </div>
         </div>
     </body>
 
