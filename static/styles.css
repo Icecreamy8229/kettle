@@ -181,7 +181,8 @@ header h1 {
     margin: 0 5%;
 }
 
-.outer-container h1, h2 {
+.outer-container h1,
+.outer-container h2 {
     font-size: 36px;
     text-align: center;
     color: white;
@@ -202,9 +203,12 @@ header h1 {
 
 }
 
-.container p {
+.container p,
+.container input {
     font-family: 'Roboto', sans-serif;
 }
+
+
 
 .price {
     font-size: 16px;
