@@ -148,7 +148,7 @@ def update_user_route():
 
             # Save profile picture with a user-specific filename
             profile_picture_filename = f"profile_picture.{file_ext}"
-            profile_picture_path = os.path.join(f'user_profiles\\{current_user.user_id}', profile_picture_filename)
+            profile_picture_path = os.path.join(f'user_profiles/{current_user.user_id}', profile_picture_filename)
             folder = os.path.dirname(profile_picture_path)
             os.makedirs(folder, exist_ok=True)
             profile_picture.save(profile_picture_path)
