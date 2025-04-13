@@ -57,6 +57,7 @@ header h1 {
     top: 0;
     z-index: 90;
     background-color: #030303;
+    box-shadow: #4C1D70 0 5px 1em;
     display: flex;
     justify-content: space-between;
     align-items: center;
