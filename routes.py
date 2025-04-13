@@ -288,9 +288,9 @@ def signup_route(): #this is only used to process data from the form and sign th
     def has_special_characters(s):
         return bool(re.search(r'[^a-zA-Z0-9]', s))
 
-    def verify_email(email):
-        search = re.search(r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$', email, re.IGNORECASE)
-        return bool(search)
+    def verify_email(email: str) -> bool:
+        pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+        return bool(re.match(pattern, email))
 
     def verify_password(password):
         if len(password) < 8:
