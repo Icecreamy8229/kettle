@@ -237,6 +237,10 @@ header h1 {
 
 
 
+.bg-kettle {
+    background: url('../static/images/kettlebg.png') repeat;
+}
+
 .outer-container {
     justify-self: center;
     margin: 0 5%;
@@ -708,3 +712,5 @@ footer ul li a:hover {
 #searchbar-row button {
     height: 50px;
 }
+
+
