@@ -49,6 +49,10 @@
         font-size: 28px;
     }
 
+    .password-section h1 {
+        font-family: 'Silkscreen', sans-serif;
+    }
+
     /* Breakpoints */
         /* Extra small devices (phones, <576px) */
         @media (max-width: 575.98px) {
@@ -91,7 +95,7 @@
     {% include 'navbar.html' %}  {# Any element that is visible to the user needs to be inside the body element. moving include down here. #}
     <div class="outer-container">
         <h1>User Information & Settings</h1>
-        <h1> {{ current_user.user_alias }}'s Balance: {{ current_user.user_balance }}</h1>
+        <h1> {{ current_user.user_alias }}'s Balance: ℗{{ current_user.user_balance }}</h1>
         <div class="container">
             <form class="user-content" action="{{ url_for('routes.update_user_route') }}" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -118,7 +122,7 @@
                     oninput="validateAliasInput(this)">
 
                 <div class="password-section">
-                    <label for="current-password"><h1>Change Password</h1></label>
+                    <label for="profile-bio"><h1>Change Password</h1></label>
                     <input type="password" id="current-password" name="current_password" class="current-pass" placeholder="Current Password">
                     <p style="display: inline-block" id="validate-emoji"> </p>
                     <input type="password" id="new-password" name="new_password" class="password-change" placeholder="New Password" disabled>
