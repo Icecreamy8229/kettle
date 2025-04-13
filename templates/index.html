@@ -53,8 +53,15 @@
         margin-left: auto;
     }
 
+    .outer-container {
+        min-width: 360px;
+        width: 90%;
 
+    }
 
+    .container {
+        width: 100%;
+    }
 
     button {
         padding: 10px 15px;
@@ -94,31 +101,34 @@
 
 
         <main>
-            <div  class="container">
-            <div id="home-url" data-url="{{ url_for('routes.index_route') }}" style="display:none;"></div>
-                <div id="searchbar-row">
+            <div class="outer-container">
+            <h1>Browse our selection of Games</h1>
+                <div  class="container">
 
-                    {% include "searchbar.html" %}
-                    {% if current_user.is_authenticated and current_user.user_privilege > 0 %}
-                        <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
-                    {% endif %}
+                    <div id="searchbar-row">
+
+                        {% include "searchbar.html" %}
+                        {% if current_user.is_authenticated and current_user.user_privilege > 0 %}
+                            <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
+                        {% endif %}
 
 
-                </div>
+                    </div>
 
-                <div id="results-container" class="games-container">
-                    {% for game in games %}
-                        <a href="{{ url_for('routes.game_route') }}?id={{ game.game_id }}" class="hitbox">
-                            <div class="content">
-                                <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="Game Image" class="gameImage">
-                                <div class="text-container">
-                                    <h3>{{ game.game_title }}</h3>
+                    <div id="results-container" class="games-container">
+                        {% for game in games %}
+                            <a href="{{ url_for('routes.game_route') }}?id={{ game.game_id }}" class="hitbox">
+                                <div class="content">
+                                    <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="Game Image" class="gameImage">
+                                    <div class="text-container">
+                                        <h3>{{ game.game_title }}</h3>
+                                    </div>
+                                    <p class="price">{{ game.game_price }} points</p>
                                 </div>
-                                <p class="price">{{ game.game_price }} points</p>
-                            </div>
-                            
-                        </a>
-                    {% endfor %}
+
+                            </a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </main>

@@ -11,9 +11,11 @@ html, body {
 }
 
 body {
+    /*
     background: url('../static/images/kettlebg.png') repeat;
+    */
+    background: linear-gradient(to bottom, #40798C, #075c73, #000000);
 }
-
 
 .flash-msg {
     text-align: center;
@@ -54,8 +56,7 @@ header h1 {
     position: sticky;
     top: 0;
     z-index: 90;
-    background-color: #4C1D70;
-    font-family:'Silkscreen';
+    background-color: #030303;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -136,14 +137,13 @@ header h1 {
 }
 
 #navbar .links a:hover {
-    color: #d1d1d1;
+    background-color: #371055;
+    border-radius: 4px;
 }
 
-
-
 #navbar .login-signup {
-    background-color: #000000;
-    color: #000000;
+    background-color: #4C1D70;
+    color: #371055;
     border: none;
     border-radius: 5px;
     padding: 8px 16px;
@@ -152,79 +152,8 @@ header h1 {
 }
 
 #navbar .login-signup:hover {
-    background-color: #1c1d1f;
+    background-color: #f1f1f1;
 }
-
-.navbar-toggle {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 25px;
-    height: 20px;
-    cursor: pointer;
-}
-
-.navbar-toggle span {
-    background-color: white;
-    height: 3px;
-    border-radius: 2px;
-    width: 100%;
-    display: block;
-}
-
-#navbar .links a.active-link,
-#navbar .login-signup.active-link {
-    color: #a1bfbe;
-    font-weight: bold;
-}
-
-
-
-@media (max-width: 768px) {
-    #navbar {
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .navbar-toggle {
-        display: flex;
-        order: 3;
-        margin-left: auto;
-    }
-
-    .links.collapsible {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        flex-direction: column;
-        background-color: #4C1D70;
-        z-index: 100;
-        display: none;
-    }
-
-    .links.collapsible.active {
-        display: flex;
-    }
-
-    .links.collapsible a {
-        margin: 10px 0;
-        padding: 10px 20px;
-    }
-
-    #navbar-logo {
-        flex: none;
-        order: 1;
-    }
-
-    .navbar-user-div {
-        order: 2;
-        width: auto;
-        margin-top: 0;
-    }
-}
-
 
 .banner-description {
     text-align: center;

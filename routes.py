@@ -17,6 +17,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from login import load_user
 from email_utils import send_verify_email, verify_token
 
+
 # User media limitations
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 MAX_FILE_SIZE = 1_048_576  # 1MB
@@ -43,9 +44,9 @@ def checkout_route():
             Library.user_id == current_user.user_id,
             Library.game_id == Cart.game_id
         ).exists()
-    ).filter(Cart.user_id == current_user.user_id).scalar()
+    ).filter(Cart.user_id == current_user.user_id).all()
 
-    if exists_in_library:
+    if True in exists_in_library:
         flash(f"error: some games already owned.", "danger")
         return redirect(url_for('routes.cart_route'))
     users_cart = db.session.query(Cart).filter_by(user_id=current_user.user_id).all()
@@ -147,7 +148,7 @@ def update_user_route():
 
             # Save profile picture with a user-specific filename
             profile_picture_filename = f"profile_picture.{file_ext}"
-            profile_picture_path = os.path.join(f'user_profiles\\{current_user.user_id}', profile_picture_filename)
+            profile_picture_path = os.path.join(f'user_profiles/{current_user.user_id}', profile_picture_filename)
             folder = os.path.dirname(profile_picture_path)
             os.makedirs(folder, exist_ok=True)
             profile_picture.save(profile_picture_path)
@@ -392,7 +393,7 @@ def submission_route(): #trusted users can create games here.
 def submit_game_route():
 
 
-    if current_user.is_authenticated and current_user.user_privilege > 0:
+    if current_user.is_authenticated and current_user.user_privilege < 1:
         return jsonify({'error': 'User not allowed.'}), 400
     if 'game-images' not in request.files or 'game-videos' not in request.files:
         return jsonify({'error': 'Files are missing'}), 400
@@ -407,8 +408,10 @@ def submit_game_route():
     print(len(image_files))
 
     max_files = 10
+
+
     max_image_size = 4 * 1024 * 1024  # 4MB in bytes
-    max_video_size = 25 * 1024 * 1024  # 25MB in bytes
+    max_video_size = 35 * 1024 * 1024  # 35MB in bytes
 
     if len(image_files) + len(video_files) > max_files:
         return jsonify({'error': 'A maximum of 10 files (images and videos) is allowed'}), 400
@@ -430,7 +433,7 @@ def submit_game_route():
             return jsonify(
                 {'error': f"Only video files are allowed in the video upload (problem with {file.filename})"}), 400
         if file.content_length > max_video_size:
-            return jsonify({'error': 'Each video must be smaller than 25MB'}), 400
+            return jsonify({'error': 'Each video must be smaller than 35MB'}), 400
 
     # Check if the game already exists (case-insensitive check)
     game = Game.query.filter(Game.game_title.ilike(game_title)).first()
