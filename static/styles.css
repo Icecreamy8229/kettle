@@ -236,18 +236,35 @@ header h1 {
 
 
 
+.outer-container {
+    justify-self: center;
+    margin: 0 5%;
+}
+
+.outer-container h1,
+.outer-container h2 {
+    font-size: 36px;
+    text-align: center;
+    color: white;
+    background-color: #1e1e1e;
+    margin: 0;
+
+}
+
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: #40798C;
+
+    max-width: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #504d54;
     padding-top: 30px;
     padding-bottom: 50px;
     border-radius: 0;
+    background-color: #343538;
+
 }
 
-.container p, h2 {
+.container p,
+.container input {
     font-family: 'Roboto', sans-serif;
 }
 
