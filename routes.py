@@ -288,8 +288,9 @@ def signup_route(): #this is only used to process data from the form and sign th
     def has_special_characters(s):
         return bool(re.search(r'[^a-zA-Z0-9]', s))
 
-    def verify_email(email):
-        return bool(re.search(r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$', email))
+    def verify_email(email: str) -> bool:
+        pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+        return bool(re.match(pattern, email))
 
     def verify_password(password):
         if len(password) < 8:
@@ -311,7 +312,7 @@ def signup_route(): #this is only used to process data from the form and sign th
     user_login = data.get('username')
     password = data.get('password')
     confirm_password = data.get('password-confirm')
-    email = data.get('email')
+    email = data.get('email').strip().lower()
     if not user_login or not email or not password:
         logging.info(f"Missing required fields: {user_login}, {email}, {password}")
         return jsonify({'error': 'Missing required fields'}), 400
@@ -330,9 +331,13 @@ def signup_route(): #this is only used to process data from the form and sign th
         logging.info(f"User already exists for login: {user_login} or email: {email}")
         return jsonify({'error': 'User already exists'}), 400
 
-    if has_special_characters(user_login) or not verify_email(email):
-        logging.info(f"Invalid username or email for {user_login}")
-        return jsonify({'error': 'Invalid username or email'}), 400
+    if has_special_characters(user_login):
+        logging.info(f"User {user_login} has special characters.")
+        return jsonify({'error': 'Invalid username'}), 400
+
+    if not verify_email(email):
+        logging.info(f"Invalid email for {user_login} with email: {email}")
+        return jsonify({'error': 'Invalid email'}), 400
 
     new_user = User()
     new_user.user_login = user_login

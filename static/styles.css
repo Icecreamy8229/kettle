@@ -37,6 +37,13 @@ body {
     flex: 1;
 }
 
+
+.gameImage {
+        width: auto;
+        height: 80px;
+        margin-right: 15px;
+}
+
 header {
     background-image: url('images/tempbanner.png');
     background-size: cover;
@@ -223,6 +230,10 @@ header h1 {
         order: 2;
         width: auto;
         margin-top: 0;
+    }
+
+    .gameImage {
+        height: 45px;
     }
 }
 
