@@ -14,10 +14,16 @@
     .container {
         max-width: 650px;
         min-width: 340px;
+        position: relative;
     }
 
-    .user-header, label {
-        color: #4C1D70;
+    .outer-container {
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    label {
+        color: white;
     }
 
     input, textarea, .password-section {
@@ -37,70 +43,52 @@
     }
 
     .password-section {
-        background-color: #40798C;
+        background: url('../static/images/kettlebackground1.png'); /* intentional bad link to match container background */
     }
 
     .password-section #validate-emoji {
         font-size: 28px;
     }
 
-    /* Breakpoints */
-        /* Extra small devices (phones, <576px) */
-        @media (max-width: 575.98px) {
-            .profile-picture {
-                width: 100px;
-                height: 100px;
-            }
-
-            .save-button {
-                width: 140px;
-                padding: 20px 32px;
-                min-width: 260px;
-            }
-        }
-
-        /* Small devices (landscape phones, 576px and up) */
-        @media (min-width: 576px) and (max-width: 767.98px) {
-            .profile-picture {
-                width: 120px;
-                height: 120px;
-            }
-
-            .save-button {
-                padding: 20px 32px;
-                min-width: 260px;
-            }
-        }
-
-        /* Medium devices (tablets, 768px and up) */
-        @media (min-width: 768px) and (max-width: 991.98px) {
-            .save-button {
-                padding: 20px 32px;
-                min-width: 260px;
-            }
-        }
-
-        /* Large devices (desktops, 992px and up) */
-        @media (min-width: 992px) {
-            .save-button { 
-                padding: 20px 32px;
-                min-width: 260px;
-            }
-        }
-
+    .password-section h1 {
+        font-family: 'Silkscreen', sans-serif;
+    }
+        
     </style>
 {% endblock %}
 
 {% block content %}
     {% include 'flash.html' %}
     {% include 'navbar.html' %}  {# Any element that is visible to the user needs to be inside the body element. moving include down here. #}
+    <div class="outer-container">
+        <h1>User Information & Settings</h1>
+        <h1>{{ current_user.user_alias }}'s Balance: ℗ {{ current_user.user_balance }}</h1>
         <div class="container">
-            <div class="user-header">
-                <h1>User Information & Settings</h1>
-                <h1> {{ current_user.user_alias }}'s Balance: {{ current_user.user_balance }}</h1>
+            <!-- Add Points button in top-left -->
+            <button id="togglePointsForm">💳 Add Points</button>
+            <!-- Submit button in top-right -->
+            <button class="save-button" type="submit" form="userForm">Save<br> Changes</button>
+
+            <!-- Modal for adding points -->
+            <div id="pointsModalOverlay">
+                <div>
+                    <button id="closePointsModal">×</button>
+                    <h3>Mock Digital Transaction</h3>
+                    <form id="addPointsForm">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <label>Card Number</label>
+                        <input type="text" value="1234 5678 1234 5678" readonly>
+                        <label>Expiration</label>
+                        <input type="text" value="12/77" readonly>
+                        <label>CVV</label>
+                        <input type="text" value="321" readonly>
+                        <input type="hidden" name="game-points" value="5000">
+                        <button type="submit">➕ Add 5000 Points</button>
+                    </form>
+                </div>
             </div>
 
-            <form class="user-content" action="{{ url_for('routes.update_user_route') }}" method="POST" enctype="multipart/form-data">
+            <form id="userForm" class="user-content" action="{{ url_for('routes.update_user_route') }}" method="POST" enctype="multipart/form-data" style="padding-top: 60px;">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="profile-content">
                     <div class="profile-picture">
@@ -124,21 +112,21 @@
                     pattern=".*\S.*"
                     oninput="validateAliasInput(this)">
 
+                <div class="bio-section">
+                    <label for="profile-bio"><h1>Bio</h1></label>
+                    <textarea class="profile-bio" name="bio" placeholder="About me">{{ current_user.user_bio }}</textarea>
+                </div>
+
                 <div class="password-section">
+                    <label for="profile-bio"><h1>Change Password</h1></label>
                     <input type="password" id="current-password" name="current_password" class="current-pass" placeholder="Current Password">
                     <p style="display: inline-block" id="validate-emoji"> </p>
                     <input type="password" id="new-password" name="new_password" class="password-change" placeholder="New Password" disabled>
                     <input type="password" id="confirm-password" name="confirm_password" class="password-change" placeholder="Confirm New Password" disabled>
                 </div>
-
-                <div class="bio-section">
-                    <label for="profile-bio">Bio</label>
-                    <textarea class="profile-bio" name="bio" placeholder="About me">{{ current_user.user_bio }}</textarea>
-                </div>
-                <button class="save-button" type="submit">Save<br> Changes</button>
             </form>
-
         </div>
+    </div>
     </body>
 
 {% include 'footer.html' %}
@@ -147,6 +135,7 @@
 {% block aftercontent %}
     <script>
 
+        //upload image for profile picture
         document.getElementById('upload-image').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -158,7 +147,7 @@
             }
         });
 
-
+        //validate password before change
         function validatePassword(plaintext_password) {
             const validateEmoji = document.getElementById('validate-emoji');
 
@@ -186,7 +175,7 @@
         }
 
 
-
+        //input validation for images
         function validateImagesAndVideos() {
             const maxImageSize = 1 * 1024 * 1024; //1MB
 
@@ -226,6 +215,115 @@
                 input.setCustomValidity("");
             }
         }
+
+        // Add Points Modal Logic
+        const toggleBtn = document.getElementById('togglePointsForm');
+        const modalOverlay = document.getElementById('pointsModalOverlay');
+        const closeModalBtn = document.getElementById('closePointsModal');
+
+        toggleBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'flex';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
+
+        // Track cumulative points added
+        let totalPointsAdded = 0;
+
+        document.getElementById('addPointsForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const form = this;
+            const formData = new FormData(form);
+            const points = formData.get("game-points");
+
+            if (!points || isNaN(points)) {
+                console.error("⚠️ Invalid points value.");
+                return;
+            }
+
+            const pointsToAdd = parseInt(points);
+            const submitButton = form.querySelector('button[type="submit"]');
+            const modalOverlay = document.getElementById('pointsModalOverlay');
+
+            try {
+                const response = await fetch('/add-game-points', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers.get('content-type'));
+                const text = await response.text();
+                console.log('Response text:', text);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}: ${text}`);
+                }
+
+                const result = JSON.parse(text);
+                totalPointsAdded += pointsToAdd; // Update the cumulative total
+
+                // Clear any old messages
+                form.querySelectorAll(".status-msg").forEach(el => el.remove());
+
+                // Display the cumulative total
+                const successMsg = document.createElement('p');
+                successMsg.className = 'status-msg';
+                successMsg.textContent = `✅ ${totalPointsAdded} Points Added Total!`;
+                successMsg.style.color = 'green';
+                successMsg.style.fontWeight = 'bold';
+                successMsg.style.textAlign = 'center';
+                successMsg.style.marginTop = '16px';
+                form.appendChild(successMsg);
+
+                submitButton.disabled = true;
+                submitButton.textContent = "✓ Added";
+
+                // Update balance dynamically
+                const balanceElement = document.querySelector('h1:nth-of-type(2)');
+                const currentBalance = parseInt(balanceElement.textContent.match(/\d+/)[0]);
+                // Extract the alias from the balance element's text
+                const aliasMatch = balanceElement.textContent.match(/^(.+)'s Balance:/);
+                const userAlias = aliasMatch ? aliasMatch[1] : 'User'; // Fallback to 'User' if alias not found
+                balanceElement.textContent = `${userAlias}'s Balance: ℗ ${currentBalance + pointsToAdd}`;
+
+                // Close modal without reload
+                document.getElementById('closePointsModal').addEventListener('click', () => {
+                    modalOverlay.style.display = 'none';
+                    submitButton.disabled = false; // Re-enable button for next use
+                    submitButton.textContent = "➕ Add 5000 Points";
+                });
+                window.addEventListener('click', (e) => {
+                    if (e.target === modalOverlay) {
+                        modalOverlay.style.display = 'none';
+                        submitButton.disabled = false; // Re-enable button for next use
+                        submitButton.textContent = "➕ Add 5000 Points";
+                    }
+                });
+            } catch (err) {
+                console.error("Failed to add points:", err);
+                form.querySelectorAll(".status-msg").forEach(el => el.remove());
+                const errorMsg = document.createElement('p');
+                errorMsg.className = 'status-msg';
+                errorMsg.textContent = `⚠️ Failed to add points: ${err.message}`;
+                errorMsg.style.color = 'red';
+                errorMsg.style.fontWeight = 'bold';
+                errorMsg.style.textAlign = 'center';
+                errorMsg.style.marginTop = '16px';
+                form.appendChild(errorMsg);
+            }
+        });
+
     </script>
 {% endblock %}
 

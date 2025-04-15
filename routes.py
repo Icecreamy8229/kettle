@@ -16,6 +16,9 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from login import load_user
 from email_utils import send_verify_email, verify_token
+from sqlalchemy.exc import SQLAlchemyError
+
+
 
 # User media limitations
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -82,6 +85,24 @@ def user_route():
         return render_template('user.html')
     else:
         return render_template('login.html', title='Login')
+    
+# Add game points to user balance
+@routes.route('/add-game-points', methods=['POST'])
+@login_required
+def add_game_points():
+    try:
+        points = request.form.get('game-points')
+        if not points or not points.isdigit() or int(points) != 5000:
+            return jsonify({"error": "Invalid points value"}), 400
+
+        user = User.query.get(current_user.user_id)
+        user.user_balance += int(points)
+        db.session.commit()
+        return jsonify({"success": True, "points": points}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
 
 
 @routes.route('/search-results', methods=['GET'])
@@ -147,7 +168,7 @@ def update_user_route():
 
             # Save profile picture with a user-specific filename
             profile_picture_filename = f"profile_picture.{file_ext}"
-            profile_picture_path = os.path.join(f'user_profiles\\{current_user.user_id}', profile_picture_filename)
+            profile_picture_path = os.path.join(f'user_profiles/{current_user.user_id}', profile_picture_filename)
             folder = os.path.dirname(profile_picture_path)
             os.makedirs(folder, exist_ok=True)
             profile_picture.save(profile_picture_path)
@@ -287,8 +308,9 @@ def signup_route(): #this is only used to process data from the form and sign th
     def has_special_characters(s):
         return bool(re.search(r'[^a-zA-Z0-9]', s))
 
-    def verify_email(email):
-        return bool(re.search(r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$', email))
+    def verify_email(email: str) -> bool:
+        pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+        return bool(re.match(pattern, email))
 
     def verify_password(password):
         if len(password) < 8:
@@ -310,7 +332,7 @@ def signup_route(): #this is only used to process data from the form and sign th
     user_login = data.get('username')
     password = data.get('password')
     confirm_password = data.get('password-confirm')
-    email = data.get('email')
+    email = data.get('email').strip().lower()
     if not user_login or not email or not password:
         logging.info(f"Missing required fields: {user_login}, {email}, {password}")
         return jsonify({'error': 'Missing required fields'}), 400
@@ -329,9 +351,13 @@ def signup_route(): #this is only used to process data from the form and sign th
         logging.info(f"User already exists for login: {user_login} or email: {email}")
         return jsonify({'error': 'User already exists'}), 400
 
-    if has_special_characters(user_login) or not verify_email(email):
-        logging.info(f"Invalid username or email for {user_login}")
-        return jsonify({'error': 'Invalid username or email'}), 400
+    if has_special_characters(user_login):
+        logging.info(f"User {user_login} has special characters.")
+        return jsonify({'error': 'Invalid username'}), 400
+
+    if not verify_email(email):
+        logging.info(f"Invalid email for {user_login} with email: {email}")
+        return jsonify({'error': 'Invalid email'}), 400
 
     new_user = User()
     new_user.user_login = user_login
@@ -392,7 +418,7 @@ def submission_route(): #trusted users can create games here.
 def submit_game_route():
 
 
-    if current_user.is_authenticated and current_user.user_privilege > 0:
+    if current_user.is_authenticated and current_user.user_privilege < 1:
         return jsonify({'error': 'User not allowed.'}), 400
     if 'game-images' not in request.files or 'game-videos' not in request.files:
         return jsonify({'error': 'Files are missing'}), 400
@@ -407,8 +433,10 @@ def submit_game_route():
     print(len(image_files))
 
     max_files = 10
+
+
     max_image_size = 4 * 1024 * 1024  # 4MB in bytes
-    max_video_size = 25 * 1024 * 1024  # 25MB in bytes
+    max_video_size = 35 * 1024 * 1024  # 35MB in bytes
 
     if len(image_files) + len(video_files) > max_files:
         return jsonify({'error': 'A maximum of 10 files (images and videos) is allowed'}), 400
@@ -430,7 +458,7 @@ def submit_game_route():
             return jsonify(
                 {'error': f"Only video files are allowed in the video upload (problem with {file.filename})"}), 400
         if file.content_length > max_video_size:
-            return jsonify({'error': 'Each video must be smaller than 25MB'}), 400
+            return jsonify({'error': 'Each video must be smaller than 35MB'}), 400
 
     # Check if the game already exists (case-insensitive check)
     game = Game.query.filter(Game.game_title.ilike(game_title)).first()

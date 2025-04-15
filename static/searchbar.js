@@ -5,7 +5,6 @@ function returnResults(user_query) {
     console.log(user_query);
     console.log(resultsContainer);
 
-
     if (user_query.trim() === "") {
         resultsContainer.innerHTML = "";
         return;
@@ -19,7 +18,6 @@ function returnResults(user_query) {
     })
     .then(response => response.json())
     .then(data => {
-
         if (data.length > 0) {
             resultsContainer.innerHTML = data.map(game => {
                 return `
@@ -44,6 +42,9 @@ function clearSearch() {
     const searchInput = document.getElementById('searchInput');
     searchInput.value = '';
     document.getElementById('results-container').innerHTML = '';
+
+    const homeUrl = document.getElementById('home-url').getAttribute('data-url');
+    window.location.href = homeUrl;
 }
 
 const searchBar = document.getElementById('searchInput');
