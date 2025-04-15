@@ -64,12 +64,12 @@
         <h1>User Information & Settings</h1>
         <h1>{{ current_user.user_alias }}'s Balance: ℗ {{ current_user.user_balance }}</h1>
         <div class="container">
-            <!-- Add Points button in top-left -->
+            {# Add points top left #}
             <button id="togglePointsForm">💳 Add Points</button>
-            <!-- Submit button in top-right -->
+            {# Submit top right #}
             <button class="save-button" type="submit" form="userForm">Save<br> Changes</button>
 
-            <!-- Modal for adding points -->
+            {# Modal for adding points #}
             <div id="pointsModalOverlay">
                 <div>
                     <button id="closePointsModal">×</button>
@@ -77,11 +77,11 @@
                     <form id="addPointsForm">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <label>Card Number</label>
-                        <input type="text" value="1234 5678 1234 5678" readonly>
+                        <input type="text" placeholder="1234 5678 1234 5678" readonly>
                         <label>Expiration</label>
-                        <input type="text" value="12/77" readonly>
+                        <input type="text" placeholder="12/77" readonly>
                         <label>CVV</label>
-                        <input type="text" value="321" readonly>
+                        <input type="text" placeholder="321" readonly>
                         <input type="hidden" name="game-points" value="5000">
                         <button type="submit">➕ Add 5000 Points</button>
                     </form>
@@ -98,8 +98,8 @@
                         <input type="file" id="upload-image" name="profile_picture" accept="image/*" onchange="validateImagesAndVideos()" hidden>
                     </div>
                 </div>
-                <input type="text" id="username" name="username" class="username" placeholder="Username" value="{{ current_user.user_login }}" readonly>
-                <input type="email" id="email" name="email" class="email" placeholder="Email" value="{{ current_user.user_email }}" readonly>
+                <input type="text" id="username" name="username" class="username" placeholder="{{ current_user.user_login }}" readonly>
+                <input type="email" id="email" name="email" class="email" placeholder="{{ current_user.user_email }}" readonly>
                 <input type="text" 
                     id="alias" 
                     name="alias" 
