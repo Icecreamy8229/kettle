@@ -267,9 +267,10 @@ header h1 {
 
 }
 
-.container {
-
-    max-width: none;
+.container {                                            /* Container for the main content */
+    max-width: 1200px;
+    margin: 0 auto;
+    background: url(../static/images/kettlebg.png) repeat;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #504d54;
     padding-top: 30px;
@@ -404,20 +405,28 @@ header h1 {
 
 .bio-section {
     text-align: left;
-    margin-top: 20px;
+    width: 550px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.profile-bio {
+    height: 175px;
 }
 
 .save-button {
-    width: 30%;
-    padding: 15px;
-    margin-top: 30px;
     background: #28a745;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 18px;
+    width: 120px;
+    padding: 6px 12px;
+    font-size: 14px;
     font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px; 
 }
 
 .user-info {
@@ -442,6 +451,67 @@ header h1 {
     margin: 0 auto;
     padding: 2rem;
     box-sizing: border-box;
+}
+
+/* User add points styles */
+#togglePointsForm {
+    background-color: #4C1D70;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 120px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+#addPointsForm button[type="submit"] {
+    background-color: #4C1D70;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 14px;
+    width: 100%;
+}
+
+#closePointsModal {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#pointsModalOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+#pointsModalOverlay > div {
+    background: url(../static/images/kettlebg.png) repeat;
+    border: 2px solid #4C1D70;
+    border-radius: 10px;
+    padding: 24px;
+    width: 300px;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: relative;
 }
 
 
@@ -498,7 +568,6 @@ header h1 {
 }
 
 .library-content > div:last-child::after {
-    content: '...';
     position: absolute;
     right: 0;
     bottom: 0;

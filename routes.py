@@ -16,6 +16,8 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from login import load_user
 from email_utils import send_verify_email, verify_token
+from sqlalchemy.exc import SQLAlchemyError
+
 
 
 # User media limitations
@@ -83,6 +85,24 @@ def user_route():
         return render_template('user.html')
     else:
         return render_template('login.html', title='Login')
+    
+# Add game points to user balance
+@routes.route('/add-game-points', methods=['POST'])
+@login_required
+def add_game_points():
+    try:
+        points = request.form.get('game-points')
+        if not points or not points.isdigit() or int(points) != 5000:
+            return jsonify({"error": "Invalid points value"}), 400
+
+        user = User.query.get(current_user.user_id)
+        user.user_balance += int(points)
+        db.session.commit()
+        return jsonify({"success": True, "points": points}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
 
 
 @routes.route('/search-results', methods=['GET'])
