@@ -75,7 +75,7 @@ class Game(db.Model):
 class Genre(db.Model):
     __tablename__ = 'genres'
     genre_id: Mapped[int] = mapped_column(primary_key=True, nullable=False, autoincrement=True, unique=True)
-    genre_name: Mapped[str] = mapped_column(String(128), nullable=False, unique=True)
+    genre_tag: Mapped[str] = mapped_column(String(128), nullable=False, unique=True)
 
 class GameGenre(db.Model): #linking table
     __tablename__ = 'game_genres'
