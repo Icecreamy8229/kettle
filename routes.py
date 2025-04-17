@@ -525,7 +525,7 @@ def serve_game_media(game_id, filename):
     return send_from_directory(f'game_media/{game_id}/', filename)
 #TODO I dont think I ended up needing this route, probably can be deleted.
 
-#ALL AI GENERATED, JUST SO I CAN SEE IF THE CART PAGE WORKS.
+
 @routes.route("/add-to-cart", methods=['POST'])
 @login_required
 def add_to_cart_route():
@@ -557,7 +557,7 @@ def add_to_cart_route():
     return redirect(url_for('routes.index_route'))
 
 
-#ALL AI GENERATED, JUST SO I CAN SEE IF THE CART PAGE WORKS.
+
 @routes.route("/remove-from-cart", methods=['POST'])
 @login_required
 def remove_from_cart():

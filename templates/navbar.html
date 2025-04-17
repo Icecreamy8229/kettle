@@ -1,9 +1,8 @@
 {% if current_user.is_authenticated %}
-    {# The authenticated navbar, the cool people get this one. #}
 
     <nav id="navbar">
 
-        <!-- Logo -->
+
         <a id="navbar-logo" href="/">
             <img src="static/images/kettlelogo.png" alt="Index page">
         </a>
@@ -14,7 +13,7 @@
             <span></span>
         </div>
 
-        <!-- Links for nav bar -->
+
         <div class="links collapsible">
             <a href="{{ url_for('routes.about_route') }}"
            class="{% if request.path == url_for('routes.about_route') %}active-link{% endif %}">About</a>
@@ -37,7 +36,7 @@
     {# The guest Navbar #}
     <nav id="navbar">
 
-        <!-- Logo -->
+
         <a id="navbar-logo" href="/">
             <img src="static/images/kettlelogo.png" alt="Index page">
         </a>
@@ -48,7 +47,7 @@
             <span></span>
         </div>
 
-        <!-- Links for nav bar -->
+
         <div class="links collapsible" style="justify-content: right;">
         <a href="{{ url_for('routes.about_route') }}"
            class="{% if request.path == url_for('routes.about_route') %}active-link{% endif %}">About</a>

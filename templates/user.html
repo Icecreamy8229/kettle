@@ -59,7 +59,7 @@
 
 {% block content %}
     {% include 'flash.html' %}
-    {% include 'navbar.html' %}  {# Any element that is visible to the user needs to be inside the body element. moving include down here. #}
+    {% include 'navbar.html' %}
     <div class="outer-container">
         <h1>User Information & Settings</h1>
         <h1>{{ current_user.user_alias }}'s Balance: ℗ {{ current_user.user_balance }}</h1>

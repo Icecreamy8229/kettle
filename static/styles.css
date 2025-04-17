@@ -93,7 +93,7 @@ header h1 {
 
 #navbar-user-alias {
     all: unset;
-    display: block; /* overrides some margin style being applied from bootstrap..  */
+    display: block;
     color: white;
     font-size: 16px;
     overflow: hidden;
@@ -764,10 +764,10 @@ footer ul li a:hover {
 
 #cursor {
     display: inline-block;
-    width: 8px; /* Adjust the cursor width as needed */
-    height: .8em; /* Adjust the cursor height as needed */
-    background-color: white; /* Cursor color */
-    animation: blink 1s infinite; /* Blinking animation */
+    width: 8px;
+    height: .8em;
+    background-color: white;
+    animation: blink 1s infinite;
 }
 
 #searchbar-row {
