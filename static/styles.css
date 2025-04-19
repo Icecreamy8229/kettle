@@ -527,7 +527,7 @@ header h1 {
     background-color: #343538;
     border: solid 4px #4C1D70;
     border-radius: 10px;
-    display: flex;
+    display: block;
     flex-direction: column;
     padding: 15px;
     box-shadow: 0 6px 10px rgba(76, 29, 112, 0.5);
@@ -535,12 +535,14 @@ header h1 {
     min-height: 220px;
     overflow: hidden;
     box-sizing: border-box;
+    text-decoration: none;
 }
 
 .library-item:hover {
     transform: scale(1.03);
     box-shadow: 0 8px 15px rgba(76, 29, 112, 0.7);
     background-color: #4C1D70;
+    cursor: pointer;
 }
 
 .library-content {
@@ -548,6 +550,7 @@ header h1 {
     flex-direction: column;
     height: 100%;
     gap: 15px;
+    text-decoration: none;
 }
 
 .library-content > div:first-child {

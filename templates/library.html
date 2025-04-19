@@ -22,17 +22,19 @@
                     <div class="library-container">
                         {% for game in games %}
                             <div class="library-item">
+                                <a href="{{ url_for('routes.game_route')}}?id={{ game.game_id}}">
                                 <div class="library-content">
                                     <div>
                                         <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
                                     </div>
                                     <div>
-                                        <h2><a href="{{ url_for('routes.game_route')}}?id={{ game.game_id}}">{{ game.game_title }}</a></h2>
+                                        <h2>{{ game.game_title }}</h2>
                                     </div>
                                     <div>
                                         <p>{{ game.game_desc|truncate(100) }}</p> {# Helps with consistent style of items. #}
                                     </div>
                                 </div>
+                                </a>
                             </div>
                         {% endfor %}
                     </div>
