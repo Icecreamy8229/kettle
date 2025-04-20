@@ -105,11 +105,11 @@
 {% endblock %}
 {% block content %}
     <body>
-        {% include 'navbar.html' %}
+        {% include 'partials/navbar.html' %}
 
         <div class="outer-container">
             <h1 id="gameTitle">{{ game.game_title }} <br>Price: ℗ {{ game.game_price }}</h1>
-            {% include 'slider.html' %}
+            {% include '/partials/slider.html' %}
         </div>
 
         <section id="briefDescriptionBox">
@@ -127,7 +127,7 @@
 
         <div class="outer-container">
             <h2>About the Game</h2>
-            <div class="container">
+            <div class="content-container">
                 <p>{{ game.game_desc }}</p>
             </div>
         </div>

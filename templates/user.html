@@ -58,8 +58,8 @@
 {% endblock %}
 
 {% block content %}
-    {% include 'flash.html' %}
-    {% include 'navbar.html' %}
+    {% include 'partials/flash.html' %}
+    {% include 'partials/navbar.html' %}
     <div class="outer-container">
         <h1>User Information & Settings</h1>
         <h1>{{ current_user.user_alias }}'s Balance: ℗ {{ current_user.user_balance }}</h1>

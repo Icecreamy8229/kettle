@@ -75,8 +75,8 @@
 
 
 <body>
-    {% include 'navbar.html' %}
-    {% include 'flash.html' %}
+    {% include 'partials/navbar.html' %}
+    {% include 'partials/flash.html' %}
 
     
 
@@ -89,7 +89,7 @@
         <p>Discover new games for an affordable price or whatever text we might want here! </p>
     </div>
 
-       {% include 'slider.html' %}
+       {% include '/partials/slider.html' %}
 
         <main>
             <div class="outer-container">
@@ -98,7 +98,7 @@
 
                     <div id="searchbar-row">
 
-                        {% include "searchbar.html" %}
+                        {% include '/partials/searchbar.html' %}
                         {% if current_user.is_authenticated and current_user.user_privilege > 0 %}
                             <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
                         {% endif %}

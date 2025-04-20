@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-{% include 'navbar.html' %}
+{% include 'partials/navbar.html' %}
 <div class="content-container">
 <form method="POST" enctype="multipart/form-data" action="{{ url_for('routes.submit_game_route') }}">
 {# This form will be used to submit a game, with image and videos #}
