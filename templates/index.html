@@ -70,7 +70,7 @@
 }
 
     </style>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='slider.css') }}" />
 
 {% endblock %}
 {% block content %}
@@ -92,6 +92,7 @@
         <p>Discover new games for an affordable price or whatever text we might want here! </p>
     </div>
 
+       {% include 'slider.html' %}
 
         <main>
             <div class="outer-container">
