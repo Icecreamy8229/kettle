@@ -1,6 +1,8 @@
-
-from models import User
+from enum import Enum
+import enum
+from models import User, Game, Genre, GameGenre, db
 from flask import url_for
+import os
 """
 Using this module to help you create dummy users for now.
 I may add other functions here in the future if we need other ways to generate content
@@ -14,7 +16,68 @@ py helper.py "testuser" "testuser@gmail.com" "password123!"
 """
 
 
+class SliderType(Enum):
+    TAG = enum.auto()
 
+
+
+def get_game_slider_media(slider_type : SliderType, tag_type = None):
+    slider_display_images = []
+
+
+    #TODO DETERMINE SLIDER TYPE
+    if slider_type == SliderType.TAG and tag_type is not None:
+        tag = db.session.query(Genre).filter(Genre.genre_tag == tag_type).first()
+        games = db.session.query(Game).filter(Game.game_id == tag.genre_id).all()
+        for game in games:
+            slider_display_images.append(get_game_media("images", game)[0])
+
+
+
+    #TODO DATABASE LOOKUP FOR A VALID GENRE
+    #TODO LOOKUP ALL GAMES WITH THAT TAG IN THE GAME_GENRES
+
+
+
+    return slider_display_images
+
+    #TODO ITERATE THROUGH EACH GAME
+
+
+
+
+
+
+
+    # choosing what games to filter
+
+
+
+
+def get_game_media(media_type, game: Game):
+    media_files = []
+    TOP_LEVEL_DIR = 'game_media'
+    game_path = os.path.join(TOP_LEVEL_DIR, str(game.game_id))
+    image_path = os.path.join(game_path, "images")
+    video_path = os.path.join(game_path, "videos")
+
+    if os.path.exists(image_path):
+        for filename in os.listdir(image_path):
+            file_url = f"/game_media/{game.game_id}/{media_type}/{filename}"
+            if media_type == "images" and filename.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".webp")):
+                media_files.append({"type": "image", "url": file_url})
+            elif media_type == "videos" and filename.lower().endswith((".mp4", ".webm", ".ogg")):
+                media_files.append({"type": "video", "url": file_url})
+
+    if os.path.exists(video_path):
+        for filename in os.listdir(video_path):
+            file_url = f"/game_media/{game.game_id}/{media_type}/{filename}"
+            if media_type == "images" and filename.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".webp")):
+                media_files.append({"type": "image", "url": file_url})
+            elif media_type == "videos" and filename.lower().endswith((".mp4", ".webm", ".ogg")):
+                media_files.append({"type": "video", "url": file_url})
+
+    return media_files
 
 def get_profile_picture(user: User) -> str:
 
@@ -24,34 +87,3 @@ def get_profile_picture(user: User) -> str:
     return url_for('routes.profile_pictures', filename=f'{user.user_id}/{user.user_picture}')
 
 
-def create_game_slider():
-    supported_image_types = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
-    supported_video_types = ('.mp4', '.webm', '.ogg')
-
-    folder = "static/images/games"
-    media_files = []
-
-
-    if not os.path.exists(folder):
-        return media_files
-
-    for filename in os.listdir(folder):
-        filepath = os.path.join(folder, filename)
-
-        if not os.path.isfile(filepath):
-            continue
-
-        ext = filename.lower()
-        if ext.endswith(supported_image_types):
-            media_type = "image"
-        elif ext.endswith(supported_video_types):
-            media_type = "video"
-        else:
-            continue
-
-        media_files.append({
-            "url": f"/static/images/games/{filename}",
-            "type": media_type
-        })
-
-    return media_files

@@ -17,7 +17,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from login import load_user
 from email_utils import send_verify_email, verify_token
 from sqlalchemy.exc import SQLAlchemyError
-from helper import create_game_slider
+from helper import get_game_slider_media, SliderType
 from flask import render_template
 
 
@@ -38,7 +38,8 @@ def index_route():
     games = db.session.query(Game).filter_by(game_active=True).order_by(Game.game_releasedate.desc()).limit(10).all()
     random.shuffle(games)
     logging.debug('Index route called')
-    return render_template('index.html',games=games)
+    media_files = get_game_slider_media(slider_type=SliderType.TAG, tag_type="multiplayer")
+    return render_template('index.html',games=games, media_files=media_files)
 
 @login_required
 @routes.route('/checkout', methods=['GET', 'POST',])
@@ -240,6 +241,7 @@ def settings_route(): #not used yet.
 
 @routes.route("/game")
 def game_route():
+    from helper import get_game_media
 
     game_id = request.args.get("id", type=int)
 
@@ -253,23 +255,12 @@ def game_route():
         return "404 Not Found"
 
     logging.info(f"Game route called for game: {game}")
-    MEDIA_DIR = 'game_media'
-    game_path = os.path.join(MEDIA_DIR, str(game_id))
-    image_path = os.path.join(game_path, "images")
-    video_path = os.path.join(game_path, "videos")
+
+
+
     media_files = []
-
-    def add_media_from_directory(directory, media_type):
-        if os.path.exists(directory):
-            for filename in os.listdir(directory):
-                file_url = f"/game_media/{game_id}/{media_type}/{filename}"
-                if media_type == "images" and filename.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".webp")):
-                    media_files.append({"type": "image", "url": file_url})
-                elif media_type == "videos" and filename.lower().endswith((".mp4", ".webm", ".ogg")):
-                    media_files.append({"type": "video", "url": file_url})
-
-    add_media_from_directory(image_path, "images")
-    add_media_from_directory(video_path, "videos")
+    media_files.extend(get_game_media("images", game))
+    media_files.extend(get_game_media("videos", game))
 
 
     return render_template(
@@ -301,8 +292,10 @@ def login_route():
             logging.info(f"Invalid username or password, attempted login: {username}")
             flash("Invalid username or password", "danger")
 
-    return render_template('login.html', title='Login')
 
+
+
+    return render_template('login.html', title='Login')
 
 @routes.route("/signup", methods=['POST'])
 def signup_route(): #this is only used to process data from the form and sign the user up.
