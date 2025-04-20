@@ -559,6 +559,12 @@ def add_to_cart_route():
 
 
 
+@routes.route("/kettle-bird")
+def kettle_bird_route():
+    #TODO will want to hide behind a "paywall" eventually.
+
+    return render_template('games/kettle_bird.html')
+
 @routes.route("/remove-from-cart", methods=['POST'])
 @login_required
 def remove_from_cart():
