@@ -3,11 +3,6 @@
     <link rel="stylesheet" href="../static/slider.css">
     <style>
 
-
-
-
-
-
             .container p {
                 font-size: 1.2em;
             }
@@ -50,10 +45,6 @@
                 background-color: #6a2c8b;
             }
 
-
-
-            /*i need to put this into a container and move the button to have it align with the
-            description still*/
             .button {
                 background-color: white;
                 color: black;
@@ -81,9 +72,10 @@
 
             }
         </style>
+
     <script>
         function addToCart() {
-            let gameId = new URLSearchParams(window.location.search).get('id'); // Get game ID from URL
+            let gameId = new URLSearchParams(window.location.search).get('id');
             
             if (!gameId) {
                 alert("Game ID is missing!");
@@ -110,25 +102,15 @@
 
 </script>
 
-
 {% endblock %}
-
 {% block content %}
     <body>
         {% include 'navbar.html' %}
 
-
-    
-
         <div class="outer-container">
-            <h1 id="gameTitle">{{ game.game_title }}</h1>
+            <h1 id="gameTitle">{{ game.game_title }} <br>Price: ℗ {{ game.game_price }}</h1>
             {% include 'slider.html' %}
-
         </div>
-
-
-
-
 
         <section id="briefDescriptionBox">
             <p>Need to fix this so its dynamically generated.</p>
@@ -140,23 +122,23 @@
             <button class="genreButton">Single Player</button>
         </div>
 
-
         <section id="detailedDescriptionBox">
 
 
-            <div class="outer-container">
-                <h2>About the Game</h2>
-                <div class="container">
-                    <p>{{ game.game_desc }}</p>
-                </div>
+        <div class="outer-container">
+            <h2>About the Game</h2>
+            <div class="container">
+                <p>{{ game.game_desc }}</p>
             </div>
-            <br>
-            <form action="/add-to-cart" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <input type="hidden" name="game_id" value="{{ game.game_id }}"/>
-                <button id="add-to-cart-button" class="button">Add to Cart</button>
+        </div>
 
-            </form>
+        <br>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="game_id" value="{{ game.game_id }}"/>
+            <button id="add-to-cart-button" class="button">Add to Cart</button>
+
+        </form>
 
 
 

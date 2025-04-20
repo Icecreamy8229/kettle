@@ -10,6 +10,16 @@ html, body {
     overflow-x: hidden;
 }
 
+button {
+    font-family: 'Silkscreen', sans-serif;
+    font-size: 1.1em;
+
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: 500;
+}
+
 body {
     /*
     background: url('../static/images/kettlebg.png') repeat;
@@ -93,7 +103,7 @@ header h1 {
 
 #navbar-user-alias {
     all: unset;
-    display: block; /* overrides some margin style being applied from bootstrap..  */
+    display: block;
     color: white;
     font-size: 16px;
     overflow: hidden;
@@ -267,10 +277,17 @@ header h1 {
 
 }
 
-.container {                                            /* Container for the main content */
-    max-width: 1200px;
-    margin: 0 auto;
+
+.bg-kettle {
     background: url(../static/images/kettlebg.png) repeat;
+}
+
+
+
+.container {
+    /* Container for the main content */
+
+    margin: 0 auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #504d54;
     padding-top: 30px;
@@ -279,6 +296,8 @@ header h1 {
     background-color: #343538;
 
 }
+
+
 
 .container p,
 .container input {
@@ -527,7 +546,7 @@ header h1 {
     background-color: #343538;
     border: solid 4px #4C1D70;
     border-radius: 10px;
-    display: flex;
+    display: block;
     flex-direction: column;
     padding: 15px;
     box-shadow: 0 6px 10px rgba(76, 29, 112, 0.5);
@@ -535,12 +554,14 @@ header h1 {
     min-height: 220px;
     overflow: hidden;
     box-sizing: border-box;
+    text-decoration: none;
 }
 
 .library-item:hover {
     transform: scale(1.03);
     box-shadow: 0 8px 15px rgba(76, 29, 112, 0.7);
     background-color: #4C1D70;
+    cursor: pointer;
 }
 
 .library-content {
@@ -548,6 +569,7 @@ header h1 {
     flex-direction: column;
     height: 100%;
     gap: 15px;
+    text-decoration: none;
 }
 
 .library-content > div:first-child {
@@ -764,10 +786,10 @@ footer ul li a:hover {
 
 #cursor {
     display: inline-block;
-    width: 8px; /* Adjust the cursor width as needed */
-    height: .8em; /* Adjust the cursor height as needed */
-    background-color: white; /* Cursor color */
-    animation: blink 1s infinite; /* Blinking animation */
+    width: 8px;
+    height: .8em;
+    background-color: white;
+    animation: blink 1s infinite;
 }
 
 #searchbar-row {

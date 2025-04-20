@@ -17,6 +17,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from login import load_user
 from email_utils import send_verify_email, verify_token
 from sqlalchemy.exc import SQLAlchemyError
+from helper import create_game_slider
+from flask import render_template
 
 
 
@@ -530,7 +532,7 @@ def serve_game_media(game_id, filename):
     return send_from_directory(f'game_media/{game_id}/', filename)
 #TODO I dont think I ended up needing this route, probably can be deleted.
 
-#ALL AI GENERATED, JUST SO I CAN SEE IF THE CART PAGE WORKS.
+
 @routes.route("/add-to-cart", methods=['POST'])
 @login_required
 def add_to_cart_route():
@@ -562,7 +564,7 @@ def add_to_cart_route():
     return redirect(url_for('routes.index_route'))
 
 
-#ALL AI GENERATED, JUST SO I CAN SEE IF THE CART PAGE WORKS.
+
 @routes.route("/remove-from-cart", methods=['POST'])
 @login_required
 def remove_from_cart():
@@ -590,3 +592,15 @@ def profile_pictures(filename):
 @routes.errorhandler(CSRFError)
 def handle_csrf_error(e):
     return str(e.description), 400
+
+
+@routes.route('/slider-games')
+def slider_games():
+
+    import os
+    game_images_dir = 'static/images/games/'
+
+    media_files = [os.path.join(game_images_dir, f) for f in os.listdir(game_images_dir) if
+                   f.endswith(('.jpg', '.png', '.gif'))]
+
+    return render_template('index.html', media_files=media_files)
