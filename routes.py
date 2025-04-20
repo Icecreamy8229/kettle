@@ -231,6 +231,11 @@ def testing_route():
     return render_template('index.html')  # used for testing purposes.  when I need to test certain things I throw it under this route.
 
 
+@routes.route('/support')
+def support_route():
+    logging.debug('Support route called')
+    return render_template('support.html', title='Support')
+
 @routes.route("/settings")
 @login_required
 def settings_route(): #not used yet.
