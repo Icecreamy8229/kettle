@@ -10,6 +10,16 @@ html, body {
     overflow-x: hidden;
 }
 
+button {
+    font-family: 'Silkscreen', sans-serif;
+    font-size: 1.1em;
+
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: 500;
+}
+
 body {
     /*
     background: url('../static/images/kettlebg.png') repeat;
@@ -272,10 +282,12 @@ header h1 {
     background: url(../static/images/kettlebg.png) repeat;
 }
 
-.container {                                            /* Container for the main content */
+
+
+.container {
+    /* Container for the main content */
 
     margin: 0 auto;
-    background-color: grey;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #504d54;
     padding-top: 30px;
@@ -284,6 +296,8 @@ header h1 {
     background-color: #343538;
 
 }
+
+
 
 .container p,
 .container input {
