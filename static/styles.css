@@ -267,10 +267,15 @@ header h1 {
 
 }
 
-.container {                                            /* Container for the main content */
-    max-width: 1200px;
-    margin: 0 auto;
+
+.bg-kettle {
     background: url(../static/images/kettlebg.png) repeat;
+}
+
+.container {                                            /* Container for the main content */
+
+    margin: 0 auto;
+    background-color: grey;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #504d54;
     padding-top: 30px;
