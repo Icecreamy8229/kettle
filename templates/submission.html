@@ -2,7 +2,7 @@
 {% block content %}
 <body>
 {% include 'navbar.html' %}
-<div class="container">
+<div class="content-container">
 <form method="POST" enctype="multipart/form-data" action="{{ url_for('routes.submit_game_route') }}">
 {# This form will be used to submit a game, with image and videos #}
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

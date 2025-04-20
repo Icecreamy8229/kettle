@@ -1,3 +1,5 @@
+
+
 /* General body styles */
 html, body {
     height: 100%;
@@ -9,6 +11,10 @@ html, body {
     padding: 0;
     overflow-x: hidden;
 }
+
+
+
+
 
 button {
     font-family: 'Silkscreen', sans-serif;
@@ -284,7 +290,7 @@ header h1 {
 
 
 
-.container {
+.content-container {
     /* Container for the main content */
 
     margin: 0 auto;
@@ -299,8 +305,8 @@ header h1 {
 
 
 
-.container p,
-.container input {
+.content-container p,
+.content-container input {
     font-family: 'Roboto', sans-serif;
 }
 
@@ -806,6 +812,12 @@ footer ul li a:hover {
     align-self: center;
 
 }
+
+/* ALERT STYLES */
+
+.
+
+/* END OF ALERT STYLES */
 
 #searchbar-row:last-of-type(button) {
     justify-content: flex-end;
