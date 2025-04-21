@@ -38,8 +38,8 @@ def index_route():
     games = db.session.query(Game).filter_by(game_active=True).order_by(Game.game_releasedate.desc()).limit(10).all()
     random.shuffle(games)
     logging.debug('Index route called')
-    media_files = get_game_slider_media(slider_type=SliderType.TAG, tag_type="multiplayer")
-    return render_template('index.html',games=games, media_files=media_files)
+
+    return render_template('index.html',games=games)
 
 @login_required
 @routes.route('/checkout', methods=['GET', 'POST',])
