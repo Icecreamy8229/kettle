@@ -14,6 +14,7 @@ let context;
 
 let gameOver = false;
 let score = 0;
+let scoreIncrement;
 
 //bird attributes
 let birdWidth = 34; //width/height ratio = 408/228 = 17/12
@@ -32,7 +33,7 @@ let bgmLoaded = false;
 
 
 //time delta logic
-const pipeInterval = 1200;
+let pipeInterval = 1200;
 let lastTime = performance.now();
 let pipeSpawnTimer = 0;
 
@@ -54,18 +55,107 @@ let pipeY = 0;
 let topPipeImg;
 let bottomPipeImg;
 
+const Difficulty = Object.freeze({ //freeze makes this immutable.
+    EASY : "EASY",
+    MEDIUM : "MEDIUM",
+    HARD : "HARD",
+});
+
+let selectedDifficulty;
+let paused = true;
+
+function selectDifficulty(button) {
+    const allButtons = document.querySelectorAll('.difficulty-button');
+    for (let i = 0; i < allButtons.length; i++) {
+        allButtons[i].disabled = true;
+    }
+
+    for(let i = 0; i < Object.values(Difficulty).length ; i++) {
+        if (button.value === Difficulty.EASY) {
+            selectedDifficulty = Difficulty.EASY;
+            console.log("setting difficulty to easy")
+            easyDifficultySettings();
+        }
+        if (button.value === Difficulty.MEDIUM) {
+            selectedDifficulty = Difficulty.MEDIUM;
+            console.log("setting difficulty to medium")
+            mediumDifficultySettings();
+        }
+        if (button.value === Difficulty.HARD) {
+            selectedDifficulty = Difficulty.HARD;
+            console.log("setting difficulty to hard")
+            hardDifficultySettings();
+        }
+
+    }
+
+    startGame();
+}
+
+function easyDifficultySettings() {
+    gravity = 3;
+    pipeInterval = 1500;
+    velocityX = -2;
+    scoreIncrement = .5;
+}
+function mediumDifficultySettings() {
+    gravity = 4;
+    pipeInterval = 1200;
+    velocityX = -2;
+    scoreIncrement = 1;
+}
+
+function hardDifficultySettings() {
+    gravity = 5;
+    pipeInterval = 900;
+    velocityX = -3;
+    scoreIncrement = 1.5;
+}
 
 //physics
 let velocityX = -2; //use -2 for the game
 let velocityY = 0; // bird jump speed
-let gravity = 3.5; //pixels per millisecond squared
+let gravity = 3; //pixels per millisecond squared
 
 
-function gameLoop(currentTime) {
-    const deltaTime = (currentTime - lastTime) / 1000; // delta in seconds
-    lastTime = currentTime;
 
-    if (gameOver) {
+function startGame() {
+    const startMessage = "Game starts in\n";
+    const timeTillStart = 3000; // 6 seconds
+    const startTime = performance.now();
+
+    function countdownLoop(currentTime) {
+        const elapsed = currentTime - startTime;
+        const remaining = Math.ceil((timeTillStart - elapsed) / 1000);
+
+        context.clearRect(0, 0, board.width, board.height); // Clear the canvas
+        context.fillStyle = "white";
+        context.font = "36px sans-serif";
+        context.textAlign = "center";
+        context.fillText(startMessage + remaining, board.width / 2, board.height / 2);
+
+        if (elapsed < timeTillStart) {
+            requestAnimationFrame(countdownLoop);
+        } else {
+            lastTime = performance.now();
+            resetGame();
+            requestAnimationFrame(gameLoop); // Start the game
+
+        }
+    }
+
+
+    requestAnimationFrame(countdownLoop);
+
+
+}
+
+function gameLoop() {
+    let now = performance.now();
+    const deltaTime = (now - lastTime) / 1000; // delta in seconds
+    lastTime = now;
+
+    if (gameOver || paused) {
         console.log("Game Over");
         return;
     }
@@ -81,13 +171,18 @@ function gameLoop(currentTime) {
 
     // Apply gravity and movement using deltaTime
     velocityY += gravity * deltaTime * 1000; // gravity is per ms, so convert to px/sec²
+
+
     bird.y = Math.max(bird.y + velocityY * deltaTime, 0);
+    console.log("Bird Y is " + bird.y.toString());
 
     drawBirdContext();
+
 
     if (bird.y > boardHeight) {
         sfxDie.play();
         gameOver = true;
+        submitHighScore(score);
     }
 
     // pipes
@@ -100,12 +195,13 @@ function gameLoop(currentTime) {
         if (!pipe.passed && bird.x > pipe.x + pipe.width) {
             pipe.passed = true;
             sfxPoint.play();
-            score += 0.5;
+            score += scoreIncrement;
         }
 
         if (detectCollision(bird, pipe)) {
             sfxHit.play();
             gameOver = true;
+            submitHighScore(score);
         }
     }
 
@@ -113,10 +209,10 @@ function gameLoop(currentTime) {
         pipeArray.shift();
     }
 
+
     context.fillStyle = "white";
     context.font = "45px sans-serif";
-    context.fillText(score, 5, 45);
-
+    context.fillText(score, board.width / 2, 40);
     requestAnimationFrame(gameLoop);
 }
 
@@ -136,6 +232,7 @@ window.onload = function () {
         drawBirdContext();
 
 
+
     }
 
     topPipeImg = new Image();
@@ -148,17 +245,27 @@ window.onload = function () {
     document.addEventListener("keydown", moveBird);
     document.addEventListener("click", moveBird);
 
-    requestAnimationFrame(gameLoop);
-
 }
 
 
 function resetGame() {
-    bird.y = birdY;
-    pipeArray = [];
-    score = 0;
-    gameOver = false;
-    requestAnimationFrame(gameLoop);
+    if (selectedDifficulty !== null) {
+        console.log("Resetting Game");
+        bird.y = birdY;
+        pipeArray = [];
+        score = 0;
+        gameOver = false;
+        paused = false;
+        lastTime = performance.now();
+        requestAnimationFrame(gameLoop);
+        if (!bgmLoaded) {
+            bgmMario.play();
+            bgmLoaded = true;
+        }
+
+    }
+
+
 }
 
 function moveBird(e) {
@@ -177,10 +284,7 @@ function moveBird(e) {
         resetGame();
     }
 
-    if (!bgmLoaded) {
-        bgmMario.play();
-        bgmLoaded = true;
-    }
+
 }
 
 
@@ -193,7 +297,7 @@ function drawBirdContext() {
 
 function placePipes() {
 
-    if (gameOver) {
+    if (gameOver || paused) {
         return;
     }
 
@@ -228,4 +332,24 @@ function detectCollision(a, b) {
         a.x + a.width > b.x &&
         a.y < b.y + b.height &&
         a.y + a.height > b.y;
+}
+
+function submitHighScore(score) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    fetch('submit-score', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify({score: score}),
+
+
+    })
+    .then(res => res.json())
+        .then(data => {
+            console.log("server response", data);
+        })
+        .catch(err => console.error("error submitting score:", err));
+
 }

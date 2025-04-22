@@ -9,7 +9,7 @@ import random
 from flask_wtf.csrf import CSRFError
 from requests import session
 
-from models import db, User, Cart, Game, Library
+from models import db, User, Cart, Game, Library, Flappybird
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
@@ -555,8 +555,15 @@ def add_to_cart_route():
 @routes.route("/kettle-bird")
 def kettle_bird_route():
     #TODO will want to hide behind a "paywall" eventually.
+    highscores = (
+        db.session.query(User.user_alias, Flappybird.flappybird_highscore)
+        .join(Flappybird, Flappybird.user_id == User.user_id)
+        .order_by(Flappybird.flappybird_highscore.desc())
+        .limit(10)
+        .all()
+    )
 
-    return render_template('games/kettle_bird.html')
+    return render_template('games/kettle_bird.html',highscores=highscores)
 
 @routes.route("/remove-from-cart", methods=['POST'])
 @login_required
@@ -585,6 +592,33 @@ def profile_pictures(filename):
 @routes.errorhandler(CSRFError)
 def handle_csrf_error(e):
     return str(e.description), 400
+
+
+@routes.route('/submit-score', methods=['POST'])
+def submit_score_route():
+    if not current_user.is_authenticated:
+        return jsonify({'error': 'user is not logged in'}), 401
+
+    data = request.get_json()
+    score = data.get('score')
+
+    highscore = db.session.query(Flappybird).filter_by(user_id=current_user.user_id).first()
+    if not highscore:
+        highscore = Flappybird(user_id=current_user.user_id, flappybird_highscore=score)
+        db.session.add(highscore)
+        db.session.commit()
+
+    elif highscore.flappybird_cheater:
+        return jsonify({'success': False, 'error': 'cheater'}), 400
+
+    if not isinstance(score, int) or score < 0 or score > 999999: # cheaters >:(
+        highscore.flappybird_cheater = True
+        return jsonify({'success': False, 'error': 'Invalid score'}), 400
+
+    if score > highscore.flappybird_highscore:
+        highscore.flappybird_highscore = score
+    db.session.commit()
+    return jsonify({'success': True}), 200
 
 
 @routes.route('/slider-games')

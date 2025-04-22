@@ -62,6 +62,12 @@ class User(db.Model, UserMixin):
         return bcrypt.check_password_hash(self.user_password, plain_password)
 
 
+class Flappybird(db.Model):
+    __tablename__ = 'flappybird'
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.user_id'), primary_key=True, nullable=False)
+    flappybird_highscore: Mapped[int] = mapped_column(default=0, nullable=False)
+    flappybird_cheater: Mapped[bool] = mapped_column(default=False, nullable=False)
+
 class Game(db.Model):
     __tablename__ = 'games'
     game_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, unique=True)
