@@ -158,6 +158,7 @@ function resetGame() {
     pipeArray = [];
     score = 0;
     gameOver = false;
+    requestAnimationFrame(gameLoop);
 }
 
 function moveBird(e) {
