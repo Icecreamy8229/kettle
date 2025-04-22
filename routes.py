@@ -601,7 +601,7 @@ def submit_score_route():
 
     data = request.get_json()
     score = data.get('score')
-
+    logging.info(f"Flappybird score update for User: {current_user.user_login}, Score: {score}")
     highscore = db.session.query(Flappybird).filter_by(user_id=current_user.user_id).first()
     if not highscore:
         highscore = Flappybird(user_id=current_user.user_id, flappybird_highscore=score)
