@@ -20,8 +20,6 @@ let birdWidth = 34; //width/height ratio = 408/228 = 17/12
 let birdHeight = 24;
 let birdX = boardWidth/8;
 let birdY = boardHeight/2; //image anchor position is top left
-let birdImage;
-
 
 //audio files
 const sfxDie = new Audio('/static/kettlebird/audio/sfx_die.wav');
@@ -33,6 +31,12 @@ bgmMario.loop = true;
 let bgmLoaded = false;
 
 
+//time delta logic
+const pipeInterval = 1200;
+let lastTime = performance.now();
+let pipeSpawnTimer = 0;
+
+//the birb
 let bird = {
     x : birdX,
     y : birdY,
@@ -52,10 +56,69 @@ let bottomPipeImg;
 
 
 //physics
-let velocityX = -1; //use -2 for the game
+let velocityX = -2; //use -2 for the game
 let velocityY = 0; // bird jump speed
-let gravity = 0.3;
+let gravity = 3.5; //pixels per millisecond squared
 
+
+function gameLoop(currentTime) {
+    const deltaTime = (currentTime - lastTime) / 1000; // delta in seconds
+    lastTime = currentTime;
+
+    if (gameOver) {
+        console.log("Game Over");
+        return;
+    }
+
+    pipeSpawnTimer += deltaTime;
+
+    if (pipeSpawnTimer >= pipeInterval / 1000) { // convert pipeInterval to seconds
+        placePipes();
+        pipeSpawnTimer = 0;
+    }
+
+    context.clearRect(0, 0, boardWidth, boardHeight);
+
+    // Apply gravity and movement using deltaTime
+    velocityY += gravity * deltaTime * 1000; // gravity is per ms, so convert to px/sec²
+    bird.y = Math.max(bird.y + velocityY * deltaTime, 0);
+
+    drawBirdContext();
+
+    if (bird.y > boardHeight) {
+        sfxDie.play();
+        gameOver = true;
+    }
+
+    // pipes
+    for (let i = 0; i < pipeArray.length; i++) {
+        let pipe = pipeArray[i];
+        pipe.x += velocityX * deltaTime * 60; // scale for consistent speed at 60fps
+
+        context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
+
+        if (!pipe.passed && bird.x > pipe.x + pipe.width) {
+            pipe.passed = true;
+            sfxPoint.play();
+            score += 0.5;
+        }
+
+        if (detectCollision(bird, pipe)) {
+            sfxHit.play();
+            gameOver = true;
+        }
+    }
+
+    while (pipeArray.length > 0 && pipeArray[0].x < -pipeWidth) {
+        pipeArray.shift();
+    }
+
+    context.fillStyle = "white";
+    context.font = "45px sans-serif";
+    context.fillText(score, 5, 45);
+
+    requestAnimationFrame(gameLoop);
+}
 
 
 window.onload = function () {
@@ -68,7 +131,10 @@ window.onload = function () {
     birdImg = new Image();
     birdImg.src = "/static/kettlebird/images/flappybird.png";
     birdImg.onload = function () {
+
+
         drawBirdContext();
+
 
     }
 
@@ -78,11 +144,11 @@ window.onload = function () {
     bottomPipeImg = new Image();
     bottomPipeImg.src = "/static/kettlebird/images/bottompipe.png";
 
+
     document.addEventListener("keydown", moveBird);
     document.addEventListener("click", moveBird);
 
-    requestAnimationFrame(update);
-    setInterval(placePipes, 1500);
+    requestAnimationFrame(gameLoop);
 
 }
 
@@ -97,11 +163,11 @@ function resetGame() {
 function moveBird(e) {
 
     if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyX" || e.code === "mouseClick" ) {
-        velocityY = -6;
+        velocityY = -500;
 
     }
     if (e.type === "click") { //this handles mouse clicks
-        velocityY = -6;
+        velocityY = -500;
 
     }
 
@@ -118,58 +184,10 @@ function moveBird(e) {
 
 
 function drawBirdContext() {
+
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
 
 }
-
-function update() {
-    requestAnimationFrame(update);
-    if (gameOver) {
-
-        return;
-    }
-    context.clearRect(0, 0, boardWidth, boardHeight);
-
-    //bird
-    velocityY += gravity;
-    bird.y = Math.max(bird.y + velocityY, 0); //apply gravity to current y, limit the y to the top.
-    drawBirdContext();
-
-    if (bird.y > boardHeight) {
-        sfxDie.play();
-        gameOver = true;
-    }
-
-    //pipes
-    for (let i = 0; i < pipeArray.length; i++) {
-        let pipe = pipeArray[i];
-        pipe.x += velocityX;
-        context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
-
-        if (!pipe.passed && bird.x > pipe.x + pipe.width) {
-            pipe.passed = true;
-            sfxPoint.play();
-            score += 0.5; //2 pipes!  So you get one for each set.
-
-        }
-
-        if (detectCollision(bird, pipe)) {
-            sfxHit.play();
-            gameOver = true;
-        }
-    }
-
-    while (pipeArray.length > 0 && pipeArray[0].x < -pipeWidth) {
-        pipeArray.shift(); //removes first element from the array.
-        //prevents keeping passed pipes in memory.
-    }
-
-    context.fillStyle = "white";
-    context.font = "45px sans-serif";
-    context.fillText(score, 5, 45);
-
-}
-
 
 
 function placePipes() {
