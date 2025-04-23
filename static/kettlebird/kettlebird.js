@@ -95,7 +95,7 @@ function selectDifficulty(button) {
 }
 
 function easyDifficultySettings() {
-    gravity = 1;
+    gravity = 2.5;
     pipeInterval = 2000;
 
     scoreIncrement = .5;
