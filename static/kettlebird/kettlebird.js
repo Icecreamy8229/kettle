@@ -53,7 +53,7 @@ let pipeWidth = 64; //width/height ratio = 384/3072 = 1/8
 let pipeHeight = 512;
 let pipeX = boardWidth;
 let pipeY = 0;
-let openingSpace = boardHeight/4;
+let openingSpaceGaps = [boardHeight/2, boardHeight/3];
 let topPipeImg;
 let bottomPipeImg;
 
@@ -99,6 +99,7 @@ function easyDifficultySettings() {
     pipeInterval = 2000;
     openingSpace = boardHeight/3;
     scoreIncrement = .5;
+    openingSpaceGaps = [boardHeight/2];
 
 
 }
@@ -116,6 +117,7 @@ function hardDifficultySettings() {
     pipeInterval = 1500;
     velocityX = -2.5;
     scoreIncrement = 1;
+
 
 }
 
@@ -323,7 +325,7 @@ function placePipes() {
     let bottomPipe = {
         img : bottomPipeImg,
         x : pipeX,
-        y : randomPipeY + pipeHeight + openingSpace,
+        y : randomPipeY + pipeHeight + openingSpaceGaps[Math.floor(Math.random() * openingSpaceGaps.length)],
         width : pipeWidth,
         height : pipeHeight,
         passed : false
