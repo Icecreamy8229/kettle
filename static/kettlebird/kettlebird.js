@@ -342,6 +342,7 @@ function detectCollision(a, b) {
 }
 
 function submitHighScore(score) {
+    const timestamp = Date.now();
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     if (score === 0) {
         console.log("Score of 0, no submission.")
@@ -353,7 +354,8 @@ function submitHighScore(score) {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken,
         },
-        body: JSON.stringify({score: score}),
+        body: JSON.stringify({score: score,
+        }),
 
 
     })

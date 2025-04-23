@@ -23,7 +23,7 @@ function returnResults(user_query) {
                 return `
                     <a href="/game?id=${game.game_id}" class="hitbox">
                         <div class="content">
-                            <img src="../game_media/${game.game_id}/images/cover.png" alt="Game Image" class="gameImage">
+                            <img src="../game_media/${game.game_id}/cover/cover.png" alt="Game Image" class="gameImage">
                             <div class="text-container">
                                 <h3>${game.game_title}</h3>
                             </div>

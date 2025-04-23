@@ -289,6 +289,24 @@ header h1 {
 }
 
 
+.pagination {
+    justify-content: center;
+
+}
+
+.pagination strong, a {
+
+    padding: 0 15px;
+    font-size: 1.2em;
+}
+
+.pagination strong {
+    color: white;
+}
+
+.pagination a {
+    color: grey;
+}
 
 .content-container {
     /* Container for the main content */

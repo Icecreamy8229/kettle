@@ -1,6 +1,8 @@
 import datetime
 import os
 import re
+from math import ceil
+
 import yaml
 from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_from_directory
 import logging
@@ -9,7 +11,7 @@ import random
 from flask_wtf.csrf import CSRFError
 from requests import session
 
-from models import db, User, Cart, Game, Library, Flappybird
+from models import db, User, Cart, Game, Library, Flappybird, GameGenre, Genre
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
@@ -18,7 +20,7 @@ from login import load_user
 from email_utils import send_verify_email, verify_token
 from sqlalchemy.exc import SQLAlchemyError
 from helper import get_game_slider_media, SliderType
-from flask import render_template
+from flask import render_template, session
 
 
 
@@ -35,11 +37,17 @@ routes = Blueprint('routes', __name__)  # this module points to itself for route
 
 @routes.route('/')  # This is the general syntax for creating a route in flask.
 def index_route():
-    games = db.session.query(Game).filter_by(game_active=True).order_by(Game.game_releasedate.desc()).limit(10).all()
-    random.shuffle(games)
-    logging.debug('Index route called')
+    page = request.args.get('page', 1, type=int)
+    all_games = db.session.query(Game).filter_by(game_active=True).order_by(Game.game_releasedate.desc()).all()
+    per_page = 15
+    total_pages = ceil(len(all_games) / per_page)
 
-    return render_template('index.html',games=games)
+
+    logging.debug('Index route called')
+    start = (page - 1) * per_page
+    end = start + per_page
+    games = all_games[start:end]
+    return render_template('index.html',games=games,page=page, total_pages=total_pages)
 
 @login_required
 @routes.route('/checkout', methods=['GET', 'POST',])
@@ -243,6 +251,7 @@ def settings_route(): #not used yet.
 def game_route():
     from helper import get_game_media
 
+
     game_id = request.args.get("id", type=int)
 
     if not game_id:
@@ -250,6 +259,14 @@ def game_route():
         return "404 Not Found"
 
     game = db.session.query(Game).filter_by(game_id=game_id).first()
+    genres = (
+        db.session.query(Genre.genre_tag)
+        .join(GameGenre, Genre.genre_id == GameGenre.genre_id)
+        .filter(GameGenre.game_id == game_id)
+        .all()
+    )
+
+
     if not game:
         logging.info(f"Game with ID {game_id} not found.")
         return "404 Not Found"
@@ -268,7 +285,8 @@ def game_route():
         game=game,
         user=current_user,
         title=game.game_title,
-        media_files=media_files
+        media_files=media_files,
+        genres=genres,
     )
 
 
@@ -556,6 +574,7 @@ def add_to_cart_route():
 def kettle_bird_route():
     #TODO will want to hide behind a "paywall" eventually.
 
+    session['flappybird_ts'] = datetime.datetime.now().timestamp()
     game_owned = db.session.query(Library).filter_by(user_id=current_user.user_id, game_id=276).first()
     if not game_owned:
         flash("Please purchase the game.", "danger")
@@ -602,28 +621,56 @@ def handle_csrf_error(e):
 
 @routes.route('/submit-score', methods=['POST'])
 def submit_score_route():
+    game_start_time = session.get('flappybird_ts')
+    game_finish_time = datetime.datetime.now().timestamp()
+    multiplier = 1.35
+    delta = game_finish_time - game_start_time
+
     if not current_user.is_authenticated:
         return jsonify({'error': 'user is not logged in'}), 401
 
     data = request.get_json()
     score = data.get('score')
-    logging.info(f"Flappybird score update for User: {current_user.user_login}, Score: {score}")
+    if not score:
+        return jsonify({'error': 'Score is required'}), 400
+
+    def verify_score(score: int):
+        return (float(delta) * multiplier) > float(score)
+
+
+
+    def reset_game_start_time():
+        session['flappybird_ts'] = datetime.datetime.now().timestamp()
+
+    if not verify_score(score):
+        logging.info(
+            f"CHEATER user {current_user.user_login} score is {score} with a time delta of {delta * multiplier}")
+        return jsonify({'error': 'Cheater'}), 400
+
+    reset_game_start_time()
     highscore = db.session.query(Flappybird).filter_by(user_id=current_user.user_id).first()
+
     if not highscore:
         highscore = Flappybird(user_id=current_user.user_id, flappybird_highscore=score)
         db.session.add(highscore)
         db.session.commit()
 
+    if not isinstance(score, int) or score < 0 or score > 999999: # cheaters >:(
+        highscore.flappybird_cheater = True
+        db.session.add(highscore)
+        db.session.commit()
+        return jsonify({'success': False, 'error': 'Invalid score'}), 400
+
+
     elif highscore.flappybird_cheater:
         return jsonify({'success': False, 'error': 'cheater'}), 400
 
-    if not isinstance(score, int) or score < 0 or score > 999999: # cheaters >:(
-        highscore.flappybird_cheater = True
-        return jsonify({'success': False, 'error': 'Invalid score'}), 400
 
     if score > highscore.flappybird_highscore:
+        logging.info(f"Flappybird score update for User: {current_user.user_login}, Score: {score}")
         highscore.flappybird_highscore = score
-    db.session.commit()
+        db.session.add(highscore)
+        db.session.commit()
     return jsonify({'success': True}), 200
 
 

@@ -120,9 +120,9 @@
         </section>
 
         <div id="genreButtons">
-            <button class="genreButton">Simulation</button>
-            <button class="genreButton">Strategy</button>
-            <button class="genreButton">Single Player</button>
+            {% for genre in genres %}
+                <button class="genreButton">{{ genre.genre_tag }}</button>
+            {% endfor %}
         </div>
 
         <section id="detailedDescriptionBox">

@@ -86,7 +86,7 @@
 
 
     <div class="banner-description">
-        <p>Discover new games for an affordable price or whatever text we might want here! </p>
+        <p>Discover new games for an affordable price</p>
     </div>
 
 
@@ -124,7 +124,26 @@
                             </a>
                         {% endfor %}
                     </div>
+
                 </div>
+                <div class="pagination">
+                    {% if page > 1 %}
+                      <a href="/?page={{ page - 1 }}#results-container">Previous</a>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages + 1) %}
+                      {% if p == page %}
+                        <strong>{{ p }}</strong>
+                      {% else %}
+                        <a href="/?page={{ p }}#results-container">{{ p }}</a>
+                      {% endif %}
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                      <a href="/?page={{ page + 1 }}#results-container">Next</a>
+                    {% endif %}
+                </div>
+
             </div>
         </main>
 </body>

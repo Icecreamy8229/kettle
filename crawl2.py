@@ -158,7 +158,11 @@ def create_kettle_game(title, description, dt_string, genres) -> int:
     genre_ignores = ["+", ""]
     game_prices = [1000, 2000, 3000, 4000, 5000]
 
+
     with app.app_context():
+        check_db_for_game = db.session.query(Game).filter_by(game_title=title).first()
+        if check_db_for_game:
+            raise "Game already exists"
         game = Game(
             game_title=title,
             game_price=random.choice(game_prices),
