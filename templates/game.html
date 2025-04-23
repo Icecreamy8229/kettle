@@ -108,6 +108,7 @@
 {% block content %}
     <body>
         {% include 'partials/navbar.html' %}
+        {% include '/partials/flash.html' %}
 
         <div class="outer-container">
             <h1 id="gameTitle">{{ game.game_title }} <br>Price: ℗ {{ game.game_price }}</h1>

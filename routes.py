@@ -423,8 +423,7 @@ def submit_game_route():
 
     image_files = request.files.getlist('game-images')
     video_files = request.files.getlist('game-videos')
-    print(len(video_files))
-    print(len(image_files))
+
 
     max_files = 10
 
@@ -553,8 +552,15 @@ def add_to_cart_route():
 
 
 @routes.route("/kettle-bird")
+@login_required
 def kettle_bird_route():
     #TODO will want to hide behind a "paywall" eventually.
+
+    game_owned = db.session.query(Library).filter_by(user_id=current_user.user_id, game_id=276).first()
+    if not game_owned:
+        flash("Please purchase the game.", "danger")
+        return redirect(url_for('routes.game_route') + "?id=276")
+
     highscores = (
         db.session.query(User.user_alias, Flappybird.flappybird_highscore)
         .join(Flappybird, Flappybird.user_id == User.user_id)

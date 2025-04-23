@@ -34,6 +34,7 @@ blacklisted_tags = config['crawler']['blacklisted_tags']
 def load_user_profile():
     options = webdriver.FirefoxOptions()
     options.add_argument('--disable-blink-features=AutomationControlled')
+    options.add_argument("--headless")
     options.set_preference("browser.startup.page", 1)
     options.set_preference("browser.startup.homepage_override.mstone", "ignore")
     options.set_preference("network.http.connection-retry-timeout", 0)

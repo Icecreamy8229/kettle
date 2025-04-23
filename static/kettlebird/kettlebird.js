@@ -36,6 +36,7 @@ let bgmLoaded = false;
 let pipeInterval = 1200;
 let lastTime = performance.now();
 let pipeSpawnTimer = 0;
+let jumpValue = -550;
 
 //the birb
 let bird = {
@@ -43,6 +44,7 @@ let bird = {
     y : birdY,
     width : birdWidth,
     height : birdHeight
+
 }
 
 //pipes
@@ -93,23 +95,28 @@ function selectDifficulty(button) {
 }
 
 function easyDifficultySettings() {
-    gravity = 3;
-    pipeInterval = 1500;
-    velocityX = -2;
+    gravity = 1;
+    pipeInterval = 2000;
+
     scoreIncrement = .5;
+
+
 }
 function mediumDifficultySettings() {
-    gravity = 4;
-    pipeInterval = 1200;
-    velocityX = -2;
+    gravity = 2.5;
+    pipeInterval = 1750;
+
     scoreIncrement = 1;
+
+
 }
 
 function hardDifficultySettings() {
-    gravity = 5;
-    pipeInterval = 900;
-    velocityX = -3;
-    scoreIncrement = 1.5;
+    gravity = 3;
+    pipeInterval = 1500;
+    velocityX = -2.5;
+    scoreIncrement = 1;
+
 }
 
 //physics
@@ -271,11 +278,11 @@ function resetGame() {
 function moveBird(e) {
 
     if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyX" || e.code === "mouseClick" ) {
-        velocityY = -500;
+        velocityY = jumpValue;
 
     }
     if (e.type === "click") { //this handles mouse clicks
-        velocityY = -500;
+        velocityY = jumpValue;
 
     }
 
@@ -336,6 +343,10 @@ function detectCollision(a, b) {
 
 function submitHighScore(score) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    if (score === 0) {
+        console.log("Score of 0, no submission.")
+        return;
+    }
     fetch('submit-score', {
         method: 'POST',
         headers: {

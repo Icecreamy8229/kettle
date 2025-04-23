@@ -22,7 +22,12 @@
                     <div class="library-container">
                         {% for game in games %}
                             <div class="library-item">
-                                <a href="{{ url_for('routes.game_route')}}?id={{ game.game_id}}">
+                                {% if game.game_id == 276 %}
+                                    <a href="{{ url_for('routes.kettle_bird_route') }}">
+                                {% else %}
+                                    <a href="{{ url_for('routes.game_route')}}?id={{ game.game_id}}">
+
+                                {% endif %}
                                 <div class="library-content">
                                     <div>
                                         <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
