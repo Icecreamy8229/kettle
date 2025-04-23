@@ -53,7 +53,7 @@ let pipeWidth = 64; //width/height ratio = 384/3072 = 1/8
 let pipeHeight = 512;
 let pipeX = boardWidth;
 let pipeY = 0;
-
+let openingSpace = boardHeight/4;
 let topPipeImg;
 let bottomPipeImg;
 
@@ -97,7 +97,7 @@ function selectDifficulty(button) {
 function easyDifficultySettings() {
     gravity = 2.5;
     pipeInterval = 2000;
-
+    openingSpace = boardHeight/3;
     scoreIncrement = .5;
 
 
@@ -181,7 +181,7 @@ function gameLoop() {
 
 
     bird.y = Math.max(bird.y + velocityY * deltaTime, 0);
-    console.log("Bird Y is " + bird.y.toString());
+
 
     drawBirdContext();
 
@@ -309,7 +309,7 @@ function placePipes() {
     }
 
     let randomPipeY = pipeY - pipeHeight / 4 - Math.random()*(pipeHeight / 2);
-    let openingSpace = board.height/4;
+
 
     let topPipe = {
         img : topPipeImg,
