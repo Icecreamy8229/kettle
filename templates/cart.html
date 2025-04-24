@@ -159,9 +159,14 @@
                             <div class="cart-item-points">
                                 <p>{{ game.game_price }} Points</p>
                             </div>
+                            <form action="{{ url_for('routes.remove_from_cart_route') }}" method="POST">
+                                <input type="hidden" name="game_id" value="{{ game.game_id }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
                         </div>
-                            <button class="remove" data-points="{{ game.points }}" onclick="removeFromCart('{{ game.game_id }}', this)">X</button>                    
-                        </div>
+                    </div>
+                        
                     {% endfor %}
                 </div>
                 <hr>    

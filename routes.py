@@ -568,6 +568,21 @@ def add_to_cart_route():
     return redirect(url_for('routes.index_route'))
 
 
+@routes.route("/remove-from-cart", methods=['POST'])
+@login_required
+def remove_from_cart_route():
+    data = request.form
+    game_id = data.get("game_id")
+    if not game_id:
+        return jsonify({'error': 'Game ID is required'}), 400
+    cart_item = db.session.query(Cart).filter_by(user_id=current_user.user_id, game_id=game_id).first()
+    if not cart_item:
+        return jsonify({'error': 'Game not found in cart'}), 404
+    db.session.delete(cart_item)
+    db.session.commit()
+    flash("Item removed from cart", "success")
+    return redirect(url_for('routes.cart_route'))
+
 
 @routes.route("/kettle-bird")
 @login_required
