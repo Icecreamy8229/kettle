@@ -26,6 +26,9 @@
     }
 
 
+    .content-container {
+        padding: 0 2em;
+    }
 
     .text-container {
         flex-grow: 1;
@@ -45,8 +48,8 @@
     }
 
     .outer-container {
-        min-width: 360px;
-        width: 90%;
+
+        width: 100%;
         margin: 0 auto;
         max-width: 1000px;
     }
@@ -89,22 +92,35 @@
         <p>Discover new games for an affordable price</p>
     </div>
 
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="/?page={{ page - 1 }}">Previous</a>
+            {% endif %}
+            {% for p in range(1, total_pages + 1) %}
+                {% if p == page %}
+                    <strong>{{ p }}</strong>
+                {% else %}
+                    <a href="/?page={{ p }}">{{ p }}</a>
 
+                {% endif %}
+            {% endfor %}
+            {% if page < total_pages %}
+                <a href="/?page={{ page + 1 }}">Next</a>
+            {% endif %}
+        </div>
 
         <main>
+
             <div class="outer-container">
             <h1>Browse our selection of Games</h1>
                 <div  class="content-container bg-kettle">
 
-                    <div id="searchbar-row">
 
-                        {% include '/partials/searchbar.html' %}
-                        {% if current_user.is_authenticated and current_user.user_privilege > 0 %}
-                            <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
-                        {% endif %}
+                    {% include '/partials/searchbar.html' %}
 
 
-                    </div>
+
+
 
                     <div id="results-container" class="games-container">
                         {% for game in games %}
@@ -126,23 +142,7 @@
                     </div>
 
                 </div>
-                <div class="pagination">
-                    {% if page > 1 %}
-                      <a href="/?page={{ page - 1 }}#results-container">Previous</a>
-                    {% endif %}
 
-                    {% for p in range(1, total_pages + 1) %}
-                      {% if p == page %}
-                        <strong>{{ p }}</strong>
-                      {% else %}
-                        <a href="/?page={{ p }}#results-container">{{ p }}</a>
-                      {% endif %}
-                    {% endfor %}
-
-                    {% if page < total_pages %}
-                      <a href="/?page={{ page + 1 }}#results-container">Next</a>
-                    {% endif %}
-                </div>
 
             </div>
         </main>

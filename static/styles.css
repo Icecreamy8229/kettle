@@ -251,6 +251,17 @@ header h1 {
     .gameImage {
         height: 45px;
     }
+
+    #results-container {
+        width: 97%;
+        margin: auto;
+
+
+    }
+    .content-container {
+        width: 100%;
+        padding: unset !important;
+    }
 }
 
 
@@ -263,14 +274,13 @@ header h1 {
 }
 
 
-
 .bg-kettle {
     background: url('../static/images/kettlebg.png') repeat;
 }
 
 .outer-container {
     justify-self: center;
-    margin: 0 5%;
+
 }
 
 .outer-container h1,
@@ -294,7 +304,7 @@ header h1 {
 
 }
 
-.pagination strong, a {
+.pagination strong, .pagination a {
 
     padding: 0 15px;
     font-size: 1.2em;
@@ -448,7 +458,7 @@ header h1 {
 
 .bio-section {
     text-align: left;
-    width: 550px;
+    width: 100%;
     height: auto;
     margin: 0 auto;
 }
@@ -816,18 +826,33 @@ footer ul li a:hover {
     animation: blink 1s infinite;
 }
 
-#searchbar-row {
+#searchbar-div {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-#searchbar-row div {
+    padding: 20px;
+    justify-content: center;
 
-    display: flex;
 }
 
-#searchbar-row button {
-    align-self: center;
+#searchbar-div button {
+
+    padding: 12px;
+
+}
+
+
+#searchInput {
+    width: 50%;
+
+}
+
+#options-row button {
+
+
+
+}
+
+#options-row button {
+
 
 }
 
@@ -837,12 +862,12 @@ footer ul li a:hover {
 
 /* END OF ALERT STYLES */
 
-#searchbar-row:last-of-type(button) {
-    justify-content: flex-end;
+#options-row:last-of-type(button) {
+
 }
 
-#searchbar-row button {
-    height: 50px;
+#options-row button {
+
 }
 
 
