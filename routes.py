@@ -41,13 +41,14 @@ def index_route():
     all_games = db.session.query(Game).filter_by(game_active=True).order_by(Game.game_releasedate.desc()).all()
     per_page = 15
     total_pages = ceil(len(all_games) / per_page)
+    game_count = len(all_games)
 
 
     logging.debug('Index route called')
     start = (page - 1) * per_page
     end = start + per_page
     games = all_games[start:end]
-    return render_template('index.html',games=games,page=page, total_pages=total_pages)
+    return render_template('index.html',games=games,page=page, total_pages=total_pages, game_count=game_count)
 
 @login_required
 @routes.route('/checkout', methods=['GET', 'POST',])
