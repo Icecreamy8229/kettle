@@ -3,6 +3,8 @@ import enum
 from models import User, Game, Genre, GameGenre, db
 from flask import url_for
 import os
+import logging
+
 """
 Using this module to help you create dummy users for now.
 I may add other functions here in the future if we need other ways to generate content
@@ -21,37 +23,33 @@ class SliderType(Enum):
 
 
 
-def get_game_slider_media(slider_type : SliderType, tag_type = None):
+def get_game_slider_media(slider_type: SliderType, tag_type=None):
     slider_display_images = []
 
-
-    #TODO DETERMINE SLIDER TYPE
     if slider_type == SliderType.TAG and tag_type is not None:
+
         tag = db.session.query(Genre).filter(Genre.genre_tag == tag_type).first()
-        games = db.session.query(Game).filter(Game.game_id == tag.genre_id).all()
-        for game in games:
-            slider_display_images.append(get_game_media("images", game)[0])
+        if tag:
+
+            game_ids = (
+                db.session.query(GameGenre.game_id)
+                .filter(GameGenre.genre_id == tag.genre_id)
+                .all()
+            )
+            game_ids = [game_id for (game_id,) in game_ids]
 
 
-
-    #TODO DATABASE LOOKUP FOR A VALID GENRE
-    #TODO LOOKUP ALL GAMES WITH THAT TAG IN THE GAME_GENRES
+            games = db.session.query(Game).filter(Game.game_id.in_(game_ids)).all()
 
 
+            for i, game in enumerate(games):
+                if i >= 10:
+                    break
+                images = get_game_media("images", game)
+                if images:
+                    slider_display_images.append(images[0])
 
     return slider_display_images
-
-    #TODO ITERATE THROUGH EACH GAME
-
-
-
-
-
-
-
-    # choosing what games to filter
-
-
 
 
 def get_game_media(media_type, game: Game):
@@ -76,6 +74,9 @@ def get_game_media(media_type, game: Game):
                 media_files.append({"type": "image", "url": file_url})
             elif media_type == "videos" and filename.lower().endswith((".mp4", ".webm", ".ogg")):
                 media_files.append({"type": "video", "url": file_url})
+
+    if not os.path.exists(image_path):
+        logging.warning(f"No image directory found for game_id {game.game_id}")
 
     return media_files
 

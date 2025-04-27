@@ -4,6 +4,7 @@ config.yaml
 secret.py
 game_media/
 user_profiles/
+media_files/
 
 
 # Byte-compiled / optimized / DLL files

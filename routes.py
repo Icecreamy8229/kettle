@@ -47,7 +47,9 @@ def index_route():
     start = (page - 1) * per_page
     end = start + per_page
     games = all_games[start:end]
-    return render_template('index.html',games=games,page=page, total_pages=total_pages)
+    media_files = get_game_slider_media(slider_type=SliderType.TAG, tag_type="multiplayer")
+
+    return render_template('index.html',games=games,page=page, total_pages=total_pages, media_files=media_files)
 
 @login_required
 @routes.route('/checkout', methods=['GET', 'POST',])
@@ -296,21 +298,26 @@ def login_route():
         return redirect(url_for('routes.index_route'))
 
     if request.method == "POST":
-        username = request.form['username']
+        username_or_email = request.form['username']
         password = request.form['password']
 
-        user = db.session.query(User).filter_by(user_login=username).first()
+        is_email = re.match(r"[^@]+@[^@]+\.[^@]+", username_or_email)
+
+        if is_email:
+
+            user = db.session.query(User).filter_by(user_email=username_or_email).first()
+        else:
+
+            user = db.session.query(User).filter_by(user_login=username_or_email).first()
+
         if user and user.verify_password(password):
             logging.info(f"{user.user_login} has successfully logged in")
             login_user(user)
             flash(f'You are now logged in as {user.user_login}', "success")
             return redirect(url_for('routes.index_route'))
-
         else:
-            logging.info(f"Invalid username or password, attempted login: {username}")
-            flash("Invalid username or password", "danger")
-
-
+            logging.info(f"Invalid username/email or password, attempted login: {username_or_email}")
+            flash("Invalid username/email or password", "danger")
 
 
     return render_template('login.html', title='Login')

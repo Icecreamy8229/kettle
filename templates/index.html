@@ -70,7 +70,9 @@
 }
 
     </style>
-    <link rel="stylesheet" href="{{ url_for('static', filename='slider.css') }}" />
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='slider.css') }}">
+    <script src="{{ url_for('static', filename='slider.js') }}"></script>
 
 {% endblock %}
 {% block content %}
@@ -91,6 +93,10 @@
     <div class="banner-description">
         <p>Discover new games for an affordable price</p>
     </div>
+
+    {% include 'partials/slider.html' %}
+
+
 
         <div class="pagination">
             {% if page > 1 %}
