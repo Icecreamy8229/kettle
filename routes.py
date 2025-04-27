@@ -296,10 +296,18 @@ def login_route():
         return redirect(url_for('routes.index_route'))
 
     if request.method == "POST":
-        username = request.form['username']
+        username_or_email = request.form['username']
         password = request.form['password']
 
-        user = db.session.query(User).filter_by(user_login=username).first()
+        is_email = re.match(r"[^@]+@[^@]+\.[^@]+", username_or_email)
+
+        if is_email:
+
+            user = db.session.query(User).filter_by(user_email=username_or_email).first()
+        else:
+
+            user = db.session.query(User).filter_by(user_login=username_or_email).first()
+
         if user and user.verify_password(password):
             logging.info(f"{user.user_login} has successfully logged in")
             login_user(user)
@@ -309,9 +317,6 @@ def login_route():
         else:
             logging.info(f"Invalid username or password, attempted login: {username}")
             flash("Invalid username or password", "danger")
-
-
-
 
     return render_template('login.html', title='Login')
 
