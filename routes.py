@@ -33,7 +33,7 @@ with open('config.yaml', 'r') as f:
 routes = Blueprint('routes', __name__)  # this module points to itself for routes.
 
 game_media = os.listdir("./game_media/")
-games_on_display = [directory for directory in game_media if len(os.listdir(f"./game_media/{directory}/videos")) > 0]
+games_on_display = [directory for directory in game_media if os.path.isdir(f"{game_media}/{directory}") and len(os.listdir(f"./game_media/{directory}/videos")) > 0]
 @routes.route('/')  # This is the general syntax for creating a route in flask.
 def index_route():
 
@@ -46,11 +46,17 @@ def index_route():
 
     def load_index_videos():
 
+        try:
+            selected_game_ids = random.sample(games_on_display, 3)
+        except Exception as e:
+            logging.error(f"Exception when trying to load index banner videos: {e}")
+            selected_game_ids = [338, 339, 340] #a default list.
 
-
-        selected_game_ids = random.sample(games_on_display, 3)
         #this makes sure only games that actually have a video are loaded, rather than a game with no video causing an error.
         games_selected = db.session.query(Game).filter(Game.game_id.in_(selected_game_ids)).all()
+        if not games_selected:
+            logging.error("No games selected")
+            return []
 
         for game in games_selected:
             game.video_path = get_game_media("videos", game)[0]['url']
@@ -73,11 +79,6 @@ def index_route():
     else:
         logging.info(f"Banner games loaded from session: {session.get('banner-last-set')}")
         index_banner_games = load_videos_from_session(session['index-banner-games'])
-
-
-
-
-
 
 
     return render_template('index.html',
@@ -636,7 +637,8 @@ def add_to_cart_route():
     db.session.commit()
 
     flash(f"{game.game_title} added to cart", "success")
-    return redirect(url_for('routes.index_route'))
+    logging.info(f"User: {current_user.user_login} added the game {game.game_title} to their cart.")
+    return redirect(url_for('routes.cart_route'))
 
 
 @routes.route("/remove-from-cart", methods=['POST'])
@@ -652,13 +654,14 @@ def remove_from_cart_route():
     db.session.delete(cart_item)
     db.session.commit()
     flash("Item removed from cart", "success")
+    logging.info(f"User: {current_user.user_login} removed the game with id {cart_item.game_id} from their cart.")
     return redirect(url_for('routes.cart_route'))
 
 
 @routes.route("/kettle-bird")
 @login_required
 def kettle_bird_route():
-    #TODO will want to hide behind a "paywall" eventually.
+
 
     session['flappybird_ts'] = datetime.datetime.now().timestamp()
     game_owned = db.session.query(Library).filter_by(user_id=current_user.user_id, game_id=276).first()
@@ -675,25 +678,6 @@ def kettle_bird_route():
     )
 
     return render_template('games/kettle_bird.html',highscores=highscores)
-
-@routes.route("/remove-from-cart", methods=['POST'])
-@login_required
-def remove_from_cart():
-    data = request.get_json()
-    game_id = data.get("game_id")
-
-    if not game_id:
-        return jsonify({'error': 'Game ID is required'}), 400
-
-    cart_item = db.session.query(Cart).filter_by(user_id=current_user.user_id, game_id=game_id).first()
-    
-    if not cart_item:
-        return jsonify({'error': 'Game not found in cart'}), 404
-
-    db.session.delete(cart_item)
-    db.session.commit()
-
-    return jsonify({'success': True}), 200
 
 
 @routes.route('/profile_pictures/<path:filename>')
