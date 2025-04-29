@@ -73,6 +73,13 @@
 
 
             }
+
+            #game-slider-container {
+                margin: auto;
+                width: 80%;
+                max-width: 1500px;
+
+            }
         </style>
 
     <script>
@@ -110,7 +117,7 @@
         {% include 'partials/navbar.html' %}
         {% include '/partials/flash.html' %}
 
-        <div class="outer-container">
+        <div id="game-slider-container" class="outer-container">
             <h1 id="gameTitle">{{ game.game_title }} <br>Price: ℗ {{ game.game_price }}</h1>
             {% include '/partials/slider.html' %}
         </div>
