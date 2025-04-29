@@ -19,7 +19,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from login import load_user
 from email_utils import send_verify_email, verify_token
 from sqlalchemy.exc import SQLAlchemyError
-from helper import get_game_slider_media, SliderType
+from helper import get_game_slider_media, SliderType, get_game_media
 from flask import render_template, session
 
 
@@ -34,10 +34,26 @@ with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 routes = Blueprint('routes', __name__)  # this module points to itself for routes.
 
-
 @routes.route('/')  # This is the general syntax for creating a route in flask.
 def index_route():
+
+    def load_index_videos():
+
+
+        game_media = os.listdir("./game_media/")
+        selected_game_ids = random.sample([directory for directory in game_media if len(os.listdir(f"./game_media/{directory}")) > 0], 3)
+        #this makes sure only games that actually have a video are loaded, rather than a game with no video causing an error.
+        games_selected = db.session.query(Game).filter(Game.game_id.in_(selected_game_ids)).all()
+
+        for game in games_selected:
+            game.video_path = get_game_media("videos", game)[0]['url']
+
+        return games_selected
+
+
+    index_banner_games = load_index_videos()
     page = request.args.get('page', 1, type=int)
+    print(page)
     all_games = db.session.query(Game).filter_by(game_active=True).order_by(Game.game_releasedate.desc()).all()
     per_page = 15
     total_pages = ceil(len(all_games) / per_page)
@@ -48,7 +64,11 @@ def index_route():
     start = (page - 1) * per_page
     end = start + per_page
     games = all_games[start:end]
-    return render_template('index.html',games=games,page=page, total_pages=total_pages, total_games=total_games)
+    return render_template('index.html',games=games,
+                           page=page,
+                           total_pages=total_pages,
+                           total_games=total_games,
+                           index_banner_games=index_banner_games)
 
 @login_required
 @routes.route('/checkout', methods=['GET', 'POST',])

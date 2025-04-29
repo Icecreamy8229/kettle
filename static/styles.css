@@ -61,13 +61,12 @@ body {
 }
 
 header {
-    background-image: url('images/tempbanner.png');
+    background-color: black;
     background-size: cover;
     background-position: center;
     padding: 150px 20px;
     text-align: center;
     color: rgb(255, 255, 255);
-    width: 100%;
 }
 
 header h1 {
@@ -845,29 +844,60 @@ footer ul li a:hover {
 
 }
 
-#options-row button {
+#video-banner {
+    position: relative;
 
+    overflow: hidden;
+}
+
+
+.video-wrap {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    max-width: 1920px;
+    height: 1080px;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+
+    transition: opacity 1s ease-in-out;
+
+}
+
+.banner-video {
+    width: 100%;
+    max-width: 1920px;
+    height: 1080px;
+    object-fit: contain;
+    pointer-events: none;
+    opacity: 0;
 
 
 }
 
-#options-row button {
-
-
+.banner-video.active {
+    opacity: 1;
+    pointer-events: auto;
 }
 
-/* ALERT STYLES */
-
-.
-
-/* END OF ALERT STYLES */
-
-#options-row:last-of-type(button) {
-
+.video-info {
+    margin-left: 5px;
+    position: absolute;
+    transition: opacity 1s ease-in-out;
+    top: 57%;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0,0,0,.5);
 }
 
-#options-row button {
-
+.video-info p {
+    margin: 0;
+    color: white;
 }
 
+.video-info.active {
+    opacity: 1;
+}
 

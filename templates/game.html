@@ -11,22 +11,6 @@
                 max-width: 1500px;
             }
 
-            #briefDescriptionBox {
-                padding: 15px;
-                background-color: #343538;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                margin: 20px auto;
-                width: 80%;
-                max-width: 1200px;
-                border: 1px solid #504d54;
-                color: #fff;
-                text-align: center;
-            }
-
-            #briefDescriptionBox p {
-                font-size: 16px;
-            }
-
             #genreButtons {
                 text-align: center;
                 margin: 20px 0;
@@ -80,6 +64,7 @@
                 max-width: 1500px;
 
             }
+
         </style>
 
     <script>
@@ -122,10 +107,6 @@
             {% include '/partials/slider.html' %}
         </div>
 
-        <section id="briefDescriptionBox">
-            <p>Need to fix this so its dynamically generated.</p>
-        </section>
-
         <div id="genreButtons">
             {% for genre in genres %}
                 <button class="genreButton">{{ genre.genre_tag }}</button>
@@ -138,7 +119,7 @@
         <div class="outer-container">
             <h2>About the Game</h2>
             <div class="content-container">
-                <p>{{ game.game_desc }}</p>
+                <p style="padding: 5px 15px;">{{ game.game_desc }}</p>
             </div>
         </div>
 
