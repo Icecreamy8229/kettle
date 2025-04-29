@@ -261,6 +261,10 @@ header h1 {
         width: 100%;
         padding: unset !important;
     }
+
+    #game-slider-container {
+        width: 100% !important;
+    }
 }
 
 
@@ -846,7 +850,7 @@ footer ul li a:hover {
 
 #video-banner {
     position: relative;
-
+    border: 5px solid black;
     overflow: hidden;
 }
 

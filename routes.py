@@ -4,23 +4,21 @@ import re
 from math import ceil
 
 import yaml
-from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_from_directory
+from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_from_directory, session
 import logging
 import random
 
 from flask_wtf.csrf import CSRFError
-from requests import session
 
 from models import db, User, Cart, Game, Library, Flappybird, GameGenre, Genre
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
-from werkzeug.security import check_password_hash, generate_password_hash
-from login import load_user
+
 from email_utils import send_verify_email, verify_token
-from sqlalchemy.exc import SQLAlchemyError
-from helper import get_game_slider_media, SliderType, get_game_media
-from flask import render_template, session
+
+from helper import get_game_media
+
 
 
 
@@ -36,6 +34,12 @@ routes = Blueprint('routes', __name__)  # this module points to itself for route
 
 @routes.route('/')  # This is the general syntax for creating a route in flask.
 def index_route():
+    current_time = datetime.datetime.now().timestamp()
+    def load_videos_from_session(game_list: [int]):
+        games = Game.query.filter(Game.game_id.in_(game_list)).all()
+        for game in games:
+            game.video_path = get_game_media("videos", game)[0]['url']
+        return games
 
     def load_index_videos():
 
@@ -50,10 +54,26 @@ def index_route():
 
         return games_selected
 
+    if not session.get('banner-last-set'):
+        logging.info("Banner never set, setting...")
+        session['banner-last-set'] = current_time
 
-    index_banner_games = load_index_videos()
+        index_banner_games = load_index_videos()
+        session['index-banner-games'] = [x.game_id for x in index_banner_games]
+
+    elif current_time - session.get('banner-last-set') > (60 * 60): #limited to an hour
+        logging.info(f"time delta is greater than 60 minutes, setting new banner...")
+        session['banner-last-set'] = current_time
+        index_banner_games = load_index_videos()
+        session['index-banner-games'] = [x.game_id for x in index_banner_games]
+
+    else:
+        logging.info(f"Banner games loaded from session: {session.get('banner-last-set')}")
+        index_banner_games = load_videos_from_session(session['index-banner-games'])
+
+
+
     page = request.args.get('page', 1, type=int)
-    print(page)
     all_games = db.session.query(Game).filter_by(game_active=True).order_by(Game.game_releasedate.desc()).all()
     per_page = 15
     total_pages = ceil(len(all_games) / per_page)
@@ -337,7 +357,7 @@ def login_route():
             return redirect(url_for('routes.index_route'))
 
         else:
-            logging.info(f"Invalid username or password, attempted login: {username}")
+            logging.info(f"Invalid username or password, attempted login: {username_or_email}")
             flash("Invalid username or password", "danger")
 
     return render_template('login.html', title='Login')
