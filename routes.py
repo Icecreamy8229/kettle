@@ -76,22 +76,33 @@ def index_route():
 
 
 
+
+
+
+
+    return render_template('index.html',
+                           index_banner_games=index_banner_games)
+
+
+
+
+@routes.route('/game-catalogue')
+def game_catalogue_route():
     page = request.args.get('page', 1, type=int)
     all_games = db.session.query(Game).filter_by(game_active=True).order_by(Game.game_releasedate.desc()).all()
     per_page = 15
     total_pages = ceil(len(all_games) / per_page)
     total_games = len(all_games)
-
-
     logging.debug('Index route called')
     start = (page - 1) * per_page
     end = start + per_page
     games = all_games[start:end]
-    return render_template('index.html',games=games,
+    return render_template('partials/game_catalogue.html', games=games,
                            page=page,
                            total_pages=total_pages,
                            total_games=total_games,
-                           index_banner_games=index_banner_games)
+                           )
+
 
 @login_required
 @routes.route('/checkout', methods=['GET', 'POST',])

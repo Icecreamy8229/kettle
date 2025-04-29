@@ -107,6 +107,13 @@ header h1 {
 
 
 
+.page-btn {
+
+    background: none;
+    border: none;
+    color: #000000;
+}
+
 #navbar-user-alias {
     all: unset;
     display: block;

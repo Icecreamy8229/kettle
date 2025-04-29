@@ -111,64 +111,45 @@
 
 
 
-    <div class="pagination">
-        {% if page > 1 %}
-            <a href="/?page={{ page - 1 }}">&#10094;</a>
-        {% endif %}
-        {% for p in range(1, total_pages + 1) %}
-            {% if p == page %}
-                <strong>{{ p }}</strong>
-            {% else %}
-                <a href="/?page={{ p }}">{{ p }}</a>
-
-            {% endif %}
-        {% endfor %}
-        {% if page < total_pages %}
-            <a href="/?page={{ page + 1 }}">&#10095;</a>
-        {% endif %}
-    </div>
-
-
-        <main>
-
-            <div class="outer-container">
-            <h1>Kettle Game Catalog: <br> {{ total_games }} Games Total</h1>
-                <div  class="content-container bg-kettle">
-
-
-                    {% include '/partials/searchbar.html' %}
 
 
 
-
-
-                    <div id="results-container" class="games-container">
-                        {% for game in games %}
-                            <a href="{{ url_for('routes.game_route') }}?id={{ game.game_id }}" class="hitbox">
-                                <div class="content">
-                                    <img src="../game_media/{{ game.game_id }}/cover/cover.png" alt="Game Image" class="gameImage">
-                                    <div class="text-container">
-                                        <h3>{{ game.game_title }}</h3>
-                                    </div>
-
-                                    <p class="price">℗ {{ game.game_price }}</p>
+        <main id="index-catalogue-container">
 
 
 
-                                </div>
-
-                            </a>
-                        {% endfor %}
-                    </div>
-
-                </div>
-
-
-            </div>
         </main>
 </body>
 {% include "footer.html" %}
 {% endblock %}
 {% block aftercontent %}
     <script src="/static/banner-rotator.js"></script>
+    <script defer>
+        function loadPage(page) {
+    fetch(`/game-catalogue?page=${page}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}`);
+            }
+            return response.text(); // Expecting HTML, not JSON
+        })
+        .then(html => {
+            document.getElementById('index-catalogue-container').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error loading page:', error);
+        });
+    }
+
+    // Load first page on initial page load
+    loadPage(1);
+
+    // Add click listeners to page buttons
+    document.querySelectorAll('.page-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const page = button.dataset.page;
+            loadPage(page);
+        });
+    });
+    </script>
 {% endblock %}
