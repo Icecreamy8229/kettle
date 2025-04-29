@@ -18,7 +18,7 @@ You can see an example of how its being done in the game route.
                     </div>
                 {% elif media.type == 'video' %} {# This is probably broken for videos #}
                     <div class="slide">
-                    <video id="slide-{{ loop.index }}" controls>
+                    <video autoplay muted id="slide-{{ loop.index }}" controls>
                         <source src='{{ media.url }}' type="video/mp4">
                         Your browser does not support the video tag.
                     </video>

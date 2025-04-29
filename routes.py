@@ -277,8 +277,9 @@ def game_route():
 
 
     media_files = []
-    media_files.extend(get_game_media("images", game))
     media_files.extend(get_game_media("videos", game))
+    media_files.extend(get_game_media("images", game))
+
 
 
     return render_template(
