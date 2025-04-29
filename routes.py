@@ -32,6 +32,8 @@ with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 routes = Blueprint('routes', __name__)  # this module points to itself for routes.
 
+game_media = os.listdir("./game_media/")
+games_on_display = [directory for directory in game_media if len(os.listdir(f"./game_media/{directory}/videos")) > 0]
 @routes.route('/')  # This is the general syntax for creating a route in flask.
 def index_route():
 
@@ -45,8 +47,8 @@ def index_route():
     def load_index_videos():
 
 
-        game_media = os.listdir("./game_media/")
-        selected_game_ids = random.sample([directory for directory in game_media if len(os.listdir(f"./game_media/{directory}/videos")) > 0], 3)
+
+        selected_game_ids = random.sample(games_on_display, 3)
         #this makes sure only games that actually have a video are loaded, rather than a game with no video causing an error.
         games_selected = db.session.query(Game).filter(Game.game_id.in_(selected_game_ids)).all()
 
