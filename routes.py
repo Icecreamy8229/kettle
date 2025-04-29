@@ -34,6 +34,7 @@ routes = Blueprint('routes', __name__)  # this module points to itself for route
 
 @routes.route('/')  # This is the general syntax for creating a route in flask.
 def index_route():
+
     current_time = datetime.datetime.now().timestamp()
     def load_videos_from_session(game_list: [int]):
         games = Game.query.filter(Game.game_id.in_(game_list)).all()
@@ -45,7 +46,7 @@ def index_route():
 
 
         game_media = os.listdir("./game_media/")
-        selected_game_ids = random.sample([directory for directory in game_media if len(os.listdir(f"./game_media/{directory}")) > 0], 3)
+        selected_game_ids = random.sample([directory for directory in game_media if len(os.listdir(f"./game_media/{directory}/videos")) > 0], 3)
         #this makes sure only games that actually have a video are loaded, rather than a game with no video causing an error.
         games_selected = db.session.query(Game).filter(Game.game_id.in_(selected_game_ids)).all()
 
