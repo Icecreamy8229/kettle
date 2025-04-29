@@ -38,17 +38,9 @@ function returnResults(user_query) {
     })
 }
 
-function clearSearch() {
-    const searchInput = document.getElementById('searchInput');
-    searchInput.value = '';
-    document.getElementById('results-container').innerHTML = '';
-
-    const homeUrl = document.getElementById('home-url').getAttribute('data-url');
-    window.location.href = homeUrl;
-}
-
 const searchBar = document.getElementById('searchInput');
 searchBar.addEventListener('input', function() {
+    console.log("searchBar event listener loaded");
     clearTimeout(timeout);
     timeout = setTimeout(() => {
         returnResults(searchBar.value);
