@@ -106,6 +106,7 @@ header h1 {
 
 
 
+
 #navbar-user-alias {
     all: unset;
     display: block;
@@ -264,6 +265,10 @@ header h1 {
 
     #game-slider-container {
         width: 100% !important;
+    }
+
+    .cart-image {
+        height: 45px !important;
     }
 }
 

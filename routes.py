@@ -10,7 +10,7 @@ import random
 
 from flask_wtf.csrf import CSRFError
 
-from models import db, User, Cart, Game, Library, Flappybird, GameGenre, Genre
+from models import db, User, Cart, Game, Library, Flappybird, GameGenre, Genre, Order
 from flask_login import LoginManager, login_required, login_user, current_user, logout_user
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
@@ -116,10 +116,20 @@ def checkout_route():
         return redirect(url_for('routes.cart_route'))
 
     current_user.user_balance -= total_price
-    db.session.flush()
+
     for cart_item in users_cart:
+
+
         db.session.add(Library(user_id=current_user.user_id, game_id=cart_item.game_id))
+
         db.session.delete(cart_item)
+    db.session.flush()
+
+    for game in games:
+        order = Order(order_userid=current_user.user_id, order_gid=game.game_id, order_gtitle=game.game_title,
+                      order_price=game.game_price)
+        db.session.add(order)
+
     db.session.commit()
 
     return render_template('checkout.html', title='Checkout', purchases=games, total_price=total_price)
