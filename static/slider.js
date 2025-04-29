@@ -9,6 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 })
+function videoPauseReset(element) {
+    const video = element.querySelector('video');
+    if (video) {
+        video.pause();
+        video.currentTime = 0;
+
+    }
+}
+
 function moveToSlide(index) {
     const slideButtons = document.querySelectorAll('.slide-button');
     const items = document.querySelectorAll('.slide');
@@ -20,6 +29,7 @@ function moveToSlide(index) {
     if (totalSlides === 0 || index < 0 || index >= totalSlides) return; //this is a failsafe.  just an early return if the index is outside of the realm of possibility
 
     // Remove active class from slide and button
+    videoPauseReset(items[currentIndex]);
     items[currentIndex].classList.remove('active');
     slideButtons[currentIndex].classList.remove('active');
 
@@ -49,6 +59,7 @@ function moveSlide(step) {
     if (totalSlides === 0) return; // Prevent errors if no slides exist
 
     // Remove active class from the current slide
+    videoPauseReset(items[currentIndex]);
     items[currentIndex].classList.remove('active');
     slideButtons[currentIndex].classList.remove('active');
 
