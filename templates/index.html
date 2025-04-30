@@ -1,103 +1,156 @@
-<!-- Rough draft created on 2/16 -->
-<!-- Edited on 2/18 -->
-
-<!-- Temporary nav bar -->
 {% extends 'base.html' %}
 {% block head %}
     <style>
-        .gameList table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 0;
-            margin-bottom: 0;
-        }
+    .hitbox {
+        display: block;
+        padding: 20px;
+        background-color: #121212;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+        margin-bottom: 5px;
+    }
+
+    .hitbox:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }   
+
+    .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
 
 
-        .gameList th, .gameList td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            color: white;
-        }
+    .content-container {
+        padding: 0 2em;
+    }
+
+    .text-container {
+        flex-grow: 1;
+    }
+
+    h3 {
+        font-size: 18px;
+        margin: 0;
+        text-align: left;
+    }
+
+    .price {
+        font-size: 16px;
+        font-weight: bold;
+        white-space: nowrap;
+        margin-left: auto;
+    }
+
+    .outer-container {
+
+        width: 100%;
+        margin: 0 auto;
+        max-width: 1000px;
+    }
 
 
-        .gameList th {
-            background-color: transparent;
-        }
 
+    button {
 
-        .gameItem td {
-            vertical-align: middle;
-        }
+        cursor: pointer;
+        margin-left: 10px;
+        background-color: white;
+        color: black;
+        border: none;
+    }
 
-        .gameInfo {
-            display: inline-block;
-            width: 100%;
-        }
-
-        .gameImage {
-            width: 100px;
-            height: auto;
-            margin-right: 20px;
-        }
-
-        .gameItem h3 {
-            font-size: 18px;
-            margin: 0;
-            display: inline-block;
-            color: white;
-        }
+    button:hover {
+        background-color: #ddd;
+}
 
     </style>
+
+
+
+
 {% endblock %}
 {% block content %}
 
 
+
 <body>
-    {% include 'navbar.html' %}
-    {% include 'flash.html' %}
+    {% include 'partials/navbar.html' %}
+    {% include 'partials/flash.html' %}
 
     
-    <!-- Banner -->
-    <header>
-        <h1>KETTLE COOL BANNER PLACEHOLDER</h1>
+
+    <header id="video-banner">
+        {% for game in index_banner_games %}
+
+            <div class="video-wrap">
+                <video class="banner-video" autoplay muted src="{{ game.video_path }}"></video>
+                <div class="video-info">
+                    <p>Game: {{ game.game_title }}</p>
+                    <p>Released: {{ game.game_releasedate }}</p>
+
+                </div>
+
+            </div>
+        {% endfor %}
+
     </header>
 
-    <!-- Small description text below the banner -->
+
+
     <div class="banner-description">
-        <p>Discover new games for an affordable price or whatever text we might want here! </p>
+        <p>Discover new games for an affordable price</p>
+    </div>
 
-    {% if current_user.is_authenticated and current_user.user_verified %}
-        <div>
-        <h2>Want to add a game?</h2>
-        <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Click here</button>
-        </div>
-    {% endif %}
 
-    <main>
-        <!-- Container to hold game content and display them in a table-->
-        <div class="container">
-            <section class="gameList">
-                <table>
-                    <thead>
-                    </thead>
-                    <tbody>
-                        {% for game in games %}
-                            <tr class="gameItem">
-                                <td class="gameInfo">
-                                    <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="Game 1" class="gameImage">
-                                    <h3><a href="{{ url_for('routes.game_route') }}?id={{ game.game_id }}">{{ game.game_title }}</a></h3>
-                                </td>
-                                <td class="price">{{ game.game_price }}</td>
-                                <td><button class="buyButton">Add to cart</button></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </section>
-        </div>
-    </main>
+
+
+
+
+
+        {% include '/partials/searchbar.html' %}
+        <main id="index-catalogue-container">
+
+
+
+        </main>
 </body>
-
 {% include "footer.html" %}
+{% endblock %}
+{% block aftercontent %}
+    <script src="/static/banner-rotator.js"></script>
+    <script defer>
+        function loadPage(page) {
+    fetch(`/game-catalogue?page=${page}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}`);
+            }
+            return response.text(); // Expecting HTML, not JSON
+        })
+        .then(html => {
+            document.getElementById('index-catalogue-container').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error loading page:', error);
+        });
+    }
+
+    // Load first page on initial page load
+    loadPage(1);
+
+    // Add click listeners to page buttons
+    document.querySelectorAll('.page-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const page = button.dataset.page;
+            loadPage(page);
+        });
+    });
+    </script>
+    <script src="/static/searchbar.js" defer></script>
 {% endblock %}

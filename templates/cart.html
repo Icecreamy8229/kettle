@@ -1,33 +1,30 @@
 {% extends "base.html" %}
 {% block head %}
 <style>
-    .container {
+    .content-container {
         text-align: center;
         color: white;
     }
 
-    .container hr {
+    .content-container hr {
         width: 100%;
         margin: 20px auto;
         border: 1px solid black;
     }
 
     .cart-list {
-        display: flex;
+
         justify-content: center;
         flex-wrap: wrap;
     }
 
-    .cart-item-wrapper {
-        position: relative;
-    }
 
     .cart-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 300px;
-        height: 60px;
+        width: 100%;
+        height: 100px;
         border: 1px solid black;
         background-color: #4c1d70;
         padding: 10px;
@@ -35,7 +32,16 @@
         margin-bottom: 15px;
     }
 
+    .cart-image {
+        border: 1px solid black;
+
+        height: 100%;
+        width: auto;
+    }
+
+
     .cart-image-title {
+        height: 100%;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -98,12 +104,41 @@
     }
     
 </style>
+
+<script>
+    function removeFromCart(gameId, buttonElement) {
+        fetch('/remove-from-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ game_id: gameId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the cart item from the UI
+                let cartItemWrapper = buttonElement.closest(".cart-item-wrapper");
+                cartItemWrapper.remove();
+
+                // Optionally, update total points in the UI
+                let totalPointsElement = document.querySelector('.payment-row h5:last-child');
+                let currentTotal = parseInt(totalPointsElement.innerText) || 0;
+                let gamePoints = parseInt(buttonElement.dataset.points) || 0;
+                totalPointsElement.innerText = (currentTotal - gamePoints) + " Points";
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+}
+</script>
 {% endblock %}
 
 {% block content %}
 <body>
-    {% include "navbar.html" %}
-    {% include "flash.html" %}
+    {% include "partials/navbar.html" %}
+    {% include "partials/flash.html" %}
 
     {% if games %}
         <div class="container">
@@ -118,24 +153,33 @@
                     <div class="cart-item-wrapper">
                         <div class="cart-item">
                             <div class="cart-image-title">
-                                <img src="{{ game.image_url }}" alt="{{ game.name }}" width="40" height="40">
-                                <h5>{{ game.name }}</h5>
+                                <img class="cart-image" src="/game_media/{{ game.game_id }}/cover/cover.png" alt="{{ game.game_title }}">
+                                <h5>{{ game.game_title }}</h5>
                             </div>
                             <div class="cart-item-points">
-                                <p>{{ game.points }} Points</p>
+                                <p>{{ game.game_price }} Points</p>
                             </div>
+                            <form action="{{ url_for('routes.remove_from_cart_route') }}" method="POST">
+                                <input type="hidden" name="game_id" value="{{ game.game_id }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <button type="submit" class="btn btn-danger">X</button>
+                            </form>
                         </div>
-                        <button class="remove" onclick="this.parentElement.style.display='none'">X</button>
                     </div>
+                        
                     {% endfor %}
                 </div>
                 <hr>    
                 <div class="payment-container">
                     <div class="payment-row">
-                        <h5>Total Points:</h5>
-                        <h5>{{ total_points }} Points</h5>
+                        <h5>Total Cost:</h5>
+                        <h5>{{ total_price }} Points</h5>
                     </div>
-                    <button class="btn btn-primary purchase-btn">Purchase</button>
+
+                    <form method="GET" action="/checkout">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <button class="btn btn-primary purchase-btn">Purchase</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -144,7 +188,7 @@
     <div class="no-games">
         <h2> ... Theres nothing here ?!</h2>
         <br>
-        <a href="{{ url_for('routes.store_route') }}">Get some games!</a>
+        <a href="{{ url_for('routes.index_route') }}">Get some games!</a>
     </div>
     {% endif %}
 

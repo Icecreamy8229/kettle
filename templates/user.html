@@ -1,27 +1,149 @@
 {% extends 'base.html' %}
+
+{#
+
+{% if current_user.is_authenticated and current_user.user_privilege > 0 %}
+                            <button class="purple-button" onclick="window.location.href='{{ url_for('routes.submission_route') }}'">Upload a Game</button>
+                        {% endif %}
+#}
+
+
+{% block head %}
+    <style>
+    form, form div input {
+        text-align: center;
+
+    }
+
+    .user-content * {
+        display: block;
+    }
+
+    .content-container {
+        max-width: 650px;
+        min-width: 340px;
+        position: relative;
+    }
+
+    .outer-container {
+        max-width: 650px;
+        margin: auto;
+    }
+
+    label {
+        color: white;
+    }
+
+    input, textarea, .password-section {
+        width: 100%;
+        max-width: 100%;
+        margin: 8px auto;
+        padding: 10px 14px;
+        font-size: 14px;
+        font-family: 'Courier New', monospace;
+        color: #121212;
+        background-color: #f8f8f8;
+        border: 2px solid #4C1D70;
+        border-radius: 4px;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    }
+
+    .password-section {
+        background: url('../static/images/kettlebackground1.png'); /* intentional bad link to match container background */
+    }
+
+    .password-section #validate-emoji {
+        font-size: 28px;
+    }
+
+    .password-section h1 {
+        font-family: 'Silkscreen', sans-serif;
+    }
+        
+    </style>
+{% endblock %}
+
 {% block content %}
+    {% include 'partials/flash.html' %}
+    {% include 'partials/navbar.html' %}
+    <div class="outer-container">
+        <h1>User Information & Settings</h1>
+        <h1>{{ current_user.user_alias }}'s Balance: ℗ {{ current_user.user_balance }}</h1>
+        <div class="content-container bg-kettle">
+            {# Add points top left #}
+            <button id="togglePointsForm">💳 Add Points</button>
+            {# Submit top right #}
+            <button class="save-button" type="submit" form="userForm">Save<br> Changes</button>
 
-    {#
-        Checklist for settings:
-        Alias change
-        pass change
-        Profile Picture change
-        Transaction history?
-        Delete Account?
+            {# Modal for adding points #}
+            <div id="pointsModalOverlay">
+                <div>
+                    <button id="closePointsModal">×</button>
+                    <h3>Mock Digital Transaction</h3>
+                    <form id="addPointsForm">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <label>Card Number</label>
+                        <input type="text" placeholder="1234 5678 1234 5678" readonly>
+                        <label>Expiration</label>
+                        <input type="text" placeholder="12/77" readonly>
+                        <label>CVV</label>
+                        <input type="text" placeholder="321" readonly>
+                        <input type="hidden" name="game-points" value="5000">
+                        <button type="submit">➕ Add 5000 Points</button>
+                    </form>
+                </div>
+            </div>
 
-        Display:
-        Username
-        Alias
-        Email
-        Profile Picture
-        Bio
-        Transaction History
-        Delete Account
-        
-    #}
-    
+            <form id="userForm" class="user-content" action="{{ url_for('routes.update_user_route') }}" method="POST" enctype="multipart/form-data" style="padding-top: 60px;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="profile-content">
+                    <div class="profile-picture">
+                        <img id="profile-img" src="{{ get_profile_picture(current_user) }}" alt="Profile Picture">
+                        <div class="hover-overlay">Update Picture</div>
+                        <label for="upload-image" class="upload-button">📷 Change</label>
+                        <input type="file" id="upload-image" name="profile_picture" accept="image/*" onchange="validateImagesAndVideos()" hidden>
+                    </div>
+                </div>
+                <input type="text" id="username" name="username" class="username" placeholder="{{ current_user.user_login }}" readonly>
+                <input type="email" id="email" name="email" class="email" placeholder="{{ current_user.user_email }}" readonly>
+                <input type="text" 
+                    id="alias" 
+                    name="alias" 
+                    class="custom-username" 
+                    placeholder="Alias" 
+                    value="{{ current_user.user_alias }}" 
+                    required
+                    minlength="3"
+                    maxlength="20"
+                    pattern=".*\S.*"
+                    oninput="validateAliasInput(this)">
+
+                <div class="bio-section">
+                    <label for="profile-bio"><h1>Bio</h1></label>
+                    <textarea class="profile-bio" name="bio" placeholder="About me">{{ current_user.user_bio }}</textarea>
+                </div>
+
+                <div class="password-section">
+                    <label for="profile-bio"><h1>Change Password</h1></label>
+                    <input type="password" id="current-password" name="current_password" class="current-pass" placeholder="Current Password">
+                    <p style="display: inline-block" id="validate-emoji"> </p>
+                    <input type="password" id="new-password" name="new_password" class="password-change" placeholder="New Password" disabled>
+                    <input type="password" id="confirm-password" name="confirm_password" class="password-change" placeholder="Confirm New Password" disabled>
+                </div>
+            </form>
+        </div>
+    </div>
+    </body>
+
+{% include 'footer.html' %}
+{% endblock %}
+
+{% block aftercontent %}
     <script>
-        
+
+        //upload image for profile picture
         document.getElementById('upload-image').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -32,55 +154,184 @@
                 reader.readAsDataURL(file);
             }
         });
+
+        //validate password before change
+        function validatePassword(plaintext_password) {
+            const validateEmoji = document.getElementById('validate-emoji');
+
+            const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+            fetch('{{ url_for("routes.update_user_route") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                },
+                body: JSON.stringify({ password: plaintext_password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valid) {
+                    validateEmoji.innerHTML = "✅";
+                    document.getElementById('new-password').disabled = false;
+                    document.getElementById('confirm-password').disabled = false;
+                } else {
+                    validateEmoji.innerHTML = "❌";
+                    document.getElementById('new-password').disabled = true;
+                    document.getElementById('confirm-password').disabled = true;
+                }
+            });
+        }
+
+
+        //input validation for images
+        function validateImagesAndVideos() {
+            const maxImageSize = 1 * 1024 * 1024; //1MB
+
+            const imageInput = document.getElementById("upload-image");
+
+            const imageFiles = imageInput.files;
+
+            for (let file of imageFiles) {
+                if (file.size > maxImageSize) {
+                    alert("Profile Picture file must be smaller than 1MB.");
+                    imageInput.value = "";
+                    return false;
+                }
+            }
+            return true;
+        }
+        let timeout = null;
+        const currentPassword = document.getElementById('current-password');
+
+        currentPassword.addEventListener('input', function() {
+            console.log("user started typing");
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                console.log("User stopped typing, sending data.");
+                validatePassword(currentPassword.value);
+
+            }, 1000);
+
+        });
+
+        //input validation for alias
+        function validateAliasInput(input) {
+            const trimmedValue = input.value.trim();
+            if (trimmedValue.length < 3 || trimmedValue.length > 20) {
+                input.setCustomValidity("Alias must be 3-20 characters and not just whitespace.");
+            } else {
+                input.setCustomValidity("");
+            }
+        }
+
+        // Add Points Modal Logic
+        const toggleBtn = document.getElementById('togglePointsForm');
+        const modalOverlay = document.getElementById('pointsModalOverlay');
+        const closeModalBtn = document.getElementById('closePointsModal');
+
+        toggleBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'flex';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
+
+        // Track cumulative points added
+        let totalPointsAdded = 0;
+
+        document.getElementById('addPointsForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const form = this;
+            const formData = new FormData(form);
+            const points = formData.get("game-points");
+
+            if (!points || isNaN(points)) {
+                console.error("⚠️ Invalid points value.");
+                return;
+            }
+
+            const pointsToAdd = parseInt(points);
+            const submitButton = form.querySelector('button[type="submit"]');
+            const modalOverlay = document.getElementById('pointsModalOverlay');
+
+            try {
+                const response = await fetch('/add-game-points', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers.get('content-type'));
+                const text = await response.text();
+                console.log('Response text:', text);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}: ${text}`);
+                }
+
+                const result = JSON.parse(text);
+                totalPointsAdded += pointsToAdd; // Update the cumulative total
+
+                // Clear any old messages
+                form.querySelectorAll(".status-msg").forEach(el => el.remove());
+
+                // Display the cumulative total
+                const successMsg = document.createElement('p');
+                successMsg.className = 'status-msg';
+                successMsg.textContent = `✅ ${totalPointsAdded} Points Added Total!`;
+                successMsg.style.color = 'green';
+                successMsg.style.fontWeight = 'bold';
+                successMsg.style.textAlign = 'center';
+                successMsg.style.marginTop = '16px';
+                form.appendChild(successMsg);
+
+                submitButton.disabled = true;
+                submitButton.textContent = "✓ Added";
+
+                // Update balance dynamically
+                const balanceElement = document.querySelector('h1:nth-of-type(2)');
+                const currentBalance = parseInt(balanceElement.textContent.match(/\d+/)[0]);
+                // Extract the alias from the balance element's text
+                const aliasMatch = balanceElement.textContent.match(/^(.+)'s Balance:/);
+                const userAlias = aliasMatch ? aliasMatch[1] : 'User'; // Fallback to 'User' if alias not found
+                balanceElement.textContent = `${userAlias}'s Balance: ℗ ${currentBalance + pointsToAdd}`;
+
+                // Close modal without reload
+                document.getElementById('closePointsModal').addEventListener('click', () => {
+                    modalOverlay.style.display = 'none';
+                    submitButton.disabled = false; // Re-enable button for next use
+                    submitButton.textContent = "➕ Add 5000 Points";
+                });
+                window.addEventListener('click', (e) => {
+                    if (e.target === modalOverlay) {
+                        modalOverlay.style.display = 'none';
+                        submitButton.disabled = false; // Re-enable button for next use
+                        submitButton.textContent = "➕ Add 5000 Points";
+                    }
+                });
+            } catch (err) {
+                console.error("Failed to add points:", err);
+                form.querySelectorAll(".status-msg").forEach(el => el.remove());
+                const errorMsg = document.createElement('p');
+                errorMsg.className = 'status-msg';
+                errorMsg.textContent = `⚠️ Failed to add points: ${err.message}`;
+                errorMsg.style.color = 'red';
+                errorMsg.style.fontWeight = 'bold';
+                errorMsg.style.textAlign = 'center';
+                errorMsg.style.marginTop = '16px';
+                form.appendChild(errorMsg);
+            }
+        });
+
     </script>
-
-    
-
-    <body>
-    {% include 'navbar.html' %}  {# Any element that is visible to the user needs to be inside the body element. moving include down here. #}
-        <div class="profile-container">
-            <title>User Page</title>
-            <h1>User Information & Settings Page</h1>
-            <div class="username-display"></div>
-
-            <form action="" method="POST" enctype="multipart/form-data">
-            <div class="profile-content">
-                <div class="profile-picture">
-                    <img id="profile-img" src="{{ get_profile_picture(current_user) }}" alt="Profile Picture">
-                </div>
-                <div class="profile-upload">
-                    <input type="file" id="upload-image" accept="image/*" hidden>
-                    <label for="upload-image" class="upload-button">Upload File for Profile Picture</label>
-                </div>
-            </div>
-            <input type="text" id="username" class="username" placeholder="Username" value="" readonly>
-            <input type="email" id="email" class="username" placeholder="Email" value="" readonly>
-            <input type="text" id="alias" class="custom-username" placeholder="Alias" value="">
-
-            <div class="bio-section">
-                <textarea class="profile-bio" placeholder="About me"></textarea>
-
-                {# temporary games section #}
-                <h2>Favorite Games</h2>
-                <div class="games-section">
-                    <div class="slider-wrapper">
-                    <button class="previous" onclick="moveSlider(-1)">&#10094;</button> {# left arrow #}
-                    <div class="slider">
-                        <img id="game1" src="../game_media/1/images/cover.png" alt="bald-mans-gate-3">
-                        <img id="game2" src="../static/images/games/showerwithyourdad2077.png" alt="shower-with-your-dad-2077">
-                        <img id="game3" src="../game_media/2/images/cover.png" alt="cyber-drunk-2077">
-                    
-                    </div>
-                    <button class="next" onclick="moveSlider(1)">&#10095;</button> {# right arrow #}
-                    </div>
-                </div>
-            </div>
-            <button class="save-button">Save Changes</button>
-            </form>
-        </div>
-    </body>
-
-{% include 'footer.html' %}
 {% endblock %}
-
 

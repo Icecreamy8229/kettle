@@ -1,0 +1,28 @@
+body {
+
+
+}
+
+#select-difficulty-menu {
+    text-align: center;
+    margin: 10px;
+}
+
+#highscores-div {
+    margin: 10px;
+    text-align: center;
+}
+
+h1 {
+    color: white;
+}
+
+#board {
+    font-family: 'Courier New', Courier, monospace;
+    margin: auto;
+
+    background-image: url("/static/kettlebird/images/flappybirdbg.png");
+    background-repeat: no-repeat;
+    width: 360px;
+    height: 640px;
+}

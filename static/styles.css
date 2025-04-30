@@ -1,28 +1,72 @@
+
+
 /* General body styles */
 html, body {
     height: 100%;
     margin: 0;
     display: flex;
     flex-direction: column;
-    font-family: 'Roboto', sans-serif;
-    background-color: #121212;
+    font-family: 'Silkscreen', sans-serif;
     color: #A9A9A9;
     padding: 0;
     overflow-x: hidden;
 }
 
+
+
+
+
+button {
+    font-family: 'Silkscreen', sans-serif;
+    font-size: 1.1em;
+
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: 500;
+}
+
+body {
+    /*
+    background: url('../static/images/kettlebg.png') repeat;
+    */
+    background: linear-gradient(to bottom, #40798C, #075c73, #000000);
+}
+
+.flash-msg {
+    text-align: center;
+    position: absolute;
+    top: 100px;
+    left: 30%;
+    width: 40%;
+    z-index: 100;
+}
+
+.flash-msg button {
+    padding: 0;
+    margin: 0;
+    justify-self: center;
+}
+
+
 .content {
     flex: 1;
 }
 
+
+.gameImage {
+        width: auto;
+        height: 80px;
+        margin-right: 15px;
+}
+
 header {
-    background-image: url('images/tempbanner.png');
+    background-color: black;
     background-size: cover;
     background-position: center;
     padding: 150px 20px;
     text-align: center;
     color: rgb(255, 255, 255);
-    width: 100%;
 }
 
 header h1 {
@@ -30,34 +74,91 @@ header h1 {
     font-size: 48px;
 }
 
-.navbar {
+#navbar {
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 90;
     background-color: #030303;
+    box-shadow: #4C1D70 0 5px 1em;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 20px 20px;
     margin-bottom: 25px;
 }
 
-.navbar img {
-    height: 50px;
-    width: auto;
-    margin: 5px 15px;
-}
-
-.navbar .navbar-pp {
-    border-radius: 1rem;
-}
-
-.navbar .links {
+.navbar-user-div {
+    flex: 1;
+    justify-content: flex-end;
     display: flex;
+    width: 300px;
     align-items: center;
 }
 
-.navbar .links a {
+.navbar-user-div > * {
+    padding: 0 10px;
+}
+
+.navbar-user-div .cart-icon {
+    height: 50px;
+
+}
+
+
+
+
+.page-btn {
+
+    background: none;
+    border: none;
+    color: #000000;
+}
+
+#navbar-user-alias {
+    all: unset;
+    display: block;
+    color: white;
+    font-size: 16px;
+    overflow: hidden;
+    text-align: center;
+    justify-self: center;
+
+
+}
+
+#navbar-logo {
+    flex: 1;
+
+}
+
+
+#navbar-logo img {
+
+    height: 60px;
+    width: auto;
+
+
+}
+
+#navbar .navbar-pp {
+
+    border-radius: 1rem;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 2px solid #4C1D70;
+    overflow: hidden;
+}
+
+.links {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+#navbar .links a {
     color: white;
     text-decoration: none;
     margin-left: 20px;
@@ -66,12 +167,12 @@ header h1 {
     transition: background-color 0.3s ease;
 }
 
-.navbar .links a:hover {
+#navbar .links a:hover {
     background-color: #371055;
     border-radius: 4px;
 }
 
-.navbar .login-signup {
+#navbar .login-signup {
     background-color: #4C1D70;
     color: #371055;
     border: none;
@@ -81,9 +182,103 @@ header h1 {
     margin-left: 20px;
 }
 
-.navbar .login-signup:hover {
-    background-color: #f1f1f1;
+#navbar .login-signup:hover {
+    background-color: #1c1d1f;
 }
+
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.navbar-toggle span {
+    background-color: white;
+    height: 3px;
+    border-radius: 2px;
+    width: 100%;
+    display: block;
+}
+
+#navbar .links a.active-link,
+#navbar .login-signup.active-link {
+    color: #a1bfbe;
+    font-weight: bold;
+}
+
+
+
+@media (max-width: 768px) {
+    #navbar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar-toggle {
+        display: flex;
+        order: 3;
+        margin-left: auto;
+    }
+
+    .links.collapsible {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background-color: #000000;
+        z-index: 100;
+        display: none;
+    }
+
+    .links.collapsible.active {
+        display: flex;
+    }
+
+    .links.collapsible a {
+        margin: 10px 0;
+        padding: 10px 20px;
+    }
+
+    #navbar-logo {
+        flex: none;
+        order: 1;
+    }
+
+    .navbar-user-div {
+        order: 2;
+        width: auto;
+        margin-top: 0;
+    }
+
+    .gameImage {
+        height: 45px;
+    }
+
+    #results-container {
+        width: 97%;
+        margin: auto;
+
+
+    }
+    .content-container {
+        width: 100%;
+        padding: unset !important;
+    }
+
+    #game-slider-container {
+        width: 100% !important;
+    }
+
+    .cart-image {
+        height: 45px !important;
+    }
+}
+
 
 .banner-description {
     text-align: center;
@@ -93,15 +288,69 @@ header h1 {
     margin-bottom: 80px;
 }
 
-.container {
-    max-width: 1200px;
+
+.bg-kettle {
+    background: url('../static/images/kettlebg.png') repeat;
+}
+
+.outer-container {
+    justify-self: center;
+
+}
+
+.outer-container h1,
+.outer-container h2 {
+    font-size: 36px;
+    text-align: center;
+    color: white;
+    background-color: #1e1e1e;
+    margin: 0;
+
+}
+
+
+.bg-kettle {
+    background: url(../static/images/kettlebg.png) repeat;
+}
+
+
+.pagination {
+    justify-content: center;
+
+}
+
+.pagination strong, .pagination a {
+
+    padding: 0 15px;
+    font-size: 1.2em;
+}
+
+.pagination strong {
+    color: white;
+}
+
+.pagination a {
+    color: grey;
+}
+
+.content-container {
+    /* Container for the main content */
+
     margin: 0 auto;
-    background-color: #343538;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #504d54;
     padding-top: 30px;
     padding-bottom: 50px;
     border-radius: 0;
+    background-color: #343538;
+
+}
+
+
+
+.content-container p,
+.content-container input {
+    font-family: 'Roboto', sans-serif;
 }
 
 .price {
@@ -123,9 +372,10 @@ header h1 {
 }
 
 .buyButton:hover {
-    background-color: #ddd;
+    background-color: #371055;
 }
 
+/* User Styles */
 .profile-container {
     background: #121212;
     padding: 50px;
@@ -136,20 +386,42 @@ header h1 {
 
 .profile-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .profile-picture {
+    position: relative;
     width: 150px;
     height: 150px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #ccc;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.profile-picture .hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.profile-picture:hover .hover-overlay {
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .profile-picture img {
@@ -171,29 +443,258 @@ header h1 {
 }
 
 .upload-button {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #4caf50;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #4C1D70;
     color: white;
-    border: none;
     border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     cursor: pointer;
     text-align: center;
-    font-size: 14px;
+    white-space: nowrap;
 }
 
-.username, .custom-username, .profile-bio {
-    width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 18px;
+.profile-picture:hover .upload-button {
+    opacity: 1;
+}
+
+.password-section {
+    border: 1px solid white;
+    border-radius: .5em;
+    margin: 10px 0 0 0;
+    padding: 5px;
+
 }
 
 .bio-section {
     text-align: left;
-    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.profile-bio {
+    height: 175px;
+}
+
+.save-button {
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 120px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px; 
+}
+
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: solid #4C1D70;
+}
+
+.user-header {
+    text-align: center;
+}
+
+.user-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 50px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+/* User add points styles */
+#togglePointsForm {
+    background-color: #4C1D70;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 120px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+#addPointsForm button[type="submit"] {
+    background-color: #4C1D70;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 14px;
+    width: 100%;
+}
+
+#closePointsModal {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#pointsModalOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+#pointsModalOverlay > div {
+    background: url(../static/images/kettlebg.png) repeat;
+    border: 2px solid #4C1D70;
+    border-radius: 10px;
+    padding: 24px;
+    width: 300px;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+
+/* Library styles */
+.library-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 20px 0;
+    gap: 25px;
+}
+
+.library-item {
+    background-color: #343538;
+    border: solid 4px #4C1D70;
+    border-radius: 10px;
+    display: block;
+    flex-direction: column;
+    padding: 15px;
+    box-shadow: 0 6px 10px rgba(76, 29, 112, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    min-height: 220px;
+    overflow: hidden;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.library-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 15px rgba(76, 29, 112, 0.7);
+    background-color: #4C1D70;
+    cursor: pointer;
+}
+
+.library-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 15px;
+    text-decoration: none;
+}
+
+.library-content > div:first-child {
+    background-color: #1a1a1a;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.library-content > div:last-child {
+    position: relative;
+    max-height: 4.2em;
+    overflow: hidden;
+    padding-right: 1em;
+}
+
+.library-content > div:last-child::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, transparent, #343538 50%);
+    padding-left: 5px;
+}
+
+.library-item:hover .library-content > div:last-child::after {
+    background: linear-gradient(to right, transparent, #4C1D70 50%);
+}
+
+.library-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.library-content h2 {
+    font-size: 16px;
+    color: white;
+    margin: 0;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.library-content h2 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.library-content h2 a:hover {
+    text-decoration: underline;
+}
+
+.library-content p {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+    color: #ccc;
+    padding: 0 10px;
+    text-align: center;
+    display: block;
+    /* In case of non-webkit browsers */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.library-content div {
+    background: none !important;
+    border-radius: 0 !important;
+    display: block !important;
+    align-items: normal !important;
+    gap: 0 !important;
 }
 
 .games {
@@ -245,64 +746,56 @@ header h1 {
     object-fit: cover;
 }
 
-.save-button {
-    width: 30%;
-    padding: 15px;
-    margin-top: 30px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.user-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    border: solid #4C1D70;
-}
-
-/* Library styles */
-.library-item {
-    justify-content: space-around;
-    margin-top: 20px;
-    border: solid rgba(90, 88, 88, 0.2);
-    padding: 5px;
-    border-radius: 5px;
-    overflow: auto;
-    background-color: #4C1D70;
-
-
-    
-}
-
 /* Footer styles */
 footer {
     height: 200px;
     width: 100%;
-    display: flex;
+
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-top: auto;
+    margin-top: 100px;
+    position: relative;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
 }
 
 .footer-logo {
-    height: 60px;
+    height: 40px;
     width: auto;
     position: absolute;
     left: 37%;
 }
+
+
+.footer-links ul {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 
 footer .footer_content {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+footer .footer-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    margin-top: 5px;
 }
 
 footer hr {
@@ -317,35 +810,110 @@ footer ul {
 
 footer ul li a {
     text-decoration: none;
+    color: #A9A9A9;
 }
 
 footer ul li a:hover {
-    color: #4C1D70 !important;
-    color: inherit;
+    color: #ffffff;
 }
 
-footer ul li a:visited {
-    color: inherit;
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+
 }
 
-.flash-msg {
-    transition: opacity 300ms ease-out;
+.cart-icon {
+    filter: invert(1) opacity(0.7) hue-rotate(180deg);
+
+    scale: .70;
 }
 
-.purple-button {
-    text-decoration: none;
-    background-color: #4C1D70;
-    font-size: 18px;
+#cursor {
+    display: inline-block;
+    width: 8px;
+    height: .8em;
+    background-color: white;
+    animation: blink 1s infinite;
+}
+
+#searchbar-div {
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+
+}
+
+#searchbar-div button {
+
+    padding: 12px;
+
+}
+
+
+#searchInput {
+    width: 50%;
+
+}
+
+#video-banner {
+    position: relative;
+    border: 5px solid black;
+    overflow: hidden;
+}
+
+
+.video-wrap {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    max-width: 1920px;
+    height: 1080px;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+
+    transition: opacity 1s ease-in-out;
+
+}
+
+.banner-video {
+    width: 100%;
+    max-width: 1920px;
+    height: 1080px;
+    object-fit: contain;
+    pointer-events: none;
+    opacity: 0;
+
+
+}
+
+.banner-video.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.video-info {
+    margin-left: 5px;
+    position: absolute;
+    transition: opacity 1s ease-in-out;
+    top: 57%;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0,0,0,.5);
+}
+
+.video-info p {
+    margin: 0;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    width: 150px;
-    text-align: center;
-    margin: 5px;
 }
 
-.purple-button:hover {
-    background-color: #371055;
+.video-info.active {
+    opacity: 1;
 }
+

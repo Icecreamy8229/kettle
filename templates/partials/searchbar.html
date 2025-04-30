@@ -1,0 +1,11 @@
+<div class="searchContainer" id="searchbar-div">
+        <input type="text" id="searchInput" placeholder="Search">
+        <button onclick="location.reload()">Clear</button>
+
+</div>
+
+<div id="home-url" data-url="{{ url_for('routes.index_route') }}" style="display: none;"></div> {#TODO This is not being used, delete? #}
+
+{% block aftercontent %}
+    <script src="../../static/searchbar.js"></script>
+{% endblock %}

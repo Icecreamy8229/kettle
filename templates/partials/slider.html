@@ -4,8 +4,11 @@ you must pass in a keyword argument of
 media_files to the template this is included in.
 You can see an example of how its being done in the game route.
 #}
+{% block head %}
+<script src="../../static/slider.js"></script>
+{% endblock %}
 
-<section class="container">
+<section id="slider-content-container" class="content-container">
 	<div class="slider-wrapper">
 		<div class="slider">
             {% for media in media_files %}
@@ -15,7 +18,7 @@ You can see an example of how its being done in the game route.
                     </div>
                 {% elif media.type == 'video' %} {# This is probably broken for videos #}
                     <div class="slide">
-                    <video id="slide-{{ loop.index }}" controls>
+                    <video autoplay muted id="slide-{{ loop.index }}" controls>
                         <source src='{{ media.url }}' type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -24,12 +27,13 @@ You can see an example of how its being done in the game route.
             {% endfor %}
 		</div>
 
-		<div class="slider-nav">
-            {% for media in media_files %}
-                <button id="slide-dot-{{ loop.index0 }}" onclick="moveToSlide({{ loop.index0 }})"></button>
-			{% endfor %}
-		</div>
+
         <div class="slider-nav-left" onclick="moveSlide(-1)">&#10094;</div>
         <div class="slider-nav-right" onclick="moveSlide(1)">&#10095;</div>
 	</div>
+    <div class="slider-nav">
+        {% for media in media_files %}
+            <button class="slide-button" id="slide-dot-{{ loop.index0 }}" onclick="moveToSlide('{{ loop.index0 }}')"></button>
+        {% endfor %}
+    </div>
 </section>

@@ -12,11 +12,13 @@ CREATE TABLE users (
   user_alias varchar(128) NOT NULL,
   user_email varchar(320) NOT NULL UNIQUE,
   user_login varchar(128) NOT NULL UNIQUE,
-  user_password char(60) NOT NULL UNIQUE,
+  user_password char(60) NOT NULL,
   user_balance integer NOT NULL DEFAULT 10000,
   user_picture varchar(128) NOT NULL,
-  user_createdt datetime DEFAULT CURRENT_TIMESTAMP,
-  user_verified tinyint NOT NULL DEFAULT 0
+  user_bio varchar(255) NOT NULL DEFAULT 'This user has no bio.',
+  user_verified tinyint NOT NULL DEFAULT 0,
+  user_privilege tinyint NOT NULL DEFAULT 0,
+  user_createdt datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -32,6 +34,12 @@ CREATE TABLE carts (
   PRIMARY KEY (user_id, game_id)
 );
 
+
+CREATE TABLE flappybird (
+    user_id BIGINT NOT NULL PRIMARY KEY UNIQUE,
+    flappybird_highscore INT NOT NULL DEFAULT 0,
+    flappybird_cheater TINYINT NOT NULL DEFAULT 0
+);
 
 CREATE TABLE reviews (
   game_id bigint NOT NULL,
@@ -86,6 +94,7 @@ CREATE TABLE game_genres (
 
 
 ALTER TABLE carts ADD CONSTRAINT cart_game_id_fk FOREIGN KEY (game_id) REFERENCES games (game_id);
+ALTER TABLE flappybird ADD CONSTRAINT flappybird_user_id_fk FOREIGN KEY (user_id) REFERENCES users (user_id);
 ALTER TABLE carts ADD CONSTRAINT cart_user_id_fk FOREIGN KEY (user_id) REFERENCES users (user_id);
 ALTER TABLE libraries ADD CONSTRAINT libraries_game_id_fk FOREIGN KEY (game_id) REFERENCES games (game_id);
 ALTER TABLE libraries ADD CONSTRAINT libraries_user_id_fk FOREIGN KEY (user_id) REFERENCES users (user_id);

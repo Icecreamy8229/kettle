@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-{% include 'navbar.html' %}
-<div class="container">
+{% include 'partials/navbar.html' %}
+<div class="content-container">
 <form method="POST" enctype="multipart/form-data" action="{{ url_for('routes.submit_game_route') }}">
 {# This form will be used to submit a game, with image and videos #}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label for="game-title">Game Title:</label>
     <input type="text" id="game-title" name="game-title" required><br><br>
     <label for="game-desc">Game Description:</label><br>
     <textarea id="game-desc" name="game-desc" required cols="100" rows="10"></textarea><br>
+    <label for="game-price">Game Price (in points):</label>
+    <input type="number" id="game-price" name="game-price" required><br><br>
 
     <label for="game-images">Upload Images (each less than 4MB):</label>
     <input type="file" id="game-images" name="game-images" accept="image/*" multiple
@@ -23,7 +26,7 @@
     <script>
         function validateImagesAndVideos() {
             const maxImageSize = 4 * 1024 * 1024; // 4MB in bytes
-            const maxVideoSize = 25 * 1024 * 1024; // 25MB in bytes
+            const maxVideoSize = 35 * 1024 * 1024; // 25MB in bytes
             const maxFiles = 10;
 
             const imageInput = document.getElementById("game-images");

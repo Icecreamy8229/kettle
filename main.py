@@ -7,6 +7,7 @@ from models import db
 from secret import secret_key
 from helper import get_profile_picture
 from mailer import mail
+from flask_wtf.csrf import CSRFProtect
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -17,12 +18,15 @@ logging.config.dictConfig(config["logging"])
 #initializes our app and tells it where to look for html pages.
 app = Flask(__name__, template_folder='templates')
 
+#Enable CSRF for password validation
+csrf = CSRFProtect()
+
 #This lets the get_profile_picture() function be usable in any html template.
 app.jinja_env.globals['get_profile_picture'] = get_profile_picture
 
 #make sure the correct info is filled out in your config.yaml for how you have your database setup, or it will fail
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{config['database']['username']}:{config['database']['password']}@{config['database']['host']}/{config['database']['schema']}"
-logging.debug("Configured database url %s", app.config["SQLALCHEMY_DATABASE_URI"])
+#logging.debug("Configured database url %s", app.config["SQLALCHEMY_DATABASE_URI"])
 
 
 if config['environment'] == 'production':
@@ -40,7 +44,7 @@ if config['environment'] == 'production':
 app.secret_key = secret_key
 db.init_app(app)
 login_manager.init_app(app)
-
+csrf.init_app(app)
 
 #registers our endpoints.  "/" being the index page.
 app.register_blueprint(routes)
@@ -52,6 +56,7 @@ app.register_blueprint(routes)
 
 #this if statement just checks that you are running main.py, rather than an import
 if __name__ == '__main__':
+
 
     if config['environment'] == 'production':
         app.run(debug=False, port=4999)

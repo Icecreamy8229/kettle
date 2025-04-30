@@ -1,6 +1,10 @@
-import argparse
-from models import User
+from enum import Enum
+import enum
+from models import User, Game, Genre, GameGenre, db
 from flask import url_for
+import os
+import logging
+
 """
 Using this module to help you create dummy users for now.
 I may add other functions here in the future if we need other ways to generate content
@@ -13,33 +17,74 @@ You use it this way:
 py helper.py "testuser" "testuser@gmail.com" "password123!"
 """
 
-def main():
-    parser = argparse.ArgumentParser(description="Helper script to create a dummy user.")
-    parser.add_argument("username", type=str, help="A unique username")
-    parser.add_argument("alias", type=str, help="This does not have to be unique")
-    parser.add_argument("email", type=str, help="A unique email")
-    parser.add_argument("password", type=str, help="password in plaintext, remember this!")
-    args = parser.parse_args()
-    create_dummy_user(username=args.username, alias=args.alias, email=args.email, plaintext_pass=args.password)
 
-
-def create_dummy_user(username: str, alias: str, email: str, plaintext_pass: str):
-    from main import app
-    from models import User, db
-    with app.app_context():
-        user = User()
-        user.user_login = username
-        user.user_alias = alias
-        user.password = plaintext_pass
-        user.user_email = email
-        db.session.add(user)
-        db.session.commit()
+class SliderType(Enum):
+    TAG = enum.auto()
 
 
 
-def get_profile_picture(user: User) -> str: #A function accessible globally inside of flask, called in jinja.
-    return url_for('static', filename=f'images/profile-pictures/{user.user_picture}')
+def get_game_slider_media(slider_type: SliderType, tag_type=None):
+    slider_display_images = []
+
+    if slider_type == SliderType.TAG and tag_type is not None:
+
+        tag = db.session.query(Genre).filter(Genre.genre_tag == tag_type).first()
+        if tag:
+
+            game_ids = (
+                db.session.query(GameGenre.game_id)
+                .filter(GameGenre.genre_id == tag.genre_id)
+                .all()
+            )
+            game_ids = [game_id for (game_id,) in game_ids]
 
 
-if __name__ == '__main__':
-    main()
+            games = db.session.query(Game).filter(Game.game_id.in_(game_ids)).all()
+
+
+            for i, game in enumerate(games):
+                if i >= 10:
+                    break
+                images = get_game_media("images", game)
+                if images:
+                    slider_display_images.append(images[0])
+
+    return slider_display_images
+
+
+def get_game_media(media_type, game: Game):
+    media_files = []
+    TOP_LEVEL_DIR = 'game_media'
+    game_path = os.path.join(TOP_LEVEL_DIR, str(game.game_id))
+    image_path = os.path.join(game_path, "images")
+    video_path = os.path.join(game_path, "videos")
+
+    if os.path.exists(image_path):
+        for filename in os.listdir(image_path):
+            file_url = f"/game_media/{game.game_id}/{media_type}/{filename}"
+            if media_type == "images" and filename.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".webp")):
+                media_files.append({"type": "image", "url": file_url})
+            elif media_type == "videos" and filename.lower().endswith((".mp4", ".webm", ".ogg")):
+                media_files.append({"type": "video", "url": file_url})
+
+    if os.path.exists(video_path):
+        for filename in os.listdir(video_path):
+            file_url = f"/game_media/{game.game_id}/{media_type}/{filename}"
+            if media_type == "images" and filename.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".webp")):
+                media_files.append({"type": "image", "url": file_url})
+            elif media_type == "videos" and filename.lower().endswith((".mp4", ".webm", ".ogg")):
+                media_files.append({"type": "video", "url": file_url})
+
+    if not os.path.exists(image_path):
+        logging.warning(f"No image directory found for game_id {game.game_id}")
+
+    return media_files
+
+def get_profile_picture(user: User) -> str:
+
+    if user.user_picture == "default.png" or not user.user_picture:
+        return url_for('static', filename='images/profile-pictures/default.png')
+
+    return url_for('routes.profile_pictures', filename=f'{user.user_id}/{user.user_picture}')
+
+

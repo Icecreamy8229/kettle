@@ -25,11 +25,13 @@ def send_verify_email(user: User):
     html_template = jinja2.Template(open("templates/eml_verify.html").read())
 
     msg = Message(
+        sender=("Kettle Team", config['mailchimp']["username"]),
         subject="Kettle Email Verification",
         recipients=[user.user_email],
         html=html_template.render(user=user, verification_url=verification_url),
         sender=("Team Kettle", config['mailchimp']["username"])
     )
+    logging.info("Sending verification email to %s", user.user_email)
     mail.send(msg)
     logging.info("Sent verification email to %s", user.user_email)
 

@@ -4,48 +4,53 @@
 
 <style>
 
-    .container h1 {
-        text-align: center;
-        margin-top: 25px;
-    }
-    {# This was a temporary fix so that the image was not massive #}
-    {# feel free to blow away with better styling. #}
-    .library-item img {
-        float: left;
-        width: auto;
-        height: 150px;
-        margin-right: 20px;
-    }
-
 </style>
-
 
 {% endblock %}
 
 {% block content %}
 
     <body>
-        {% include 'navbar.html' %}
-        {% include 'flash.html' %}
-        <div class="container">
-            <h1>{{ current_user.user_alias }}'s Library</h1>
-            <div>
-                {% if games %}
-                    {% for game in games %}
-                        <div class="library-item">
-                            <img src="../game_media/{{ game.game_id }}/images/cover.png" alt="{{ game.game_title }}">
-                            <h2>{{ game.game_title }}</h2>
-                            <p>{{ game.game_desc|truncate(100) }}</p> {# Helps with consistent style of items. #}
-                            <p>Price: {{ game.game_price }}</p>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="no-games">
-                        <p>You have no games in your library.</p>
-                        <br>
-                        <a href="{{ url_for('routes.index_route') }}">Go to Store</a>
+        {% include 'partials/navbar.html' %}
+        {% include 'partials/flash.html' %}
+        <div class="outer-container">
+            <h1 class="type-text">{{ current_user.user_alias }}'s Library</h1>
+            <div class="content-container bg-kettle">
+
+                <div>
+                    {% if games %}
+                    <div class="library-container">
+                        {% for game in games %}
+                            <div class="library-item">
+                                {% if game.game_id == 276 %}
+                                    <a href="{{ url_for('routes.kettle_bird_route') }}">
+                                {% else %}
+                                    <a href="{{ url_for('routes.game_route')}}?id={{ game.game_id}}">
+
+                                {% endif %}
+                                <div class="library-content">
+                                    <div>
+                                        <img src="../game_media/{{ game.game_id }}/cover/cover.png" alt="{{ game.game_title }}">
+                                    </div>
+                                    <div>
+                                        <h2>{{ game.game_title }}</h2>
+                                    </div>
+                                    <div>
+                                        <p>{{ game.game_desc|truncate(100) }}</p> {# Helps with consistent style of items. #}
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endif %}
+                    {% else %}
+                        <div class="no-games">
+                            <p>You have no games in your library.</p>
+                            <br>
+                            <a href="{{ url_for('routes.index_route') }}">Go to Store</a>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% include 'footer.html' %}
@@ -54,4 +59,9 @@
 
 {% endblock %}
 
+{% block aftercontent %}
+ <script>
+     typeText(50)
+ </script>
+{% endblock %}
 
